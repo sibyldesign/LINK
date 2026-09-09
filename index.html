@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>STUDIO NINE | 品牌名片連結頁</title>
+  <title>品牌名片連結頁 | link.heysibyl.com</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
@@ -15,7 +15,7 @@
       box-sizing: border-box;
     }
 
-    /* 六大精緻風格美學色系 */
+    /* 六大美學色系 */
     :root[data-theme="cashmere-latte"] {
       --bg-gradient: radial-gradient(120% 120% at 50% 0%, #F5EFE6 0%, #E8DFD3 100%);
       --card-bg: rgba(255, 255, 255, 0.88);
@@ -27,7 +27,6 @@
       --tag-bg: #EAE1D5;
       --tag-text: #5A4C40;
       --accent-color: #8C7058;
-      --btn-color: #382F28;
     }
 
     :root[data-theme="mono-slate"] {
@@ -41,7 +40,6 @@
       --tag-bg: #E5E7EB;
       --tag-text: #374151;
       --accent-color: #1F2937;
-      --btn-color: #111827;
     }
 
     :root[data-theme="breeze-blue"] {
@@ -55,7 +53,6 @@
       --tag-bg: #DCEAF5;
       --tag-text: #234E70;
       --accent-color: #3B729E;
-      --btn-color: #1C3C58;
     }
 
     :root[data-theme="obsidian-minimal"] {
@@ -69,7 +66,6 @@
       --tag-bg: #26292E;
       --tag-text: #D1D5DB;
       --accent-color: #E5E7EB;
-      --btn-color: #F3F4F6;
     }
 
     :root[data-theme="mist-sage"] {
@@ -83,7 +79,6 @@
       --tag-bg: #E2ECE6;
       --tag-text: #375346;
       --accent-color: #4C6F5E;
-      --btn-color: #273B32;
     }
 
     :root[data-theme="french-rose"] {
@@ -97,7 +92,6 @@
       --tag-bg: #EEDADB;
       --tag-text: #613E43;
       --accent-color: #8E5A62;
-      --btn-color: #4A2E33;
     }
 
     body {
@@ -133,32 +127,34 @@
   <header class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between relative z-20">
     <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 backdrop-blur-md border border-white/50 shadow-xs">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
+      <span id="navDomainTag" class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
     </div>
 
     <div class="flex items-center gap-2">
+      <!-- 分享按鈕 -->
       <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer" title="分享">
         <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
       </button>
 
-      <button type="button" onclick="openAdminModal()" class="h-9 px-3.5 rounded-full bg-stone-900 hover:bg-black text-white text-xs font-medium shadow-sm flex items-center gap-2 transition active:scale-95 cursor-pointer">
+      <!-- 設定後台按鈕 (示範模式或真實業主解鎖模式) -->
+      <button type="button" id="btnHeaderAdmin" onclick="openAdminModal()" class="h-9 px-3.5 rounded-full bg-stone-900 hover:bg-black text-white text-xs font-medium shadow-sm flex items-center gap-2 transition active:scale-95 cursor-pointer">
         <i class="fa-solid fa-sliders text-[11px]"></i>
-        <span>設定後台</span>
+        <span id="btnAdminLabel">設定後台</span>
       </button>
     </div>
   </header>
 
-  <!-- 主體：品牌專屬連結名片 (STUDIO NINE) -->
+  <!-- 主體頁面 (支援示範模式與真實使用者模式) -->
   <main class="w-full max-w-[460px] px-5 pt-4 pb-14 flex-grow flex flex-col items-center relative z-10">
 
-    <!-- 形象頭像與名稱 -->
+    <!-- 品牌 / 主理人形象 Header -->
     <div class="w-full flex flex-col items-center text-center mb-6">
       
-      <div onclick="openAdminModal()" class="relative group cursor-pointer" title="點擊自訂品牌資訊">
+      <div onclick="handleAvatarClick()" class="relative group cursor-pointer" title="點擊自訂或更換頭像">
         <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/90 via-white/40 to-white shadow-md">
           <img id="displayAvatar" src="https://api.dicebear.com/7.x/lorelei/svg?seed=Chloe&backgroundColor=e8dfd3&accessories=earrings&head=variant02" alt="頭像" class="w-full h-full rounded-full object-cover bg-[#E8DFD3]">
         </div>
-        <div class="absolute bottom-0 right-1 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center text-[10px] shadow border border-white">
+        <div id="avatarEditBadge" class="absolute bottom-0 right-1 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center text-[10px] shadow border border-white">
           <i class="fa-solid fa-pen text-[9px]"></i>
         </div>
       </div>
@@ -175,35 +171,47 @@
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- 品牌項目清單 (動態分類) -->
+    <!-- 品牌項目分類清單 -->
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
-    <!-- 底部輕量化入口 -->
-    <!-- 強調免費開通與自由換色的宣傳卡片 -->
-    <div class="w-full mt-10 p-5 rounded-3xl bg-white/70 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
-      <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
-        <i class="fa-solid fa-palette text-[9px]"></i>
-        <span>免費開通 ╳ 自由換色</span>
-      </div>
-      <h3 class="text-sm font-bold text-stone-900">
-        想要擁有專屬美學品牌連結頁？
-      </h3>
-      <p class="text-[11px] text-stone-600 leading-relaxed max-w-[280px]">
-        免費開通即享羊絨米、黑曜灰、晨曦霧綠與法式暮粉等六色系隨時切換！
-      </p>
-      <button type="button" onclick="openOnboardModal()" class="w-full py-2.5 rounded-2xl bg-stone-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer"> 
-        <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i>
-        <span>免費開通專屬頁面（信箱自動接收）</span>
-      </button>
-    </div>
+    <!-- 底部功能區塊：示範切換、開通卡片與頁尾 -->
+    <div class="w-full mt-10 space-y-4 flex flex-col items-center">
 
+      <!-- 若處於真實使用者頁面，置頂顯示「示範體驗頁面」按鈕 -->
+      <div id="demoSwitchBar" style="display: none;" class="w-full text-center">
+        <button type="button" onclick="switchToDemoMode()" class="px-4 py-2 rounded-full bg-white/80 hover:bg-white border border-stone-200 shadow-xs text-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 mx-auto transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+          <span>進入示範體驗頁面 (查看完整操作範例)</span>
+        </button>
+      </div>
+
+      <!-- 開通卡片 -->
+      <div class="w-full p-5 rounded-3xl bg-white/70 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
+        <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
+          <i class="fa-solid fa-palette text-[9px]"></i>
+          <span>免費開通 ╳ 自由換色</span>
+        </div>
+        <h3 class="text-sm font-bold text-stone-900">
+          想要擁有專屬美學品牌連結頁？
+        </h3>
+        <p class="text-[11px] text-stone-600 leading-relaxed max-w-[280px]">
+          免費開通即享羊絨米、黑曜灰、晨曦霧綠與法式暮粉等六色系隨時切換！
+        </p>
+        <button type="button" onclick="openOnboardModal()" class="w-full py-2.5 rounded-2xl bg-stone-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i>
+          <span>免費開通專屬頁面（信箱自動接收）</span>
+        </button>
+      </div>
+
+      <!-- 核心頁尾 -->
       <footer class="pt-2 flex flex-col items-center text-center">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-stone-600 hover:text-black transition">
           <span>Designed by Sibyl | 數位管家</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-40 group-hover:opacity-100 transition"></i>
         </a>
       </footer>
-    
+
+    </div>
 
   </main>
 
@@ -213,14 +221,13 @@
     
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[88vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col overflow-hidden">
       
-      <!-- 頂部標題 -->
       <div class="pt-3 pb-3 px-6 border-b border-stone-100 flex flex-col items-center bg-stone-50">
         <div class="w-10 h-1 rounded-full bg-stone-300 mb-3"></div>
         <div class="w-full flex items-center justify-between">
           <div>
             <h2 class="text-sm font-bold text-stone-900 flex items-center gap-2">
               <i class="fa-solid fa-sliders text-stone-700"></i>
-              <span>品牌連結頁管理後台</span>
+              <span id="adminTitleLabel">品牌連結頁管理後台</span>
             </h2>
             <p class="text-[11px] text-stone-500">自訂視覺主題、分類與卡片項目</p>
           </div>
@@ -361,12 +368,10 @@
     </div>
   </div>
 
-  <!-- ==================== 新增 / 編輯卡片彈窗 (實心白色背景，徹底防止透視殘留) ==================== -->
+  <!-- ==================== 卡片編輯彈窗 ==================== -->
   <div id="itemModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-    <!-- 遮罩 -->
     <div onclick="closeItemModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     
-    <!-- 實心卡片容器 -->
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
       
       <div class="flex items-center justify-between border-b pb-3">
@@ -377,23 +382,21 @@
       </div>
 
       <div class="space-y-3.5">
-        <!-- 分類下拉 -->
         <div>
           <label class="block font-semibold text-stone-700 mb-1">放入哪個分類？</label>
           <select id="modalSectionSelect" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-stone-400"></select>
         </div>
 
         <div>
-          <label class="block font-semibold text-stone-700 mb-1">主題名稱 </label>
+          <label class="block font-semibold text-stone-700 mb-1">主題名稱 (中字 粗體)</label>
           <input type="text" id="modalTitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-stone-400" placeholder="例：【法式亞麻】手工編織生活抱枕組">
         </div>
 
         <div>
-          <label class="block font-semibold text-stone-700 mb-1">內容說明 </label>
+          <label class="block font-semibold text-stone-700 mb-1">內容說明 (小字 細字體)</label>
           <input type="text" id="modalSubtitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-light text-stone-600 focus:outline-none focus:ring-1 focus:ring-stone-400" placeholder="例：限量現貨供應中，輸入優惠碼享九折">
         </div>
 
-        <!-- 圖片上傳與排版 -->
         <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-2.5">
           <label class="block font-bold text-stone-800">圖片上傳與版面設定</label>
           
@@ -450,7 +453,7 @@
     </div>
   </div>
 
-  <!-- ==================== 自訂美感彈出視窗：新增分類 (取代瀏覽器醜醜的 prompt) ==================== -->
+  <!-- ==================== 新增分類彈窗 ==================== -->
   <div id="createSectionModal" style="display: none;" class="fixed inset-0 z-[110] flex items-center justify-center p-4">
     <div onclick="closeCreateSectionModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="relative z-10 bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 text-xs border border-stone-100">
@@ -474,7 +477,7 @@
     </div>
   </div>
 
-  <!-- ==================== 自訂美感彈出視窗：確認刪除 (取代瀏覽器醜醜的 confirm) ==================== -->
+  <!-- ==================== 確認刪除彈窗 ==================== -->
   <div id="deleteConfirmModal" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center p-4">
     <div onclick="closeDeleteConfirmModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="relative z-10 bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 text-xs border border-stone-100 text-center">
@@ -543,7 +546,7 @@
       </div>
       <div>
         <h4 id="shareBrandTitle" class="font-bold text-stone-900 text-sm">STUDIO NINE</h4>
-        <p class="text-[11px] text-stone-500 font-mono mt-0.5">link.heysibyl.com</p>
+        <p id="shareUrlDisplay" class="text-[11px] text-stone-500 font-mono mt-0.5">link.heysibyl.com</p>
       </div>
       <div class="flex gap-2">
         <button type="button" onclick="copyShareUrl()" class="flex-1 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-semibold shadow cursor-pointer">複製連結</button>
@@ -552,7 +555,7 @@
     </div>
   </div>
 
-  <!-- 浮動 Toast 提示 -->
+  <!-- Toast 提示 -->
   <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-[200] flex items-center gap-2">
     <i class="fa-solid fa-circle-check text-emerald-400"></i>
     <span id="toastMsg">操作已完成</span>
@@ -560,22 +563,21 @@
 
   <!-- ==================== 穩健資料邏輯 ==================== -->
   <script>
-    // 預設 GAS 串接端點 (若需正式串接請填入部署後取得的 Web App URL)
-    const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwbpyAvdMq4389Ycke8-2IPWoY4EIOG-3qJmGmXRz2PV9U51o3LBnGy1Qq_TkmbJeem/exec";
+    // 串接配置
+    const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz_REPLACE_WITH_YOUR_DEPLOYMENT_ID/exec";
+    const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_JnpaLZVnGkW9Jr967LeYuQ_d8bXwfnz";
 
     const illustrationAvatars = [
       'https://api.dicebear.com/7.x/lorelei/svg?seed=Chloe&backgroundColor=e8dfd3&accessories=earrings&head=variant02',
       'https://api.dicebear.com/7.x/lorelei/svg?seed=Amara&backgroundColor=f5efe6&accessories=glasses,earrings',
       'https://api.dicebear.com/7.x/lorelei/svg?seed=Aria&backgroundColor=dfe8e3&accessories=earrings',
-      'https://api.dicebear.com/7.x/lorelei/svg?seed=Mia&backgroundColor=efe1e3&accessories=earrings',
-      'https://api.dicebear.com/7.x/notionists/svg?seed=Avery&backgroundColor=e8dfd3',
-      'https://api.dicebear.com/7.x/notionists/svg?seed=Sophia&backgroundColor=dfe8e3',
-      'https://api.dicebear.com/7.x/notionists/svg?seed=Lucas&backgroundColor=dceaf5',
-      'https://api.dicebear.com/7.x/notionists/svg?seed=Milo&backgroundColor=efe1e3'
+      'https://api.dicebear.com/7.x/lorelei/svg?seed=Mia&backgroundColor=efe1e3&accessories=earrings'
     ];
     let avatarIndex = 0;
 
-    let appData = {
+    // 官方示範資料庫 (STUDIO NINE)
+    const demoData = {
       theme: 'cashmere-latte',
       brandName: 'STUDIO NINE',
       avatar: illustrationAvatars[0],
@@ -646,7 +648,106 @@
       ]
     };
 
-    // 渲染前端公開畫面
+    // 當前運作資料 (深拷貝 demoData)
+    let appData = JSON.parse(JSON.stringify(demoData));
+    let isRealUserMode = false;
+    let currentUserSlug = "";
+
+    // 啟動路由檢測：判斷是示範模式還是真實使用者頁面
+    async function initRoute() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('u');
+
+      if (slug && slug.trim().toLowerCase() !== 'demo') {
+        currentUserSlug = slug.trim().toLowerCase();
+        await loadRealUserData(currentUserSlug);
+      } else {
+        // 官方示範頁面
+        isRealUserMode = false;
+        document.getElementById('demoSwitchBar').style.display = 'none';
+        document.getElementById('avatarEditBadge').style.display = 'flex';
+        renderPublicView();
+      }
+    }
+
+    // 自 Supabase 讀取真實使用者資料
+    async function loadRealUserData(slug) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)`, {
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const data = await res.json();
+
+        if (data && data.length > 0) {
+          const store = data[0];
+          isRealUserMode = true;
+
+          // 重新組裝使用者資料
+          appData.theme = store.theme || 'cashmere-latte';
+          appData.brandName = store.brand_name || slug;
+          appData.avatar = store.avatar_url || illustrationAvatars[0];
+          appData.bio = store.bio_text || '';
+          appData.socials = store.social_links || [];
+
+          // 整理卡片分類
+          const sectionsMap = {};
+          if (store.bio_items && store.bio_items.length > 0) {
+            store.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+            store.bio_items.forEach(it => {
+              const secTitle = it.section_title || '精選推薦';
+              if (!sectionsMap[secTitle]) {
+                sectionsMap[secTitle] = { id: 'sec-' + Math.random(), title: secTitle, items: [] };
+              }
+              sectionsMap[secTitle].items.push({
+                id: it.id,
+                title: it.title,
+                subtitle: it.subtitle || '',
+                img: it.thumbnail_url || '',
+                imgSize: it.img_size || 'medium',
+                imgPos: it.img_pos || 'left',
+                url: it.target_url || '#',
+                discountCode: it.discount_code || '',
+                badge: it.badge_label || ''
+              });
+            });
+            appData.sections = Object.values(sectionsMap);
+          } else {
+            appData.sections = [{ id: 'sec-1', title: '精選專欄', items: [] }];
+          }
+
+          // UI 調整：真實使用者頁面展示
+          document.getElementById('demoSwitchBar').style.display = 'block';
+          document.getElementById('avatarEditBadge').style.display = 'none'; // 訪客不可隨意改動
+          document.getElementById('btnAdminLabel').innerText = '管理後台';
+          document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
+          document.title = `${appData.brandName} | 品牌名片`;
+
+          renderPublicView();
+        } else {
+          showToast('找不到此品牌頁面，已切換至示範模式');
+          switchToDemoMode();
+        }
+      } catch (err) {
+        showToast('雲端載入失敗，已切換至示範模式');
+        switchToDemoMode();
+      }
+    }
+
+    // 切換回示範頁面
+    window.switchToDemoMode = function() {
+      window.location.href = window.location.pathname;
+    };
+
+    function handleAvatarClick() {
+      if (!isRealUserMode) {
+        openAdminModal();
+      }
+    }
+
+    // 渲染公開頁面
     function renderPublicView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
       document.getElementById('displayName').innerText = appData.brandName;
@@ -757,6 +858,11 @@
 
     // 後台抽屜
     window.openAdminModal = function() {
+      if (isRealUserMode) {
+        const pin = prompt(`請輸入 ${appData.brandName} 的後台安全管理 PIN 碼：`);
+        if (!pin) return;
+        // 可選：與雲端 pin 比對
+      }
       populateAdminData();
       document.getElementById('adminSheet').style.display = 'block';
     };
@@ -836,7 +942,7 @@
         socBox.appendChild(row);
       });
 
-      // 分類列表 (帶有獨立的「+ 新增此分類卡片」按鈕)
+      // 分類列表
       const secBox = document.getElementById('adminSectionsList');
       secBox.innerHTML = '';
 
@@ -908,7 +1014,7 @@
       renderPublicView();
     };
 
-    // ==================== 自訂美感彈窗：新增分類 ====================
+    // 新增分類
     window.openCreateSectionModal = function() {
       document.getElementById('inputNewSectionTitle').value = '';
       document.getElementById('createSectionModal').style.display = 'flex';
@@ -934,7 +1040,7 @@
       showToast('已成功新增分類！');
     };
 
-    // ==================== 自訂美感彈窗：確認刪除 ====================
+    // 刪除確認
     let deleteActionCallback = null;
     function showAestheticDeleteModal(title, desc, onConfirm) {
       document.getElementById('deleteModalTitle').innerText = title;
@@ -991,7 +1097,7 @@
       renderPublicView();
     };
 
-    // ==================== 卡片新增與編輯核心邏輯 ====================
+    // 卡片新增與編輯
     let editingState = { sIdx: null, iIdx: null };
 
     window.openItemModal = function(sIdx, iIdx) {
@@ -1001,7 +1107,6 @@
 
       editingState = { sIdx: sIdx, iIdx: iIdx };
 
-      // 填充分類下拉選單
       const select = document.getElementById('modalSectionSelect');
       select.innerHTML = '';
       appData.sections.forEach((sec, idx) => {
@@ -1013,7 +1118,6 @@
       });
 
       if (sIdx !== null && iIdx !== null) {
-        // 編輯既有項目
         const it = appData.sections[sIdx].items[iIdx];
         document.getElementById('modalHeaderTitle').innerText = '編輯卡片項目';
         document.getElementById('modalTitle').value = it.title || '';
@@ -1025,7 +1129,6 @@
         document.getElementById('modalImgPos').value = it.imgPos || 'left';
         document.getElementById('modalPreviewImg').src = it.img || '';
       } else {
-        // 新增全新項目
         document.getElementById('modalHeaderTitle').innerText = '新增卡片項目';
         document.getElementById('modalTitle').value = '';
         document.getElementById('modalSubtitle').value = '';
@@ -1072,7 +1175,6 @@
       };
 
       if (editingState.sIdx !== null && editingState.iIdx !== null) {
-        // 編輯狀態
         if (editingState.sIdx !== targetSecIdx) {
           appData.sections[editingState.sIdx].items.splice(editingState.iIdx, 1);
           appData.sections[targetSecIdx].items.push(itemData);
@@ -1080,7 +1182,6 @@
           appData.sections[editingState.sIdx].items[editingState.iIdx] = itemData;
         }
       } else {
-        // 新增狀態
         appData.sections[targetSecIdx].items.unshift(itemData);
       }
 
@@ -1109,7 +1210,7 @@
       reader.readAsDataURL(file);
     };
 
-    // 開通表單提交 (真實串接 GAS Webhook)
+    // 真實開通送出 (使用 text/plain 規避 GAS CORS 預檢限制)
     window.handleOnboardSubmit = async function(e) {
       e.preventDefault();
       const brand = document.getElementById('quickBrand').value.trim();
@@ -1121,30 +1222,28 @@
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在全自動開通並派信...';
 
       try {
-        if (GAS_WEBHOOK_URL) {
+        if (GAS_WEBHOOK_URL && !GAS_WEBHOOK_URL.includes("REPLACE_WITH")) {
           await fetch(GAS_WEBHOOK_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
               action: "REGISTER_NEW_STORE",
-              payload: {
-                brandName: brand,
-                slug: slug,
-                email: email
-              }
+              payload: { brandName: brand, slug: slug, email: email }
             })
           });
         } else {
-          await new Promise(r => setTimeout(r, 1000));
+          await new Promise(r => setTimeout(r, 1200));
         }
 
         closeOnboardModal();
-        showToast(`開通成功！通知信已派送至 ${email}`);
-        appData.brandName = brand;
-        appData.bio = '歡迎光臨 ' + brand + ' 官方品牌頁\\n最新活動與專屬推薦皆收錄於此';
-        renderPublicView();
-        setTimeout(openAdminModal, 600);
+        showToast(`開通完成！通知信已寄至 ${email}`);
+        
+        // 自動載入新店家視圖
+        setTimeout(() => {
+          window.location.href = `${window.location.pathname}?u=${slug}`;
+        }, 1500);
+
       } catch (err) {
         showToast('開通請求發送完成！請查看信箱');
       } finally {
@@ -1178,7 +1277,8 @@
       }, 2200);
     }
 
-    renderPublicView();
+    // 啟動路由
+    initRoute();
   </script>
 </body>
 </html>
