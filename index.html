@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+clean_html = """<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -48,9 +48,73 @@
       --tag-bg: #EEDADB; --tag-text: #613E43; --accent-color: #8E5A62;
     }
 
-    body { background: var(--bg-gradient); min-height: 100vh; color: var(--title-color); transition: background 0.3s ease; }
+    body { background: var(--bg-gradient); min-height: 100vh; color: var(--title-color); transition: background 0.3s ease; margin: 0; padding: 0; }
     .app-card { background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--card-shadow); backdrop-filter: blur(14px); transition: all 0.22s ease; }
     .app-card:hover { background: var(--card-hover); transform: translateY(-2px); }
+
+    /* 全站 SweetAlert2 美學客製樣式 (統一奢華拿鐵風，徹底消除瀏覽器原廠醜視窗) */
+    div:where(.swal2-container) div:where(.swal2-popup) {
+      background: #FAF6F0 !important;
+      border: 1px solid #DFD1C0 !important;
+      border-radius: 28px !important;
+      padding: 24px 20px !important;
+      box-shadow: 0 20px 40px -10px rgba(74, 59, 44, 0.2) !important;
+      color: #2C241E !important;
+    }
+    div:where(.swal2-container) .swal2-title {
+      color: #2C241E !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      padding-top: 4px !important;
+    }
+    div:where(.swal2-container) .swal2-html-container {
+      color: #7A6C62 !important;
+      font-size: 12px !important;
+      line-height: 1.6 !important;
+      margin: 10px 0 16px 0 !important;
+    }
+    div:where(.swal2-container) .swal2-input {
+      border: 1px solid #DFD1C0 !important;
+      background: #FFFFFF !important;
+      border-radius: 14px !important;
+      font-size: 13px !important;
+      height: 42px !important;
+      color: #2C241E !important;
+      box-shadow: none !important;
+      margin: 10px auto !important;
+      text-align: center !important;
+    }
+    div:where(.swal2-container) .swal2-input:focus {
+      border-color: #8C7058 !important;
+      box-shadow: 0 0 0 2px rgba(140, 112, 88, 0.2) !important;
+    }
+    div:where(.swal2-container) .swal2-actions {
+      gap: 8px !important;
+      margin-top: 16px !important;
+    }
+    div:where(.swal2-container) button.swal2-confirm {
+      background: #2C241E !important;
+      color: #FFFFFF !important;
+      border-radius: 14px !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      padding: 10px 22px !important;
+      box-shadow: 0 4px 12px rgba(44, 36, 30, 0.15) !important;
+    }
+    div:where(.swal2-container) button.swal2-confirm:hover {
+      background: #000000 !important;
+    }
+    div:where(.swal2-container) button.swal2-cancel {
+      background: #EAE1D5 !important;
+      color: #5A4C40 !important;
+      border-radius: 14px !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      padding: 10px 20px !important;
+    }
+    div:where(.swal2-container) button.swal2-cancel:hover {
+      background: #DFD1C0 !important;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-between">
@@ -63,7 +127,7 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer">
+      <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer" title="分享">
         <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
       </button>
 
@@ -99,7 +163,7 @@
     <!-- 卡片分類清單 -->
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
-    <!-- 底部功能區塊 (示範與真實使用者模式皆能看見) -->
+    <!-- 底部功能區塊 -->
     <div class="w-full mt-12 space-y-4 flex flex-col items-center">
 
       <!-- 切回示範頁按鈕 (僅在真實使用者頁面出現) -->
@@ -126,7 +190,7 @@
         </button>
       </div>
 
-      <!-- 核心頁尾：高轉換引流金句 -->
+      <!-- 頁尾金句引流 -->
       <footer class="pt-2 flex flex-col items-center text-center max-w-[340px] mx-auto space-y-1.5">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-bold tracking-wide text-stone-700 hover:text-black transition">
           <span>Designed by Sibyl | 數位管家</span>
@@ -226,7 +290,7 @@
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <span class="font-bold text-stone-900">🔗 社群與官方入口</span>
-            <button type="button" onclick="addSocialLink()" class="text-[11px] text-stone-700 font-semibold">+ 增加圖示</button>
+            <button type="button" onclick="addSocialLink()" class="text-[11px] text-stone-700 font-semibold cursor-pointer">+ 增加圖示</button>
           </div>
           <div id="adminSocialsList" class="space-y-2"></div>
         </div>
@@ -236,8 +300,8 @@
           <div class="flex items-center justify-between border-t pt-4 border-stone-200">
             <span class="font-bold text-stone-900">📦 分類與卡片項目</span>
             <div class="flex gap-2">
-              <button type="button" onclick="openCreateSectionModal()" class="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-[11px] font-semibold border">+ 新增分類</button>
-              <button type="button" onclick="openItemModal(null, null)" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-black text-white text-[11px] font-medium shadow">+ 新增卡片</button>
+              <button type="button" onclick="openCreateSectionModal()" class="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-[11px] font-semibold border cursor-pointer">+ 新增分類</button>
+              <button type="button" onclick="openItemModal(null, null)" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-black text-white text-[11px] font-medium shadow cursor-pointer">+ 新增卡片</button>
             </div>
           </div>
           <div id="adminSectionsList" class="space-y-4"></div>
@@ -246,7 +310,7 @@
 
       <div class="px-6 py-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between">
         <span class="text-[11px] text-stone-500">雲端節點就緒</span>
-        <button type="button" onclick="saveAdminAndClose()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md">儲存並同步</button>
+        <button type="button" onclick="saveAdminAndClose()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md cursor-pointer">儲存並同步</button>
       </div>
     </div>
   </div>
@@ -257,7 +321,7 @@
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 id="modalHeaderTitle" class="font-bold text-stone-900 text-sm">編輯卡片項目</h3>
-        <button type="button" onclick="closeItemModal()" class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center">✕</button>
+        <button type="button" onclick="closeItemModal()" class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center cursor-pointer">✕</button>
       </div>
       <div class="space-y-3">
         <div>
@@ -272,25 +336,40 @@
           <label class="block font-semibold mb-1">內容說明 (小字 細字體)</label>
           <input type="text" id="modalSubtitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-light text-stone-600" placeholder="例：限量現貨供應中">
         </div>
-        <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
-          <label class="block font-bold">圖片設定</label>
-          <div class="flex items-center gap-3">
-            <img id="modalPreviewImg" src="" class="w-12 h-12 rounded-xl object-cover border bg-white">
-            <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-white border font-medium text-[11px]">
-              <span>上傳圖片</span>
-              <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'card')">
-            </label>
-            <button type="button" onclick="clearModalImg()" class="text-stone-400 hover:text-rose-500 text-[11px]">移除圖片</button>
+
+        <!-- 圖片設定 (支援一鍵切換「無需圖片」) -->
+        <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="font-bold text-stone-800">圖片設定</label>
+            <button type="button" onclick="setNoImageMode()" id="btnNoImageToggle" class="px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer">
+              <i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>
+            </button>
           </div>
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <select id="modalImgSize" class="w-full border rounded-xl px-2 py-1.5 text-xs bg-white">
-              <option value="small">小 (方形)</option><option value="medium" selected>中 (標準長方)</option><option value="large">大 (滿版海報)</option>
-            </select>
-            <select id="modalImgPos" class="w-full border rounded-xl px-2 py-1.5 text-xs bg-white">
-              <option value="left" selected>左側</option><option value="right">右側</option><option value="top">上方</option>
-            </select>
+
+          <div id="imageSettingsBody" class="space-y-2">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl border bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img id="modalPreviewImg" src="" class="w-full h-full object-cover">
+                <span id="noImgPlaceholder" class="text-[10px] text-stone-400 font-light" style="display: none;">無圖片</span>
+              </div>
+              <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-white border border-stone-300 font-medium text-[11px] hover:bg-stone-100 shadow-2xs">
+                <i class="fa-solid fa-arrow-up-from-bracket text-[10px] mr-1"></i><span>上傳圖片檔案</span>
+                <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'card')">
+              </label>
+              <button type="button" onclick="clearModalImg()" class="text-stone-400 hover:text-rose-500 text-[11px] cursor-pointer">清除重選</button>
+            </div>
+
+            <div id="imgLayoutRow" class="grid grid-cols-2 gap-2 pt-1">
+              <select id="modalImgSize" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
+                <option value="small">小 (方形)</option><option value="medium" selected>中 (標準長方)</option><option value="large">大 (滿版海報)</option>
+              </select>
+              <select id="modalImgPos" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
+                <option value="left" selected>左側</option><option value="right">右側</option><option value="top">上方</option>
+              </select>
+            </div>
           </div>
         </div>
+
         <div class="grid grid-cols-2 gap-2">
           <input type="text" id="modalUrl" class="w-full border rounded-xl px-3 py-2 text-xs" placeholder="跳轉網址 https://">
           <input type="text" id="modalCode" class="w-full border rounded-xl px-3 py-2 text-xs font-mono uppercase" placeholder="優惠代碼 (選填)">
@@ -298,8 +377,8 @@
         <input type="text" id="modalBadge" class="w-full border rounded-xl px-3 py-2 text-xs" placeholder="角標標籤 (例：本月主打)">
       </div>
       <div class="flex justify-end gap-2 pt-3 border-t">
-        <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-xl border text-stone-600">取消</button>
-        <button type="button" onclick="saveItemData()" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-medium">確定儲存</button>
+        <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-xl border text-stone-600 cursor-pointer">取消</button>
+        <button type="button" onclick="saveItemData()" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-medium cursor-pointer">確定儲存</button>
       </div>
     </div>
   </div>
@@ -349,8 +428,8 @@
         <p id="shareUrlDisplay" class="text-[11px] text-stone-500 font-mono mt-0.5">link.heysibyl.com</p>
       </div>
       <div class="flex gap-2">
-        <button type="button" onclick="copyShareUrl()" class="flex-1 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-semibold shadow">複製連結</button>
-        <button type="button" onclick="closeShareModal()" class="px-4 py-2.5 rounded-xl border text-stone-600 text-xs">關閉</button>
+        <button type="button" onclick="copyShareUrl()" class="flex-1 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-semibold shadow cursor-pointer">複製連結</button>
+        <button type="button" onclick="closeShareModal()" class="px-4 py-2.5 rounded-xl border text-stone-600 text-xs cursor-pointer">關閉</button>
       </div>
     </div>
   </div>
@@ -527,13 +606,16 @@
           const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
           const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs">${item.discountCode}</button>` : '';
 
-          if (item.imgPos === 'top' && item.img) {
+          if (item.img && item.imgPos === 'top') {
             card.innerHTML = `<div class="w-full ${sizeClass} overflow-hidden bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div><div class="p-4 space-y-1">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light">${item.subtitle}</div><div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60">探索詳情 ➔</span>${codeBtn}</div></div>`;
-          } else if (item.imgPos === 'right' && item.img) {
+          } else if (item.img && item.imgPos === 'right') {
             card.innerHTML = `<div class="p-3.5 flex justify-between gap-3"><div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate">${item.subtitle}</div>${codeBtn}</div><div class="${sizeClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div></div>`;
-          } else {
-            const imgEl = item.img ? `<div class="${sizeClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>` : '';
+          } else if (item.img) {
+            const imgEl = `<div class="${sizeClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>`;
             card.innerHTML = `<div class="p-3.5 flex items-center gap-3.5">${imgEl}<div class="flex-grow min-w-0">${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div></div>${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>`;
+          } else {
+            // 純文字卡片 (無需圖片)
+            card.innerHTML = `<div class="p-4 flex items-center justify-between gap-3"><div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div></div><div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div></div>`;
           }
           wrap.appendChild(card);
         });
@@ -549,11 +631,12 @@
       }
       const { value: pin } = await Swal.fire({
         title: '請輸入管理 PIN 碼',
+        text: '驗證身分以進入您的品牌管理後台',
         input: 'password',
         inputPlaceholder: '預設 8888',
         showCancelButton: true,
         confirmButtonText: '登入後台',
-        confirmButtonColor: '#2C241E'
+        cancelButtonText: '取消'
       });
       if (pin === appData.adminPin) {
         if (pin === '8888') {
@@ -565,8 +648,7 @@
         Swal.fire({
           title: '密碼錯誤',
           text: '若忘記密碼，請聯繫官方 LINE 由總管中心為您重設。',
-          icon: 'error',
-          confirmButtonColor: '#2C241E'
+          icon: 'error'
         });
       }
     }
@@ -574,13 +656,12 @@
     // 初次登入強制改密碼
     async function forceChangeDefaultPin() {
       const { value: newPin } = await Swal.fire({
-        title: '首次登入安全提醒',
-        text: '偵測到您仍使用預設密碼 8888，請先自訂一組 4-6 位數新 PIN 碼：',
+        title: '首次登入安全設定',
+        text: '偵測到您仍使用預設密碼 8888，請自訂一組 4-6 位數新 PIN 碼：',
         input: 'password',
-        inputPlaceholder: '請輸入新 PIN 碼',
+        inputPlaceholder: '請輸入新 PIN 碼 (至少 4 位數)',
         allowOutsideClick: false,
         confirmButtonText: '確認並進入後台',
-        confirmButtonColor: '#2C241E',
         inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
       });
       if (newPin) {
@@ -592,7 +673,7 @@
             body: JSON.stringify({ admin_pin: appData.adminPin })
           });
         }
-        Swal.fire('密碼設定成功！', '請妥善保管您的管理 PIN 碼', 'success');
+        Swal.fire({ title: '密碼設定成功！', text: '請妥善保管您的管理 PIN 碼', icon: 'success' });
         openAdminModal();
       }
     }
@@ -601,11 +682,12 @@
     async function promptChangePin() {
       const { value: newPin } = await Swal.fire({
         title: '修改管理 PIN 碼',
+        text: '設定新的後台防護密碼',
         input: 'password',
         inputPlaceholder: '輸入新密碼 (至少 4 位數)',
         showCancelButton: true,
         confirmButtonText: '儲存新密碼',
-        confirmButtonColor: '#2C241E',
+        cancelButtonText: '取消',
         inputValidator: (v) => (!v || v.length < 4) ? '密碼長度至少需 4 碼' : null
       });
       if (newPin) {
@@ -617,11 +699,11 @@
             body: JSON.stringify({ admin_pin: appData.adminPin })
           });
         }
-        Swal.fire('密碼修改成功！', '', 'success');
+        Swal.fire({ title: '密碼修改成功！', icon: 'success' });
       }
     }
 
-    // 抽屜控制
+    // 抽屜開關
     window.openAdminModal = function() { populateAdmin(); document.getElementById('adminSheet').style.display = 'block'; };
     window.closeAdminModal = function() { document.getElementById('adminSheet').style.display = 'none'; };
     window.openOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'block'; };
@@ -658,7 +740,7 @@
             <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
           </select>
           <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
-          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView();" class="text-stone-400 hover:text-rose-500 px-1">✕</button>
+          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer">✕</button>
         `;
         socBox.appendChild(row);
       });
@@ -671,10 +753,10 @@
         box.innerHTML = `
           <div class="flex justify-between items-center gap-2">
             <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
-            <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-500 text-[11px]">刪分類</button>
+            <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium cursor-pointer">刪除分類</button>
           </div>
           <div id="items-box-${sIdx}" class="space-y-1.5"></div>
-          <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold">+ 此分類新增卡片</button>
+          <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold cursor-pointer hover:bg-stone-50">+ 此分類新增卡片</button>
         `;
         secBox.appendChild(box);
         const container = box.querySelector(`#items-box-${sIdx}`);
@@ -684,8 +766,8 @@
           row.innerHTML = `
             <div class="truncate mr-2 font-bold">${it.title}</div>
             <div class="flex gap-1">
-              <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded">編輯</button>
-              <button type="button" onclick="appData.sections[${sIdx}].items.splice(${iIdx},1); populateAdmin(); renderView();" class="text-rose-500 px-1">✕</button>
+              <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200">編輯</button>
+              <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer">✕</button>
             </div>
           `;
           container.appendChild(row);
@@ -694,8 +776,65 @@
     }
 
     window.addSocialLink = function() { appData.socials.push({ icon: 'fa-brands fa-instagram', label: 'IG', url: 'https://' }); populateAdmin(); renderView(); };
-    window.deleteSection = function(idx) { if(confirm('確定刪除整組分類？')) { appData.sections.splice(idx,1); populateAdmin(); renderView(); } };
-    window.openCreateSectionModal = function() { const n = prompt('輸入新分類名稱：'); if(n) { appData.sections.push({ id:'sec-'+Date.now(), title:n.trim(), items:[] }); populateAdmin(); renderView(); } };
+
+    // 美感彈窗：刪除分類
+    window.deleteSection = async function(idx) {
+      const secTitle = appData.sections[idx].title;
+      const res = await Swal.fire({
+        title: '確定刪除分類？',
+        text: `刪除「${secTitle}」將會連帶清除此分類下的所有卡片。`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '確認刪除',
+        cancelButtonText: '取消'
+      });
+      if (res.isConfirmed) {
+        appData.sections.splice(idx, 1);
+        populateAdmin();
+        renderView();
+        showToast('分類已刪除');
+      }
+    };
+
+    // 美感彈窗：刪除單張卡片
+    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
+      const itTitle = appData.sections[sIdx].items[iIdx].title;
+      const res = await Swal.fire({
+        title: '刪除此項目？',
+        text: `確定要移除「${itTitle}」卡片嗎？`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '確定移除',
+        cancelButtonText: '取消'
+      });
+      if (res.isConfirmed) {
+        appData.sections[sIdx].items.splice(iIdx, 1);
+        populateAdmin();
+        renderView();
+        showToast('項目已移除');
+      }
+    };
+
+    // 美感彈窗：新增分類 (取代瀏覽器原生丑 prompt)
+    window.openCreateSectionModal = async function() {
+      const { value: newName } = await Swal.fire({
+        title: '新增專屬分類',
+        text: '請輸入新的分類名稱 (如：限時好物、特選專欄、預約服務)',
+        input: 'text',
+        inputPlaceholder: '例如：限時推薦',
+        showCancelButton: true,
+        confirmButtonText: '建立分類',
+        cancelButtonText: '取消',
+        inputValidator: (val) => (!val || !val.trim()) ? '分類名稱不可為空！' : null
+      });
+
+      if (newName) {
+        appData.sections.push({ id: 'sec-' + Date.now(), title: newName.trim(), items: [] });
+        populateAdmin();
+        renderView();
+        showToast('分類建立成功！');
+      }
+    };
 
     // 卡片新增 / 編輯 Modal
     let editingPointer = { sIdx: null, iIdx: null };
@@ -709,14 +848,31 @@
         sel.appendChild(opt);
       });
 
-      if (sIdx !== null && iIdx !== null) {
-        const it = appData.sections[sIdx].items[iIdx];
+      const it = (sIdx !== null && iIdx !== null && appData.sections[sIdx]) ? appData.sections[sIdx].items[iIdx] : null;
+      const hasImg = Boolean(it && it.img);
+
+      document.getElementById('modalPreviewImg').style.display = hasImg ? 'block' : 'none';
+      document.getElementById('noImgPlaceholder').style.display = hasImg ? 'none' : 'inline';
+      document.getElementById('imgLayoutRow').style.display = hasImg ? 'grid' : 'none';
+
+      const btn = document.getElementById('btnNoImageToggle');
+      if (hasImg) {
+        btn.innerHTML = '<i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>';
+        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer';
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-image text-[10px] mr-1"></i><span>恢復使用圖片</span>';
+        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-amber-300 bg-amber-50 text-amber-800 cursor-pointer';
+      }
+
+      if (it) {
         document.getElementById('modalTitle').value = it.title;
         document.getElementById('modalSubtitle').value = it.subtitle || '';
         document.getElementById('modalUrl').value = it.url;
         document.getElementById('modalCode').value = it.discountCode || '';
         document.getElementById('modalBadge').value = it.badge || '';
         document.getElementById('modalPreviewImg').src = it.img || '';
+        document.getElementById('modalImgSize').value = it.imgSize || 'medium';
+        document.getElementById('modalImgPos').value = it.imgPos || 'left';
       } else {
         document.getElementById('modalTitle').value = '';
         document.getElementById('modalSubtitle').value = '';
@@ -724,24 +880,58 @@
         document.getElementById('modalCode').value = '';
         document.getElementById('modalBadge').value = '';
         document.getElementById('modalPreviewImg').src = '';
+        document.getElementById('modalImgSize').value = 'medium';
+        document.getElementById('modalImgPos').value = 'left';
       }
       document.getElementById('itemModal').style.display = 'flex';
     };
 
     window.closeItemModal = function() { document.getElementById('itemModal').style.display = 'none'; };
-    window.clearModalImg = function() { document.getElementById('modalPreviewImg').src = ''; };
+
+    // 一鍵設為「無需圖片」切換
+    window.setNoImageMode = function() {
+      const imgEl = document.getElementById('modalPreviewImg');
+      const placeholder = document.getElementById('noImgPlaceholder');
+      const layoutRow = document.getElementById('imgLayoutRow');
+      const btn = document.getElementById('btnNoImageToggle');
+
+      if (imgEl.src && imgEl.style.display !== 'none') {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        placeholder.style.display = 'inline';
+        layoutRow.style.display = 'none';
+        btn.innerHTML = '<i class="fa-solid fa-image text-[10px] mr-1"></i><span>恢復使用圖片</span>';
+        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-amber-300 bg-amber-50 text-amber-800 cursor-pointer';
+      } else {
+        imgEl.style.display = 'block';
+        placeholder.style.display = 'none';
+        layoutRow.style.display = 'grid';
+        btn.innerHTML = '<i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>';
+        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer';
+      }
+    };
+
+    window.clearModalImg = function() {
+      document.getElementById('modalPreviewImg').src = '';
+      document.getElementById('modalPreviewImg').style.display = 'none';
+      document.getElementById('noImgPlaceholder').style.display = 'inline';
+      document.getElementById('imgLayoutRow').style.display = 'none';
+    };
 
     window.saveItemData = function() {
       const t = document.getElementById('modalTitle').value.trim();
       if (!t) return showToast('請填寫主題名稱');
       const targetSec = parseInt(document.getElementById('modalSectionSelect').value) || 0;
+      const imgEl = document.getElementById('modalPreviewImg');
+      const currentImg = (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.endsWith('/')) ? imgEl.src : '';
+
       const itObj = {
         id: 'item-' + Date.now(), title: t,
         subtitle: document.getElementById('modalSubtitle').value.trim(),
         url: document.getElementById('modalUrl').value.trim() || '#',
         discountCode: document.getElementById('modalCode').value.trim(),
         badge: document.getElementById('modalBadge').value.trim(),
-        img: document.getElementById('modalPreviewImg').src || '',
+        img: currentImg,
         imgSize: document.getElementById('modalImgSize').value,
         imgPos: document.getElementById('modalImgPos').value
       };
@@ -764,8 +954,19 @@
       if (!file) return;
       const r = new FileReader();
       r.onload = (ev) => {
-        if (type === 'avatar') { appData.avatar = ev.target.result; document.getElementById('adminAvatarThumb').src = ev.target.result; renderView(); }
-        else { document.getElementById('modalPreviewImg').src = ev.target.result; }
+        if (type === 'avatar') {
+          appData.avatar = ev.target.result;
+          document.getElementById('adminAvatarThumb').src = ev.target.result;
+          renderView();
+        } else {
+          const imgEl = document.getElementById('modalPreviewImg');
+          imgEl.src = ev.target.result;
+          imgEl.style.display = 'block';
+          document.getElementById('noImgPlaceholder').style.display = 'none';
+          document.getElementById('imgLayoutRow').style.display = 'grid';
+          document.getElementById('btnNoImageToggle').innerHTML = '<i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>';
+          document.getElementById('btnNoImageToggle').className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer';
+        }
       };
       r.readAsDataURL(file);
     };
@@ -799,7 +1000,6 @@
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立您的品牌專屬頁面...';
 
       try {
-        // 1. 直寫 Supabase (保證 1 秒內必開通，永不卡信箱問題)
         const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
           method: "POST",
           headers: {
@@ -826,7 +1026,6 @@
         const storeData = await storeRes.json();
         if (storeData && storeData.length > 0) {
           const newId = storeData[0].id;
-          // 置入範本卡片
           await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
             method: "POST",
             headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
@@ -838,7 +1037,7 @@
           });
         }
 
-        // 2. 背景非同步觸發 GAS 寄送備份信 (即便信箱延遲也不影響用戶立刻使用)
+        // 背景發送備份信
         fetch(GAS_WEBHOOK_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -849,20 +1048,18 @@
           })
         }).catch(() => {});
 
-        // 3. 雙軌成功：立即轉跳至用戶專屬微頁面！
         closeOnboardModal();
         Swal.fire({
           title: '🎉 開通成功！',
-          html: `您的專屬首頁網址為：<br><b>https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b><br>點擊確定立即前往您的微頁！`,
+          html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b><br>點擊確定立即前往您的微頁！`,
           icon: 'success',
-          confirmButtonText: '立即進入我的品牌頁',
-          confirmButtonColor: '#2C241E'
+          confirmButtonText: '立即進入我的品牌頁'
         }).then(() => {
           window.location.href = `${window.location.pathname}?u=${slug}`;
         });
 
       } catch (err) {
-        Swal.fire('代號已被使用', '請更換其他網址代號重試', 'warning');
+        Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
       } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即開通專屬微頁';
@@ -876,3 +1073,9 @@
   </script>
 </body>
 </html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(clean_html)
+
+print("Saved completely redesigned index.html!")
