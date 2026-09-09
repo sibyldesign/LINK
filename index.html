@@ -765,16 +765,37 @@
           row.className = 'flex justify-between items-center p-2 rounded-xl bg-white border text-xs';
           row.innerHTML = `
             <div class="truncate mr-2 font-bold">${it.title}</div>
-            <div class="flex gap-1">
-              <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200">編輯</button>
-              <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer">✕</button>
-            </div>
+            
+            <div class="flex items-center gap-1">
+  <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer" title="上移">↑</button>
+  <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer" title="下移">↓</button>
+  <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200 font-medium">編輯</button>
+  <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer" title="刪除">✕</button>
+</div>
           `;
           container.appendChild(row);
         });
       });
     }
 
+    // ✅ 新增卡片上下移動排序函式
+window.reorderItem = function(sIdx, iIdx, dir) {
+  const items = appData.sections[sIdx].items;
+  const targetIdx = iIdx + dir;
+  
+  // 檢查是否超出陣列邊界 (第一項不能再上移，最後一項不能再下移)
+  if (targetIdx < 0 || targetIdx >= items.length) return;
+  
+  // 陣列元素互換位置
+  const temp = items[iIdx];
+  items[iIdx] = items[targetIdx];
+  items[targetIdx] = temp;
+  
+  // 重新渲染後台列表與前端頁面
+  populateAdmin();
+  renderView();
+};
+    
     window.addSocialLink = function() { appData.socials.push({ icon: 'fa-brands fa-instagram', label: 'IG', url: 'https://' }); populateAdmin(); renderView(); };
 
     // 美感彈窗：刪除分類
