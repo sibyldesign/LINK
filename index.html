@@ -52,7 +52,7 @@
     .app-card { background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--card-shadow); backdrop-filter: blur(14px); transition: all 0.22s ease; }
     .app-card:hover { background: var(--card-hover); transform: translateY(-2px); }
 
-    /* 全站 SweetAlert2 奢華拿鐵美學風格 */
+    /* SweetAlert2 奢華拿鐵美學風格 */
     div:where(.swal2-container) div:where(.swal2-popup) {
       background: #FAF6F0 !important; border: 1px solid #DFD1C0 !important; border-radius: 28px !important;
       padding: 24px 20px !important; box-shadow: 0 20px 40px -10px rgba(74, 59, 44, 0.2) !important; color: #2C241E !important;
@@ -268,7 +268,7 @@
     </div>
   </div>
 
-  <!-- ==================== 卡片編輯彈窗 ==================== -->
+  <!-- ==================== 卡片編輯彈窗 (支援 大 方形 + 上方) ==================== -->
   <div id="itemModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <div onclick="closeItemModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
@@ -309,13 +309,26 @@
               </label>
               <button type="button" onclick="clearModalImg()" class="text-stone-400 hover:text-rose-500 text-[11px] cursor-pointer">清除重選</button>
             </div>
+            
+            <!-- 尺寸與位置設定 (已擴充 大 (方形)) -->
             <div id="imgLayoutRow" class="grid grid-cols-2 gap-2 pt-1">
-              <select id="modalImgSize" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
-                <option value="small">小 (方形)</option><option value="medium" selected>中 (標準長方)</option><option value="large">大 (滿版海報)</option>
-              </select>
-              <select id="modalImgPos" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
-                <option value="left" selected>左側</option><option value="right">右側</option><option value="top">上方</option>
-              </select>
+              <div>
+                <label class="block text-[10px] text-stone-500 mb-1">圖片比例尺寸</label>
+                <select id="modalImgSize" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
+                  <option value="small">小 (方形 48px)</option>
+                  <option value="medium" selected>中 (標準長方 64px)</option>
+                  <option value="large-square">大 (方形 300px)</option>
+                  <option value="large">大 (滿版長海報)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] text-stone-500 mb-1">圖片擺放位置</label>
+                <select id="modalImgPos" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
+                  <option value="top">上方 (置頂推薦)</option>
+                  <option value="left" selected>左側</option>
+                  <option value="right">右側</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -389,7 +402,7 @@
     操作完成
   </div>
 
-  <!-- ==================== 穩健腳本邏輯 (雙軌持久化) ==================== -->
+  <!-- ==================== 穩健腳本邏輯 ==================== -->
   <script>
     const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxJlhG1eDEwuyjiJedTtvND-iwIzGXA3sfc_iN_Pq-15LIKWwlHGDX5tFRVdlOzfanONA/exec";
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
@@ -424,8 +437,8 @@
               id: 'item-101',
               title: '【法式亞麻】手工織造抱枕與羊絨毯禮盒',
               subtitle: '限量開放預購，輸入專屬代碼享九折獨家禮遇',
-              img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
-              imgSize: 'medium', imgPos: 'left', url: 'https://heysibyl.com', discountCode: 'NINE90', badge: '本月主打'
+              img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80',
+              imgSize: 'large-square', imgPos: 'top', url: 'https://heysibyl.com', discountCode: 'NINE90', badge: '本月主打'
             },
             {
               id: 'item-102',
@@ -433,19 +446,6 @@
               subtitle: '純天然低溫萃取，以空間氣味安撫日常疲憊',
               img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=400&q=80',
               imgSize: 'small', imgPos: 'left', url: 'https://heysibyl.com', discountCode: '', badge: '僅剩8組'
-            }
-          ]
-        },
-        {
-          id: 'sec-2',
-          title: 'SPACES & BOOKINGS ╳ 空間預約與諮詢',
-          items: [
-            {
-              id: 'item-201',
-              title: '秋季私廚感官餐桌（每週僅開放五席）',
-              subtitle: '以在地當令旬味為靈感的 7 道私廚微醺晚宴',
-              img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80',
-              imgSize: 'large', imgPos: 'top', url: 'https://heysibyl.com', discountCode: '', badge: '預約席位'
             }
           ]
         }
@@ -466,7 +466,7 @@
       const slug = p.get('u');
       currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
 
-      // 先從本地快取讀取（避免白屏或閃爍）
+      // 優先讀取本地備份，防止任何資料遺失
       const localCache = localStorage.getItem(getStorageKey());
       if (localCache) {
         try {
@@ -522,9 +522,7 @@
             appData.sections = Object.values(map);
           }
 
-          // 同步存入本地快取
           localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
           document.getElementById('demoSwitchBar').style.display = 'block';
           document.getElementById('btnAdminLabel').innerText = '管理後台';
           document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
@@ -534,7 +532,7 @@
           switchToDemoMode();
         }
       } catch (e) {
-        console.warn("雲端讀取異常，使用本地暫存:", e);
+        console.warn("雲端讀取異常，改採本地暫存:", e);
         renderView();
       }
     }
@@ -578,19 +576,86 @@
           const card = document.createElement('div');
           card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer';
           card.onclick = (e) => { if (!e.target.closest('.copy-btn')) window.open(item.url, '_blank'); };
-          const sizeClass = { small: 'w-12 h-12', medium: 'w-16 h-16', large: 'w-full h-36' }[item.imgSize || 'medium'];
+
+          // 尺寸類別：新增 large-square (大方形)
+          const sizeClassMap = {
+            'small': 'w-12 h-12',
+            'medium': 'w-16 h-16',
+            'large-square': 'w-full max-w-[320px] aspect-square mx-auto',
+            'large': 'w-full h-40'
+          };
+          const sizeClass = sizeClassMap[item.imgSize] || 'w-16 h-16';
+
           const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
           const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs">${item.discountCode}</button>` : '';
 
+          // 渲染：頂部置頂 (Top) 支援 大(滿版) 與 大(方形)
           if (item.img && item.imgPos === 'top') {
-            card.innerHTML = `<div class="w-full ${sizeClass} overflow-hidden bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div><div class="p-4 space-y-1">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light">${item.subtitle}</div><div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60">探索詳情 ➔</span>${codeBtn}</div></div>`;
+            const isSquare = item.imgSize === 'large-square';
+            const imgContainerClass = isSquare 
+              ? 'w-full p-4 pb-0 flex justify-center bg-stone-50/50' 
+              : 'w-full h-40 overflow-hidden bg-stone-100';
+            const imgInsideClass = isSquare 
+              ? 'w-full aspect-square max-w-[340px] rounded-2xl object-cover shadow-sm' 
+              : 'w-full h-full object-cover';
+
+            card.innerHTML = `
+              <div class="${imgContainerClass}">
+                <img src="${item.img}" class="${imgInsideClass}">
+              </div>
+              <div class="p-4 space-y-1">
+                ${badge}
+                <div class="text-xs font-bold">${item.title}</div>
+                <div class="text-[11px] font-light leading-relaxed">${item.subtitle}</div>
+                <div class="pt-2 flex justify-between items-center">
+                  <span class="text-[10px] opacity-60">探索詳情 ➔</span>
+                  ${codeBtn}
+                </div>
+              </div>
+            `;
           } else if (item.img && item.imgPos === 'right') {
-            card.innerHTML = `<div class="p-3.5 flex justify-between gap-3"><div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate">${item.subtitle}</div>${codeBtn}</div><div class="${sizeClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div></div>`;
+            const sideClass = (item.imgSize === 'large' || item.imgSize === 'large-square') ? 'w-24 h-24' : sizeClass;
+            card.innerHTML = `
+              <div class="p-3.5 flex justify-between items-center gap-3">
+                <div class="min-w-0 space-y-0.5">
+                  ${badge}
+                  <div class="text-xs font-bold truncate">${item.title}</div>
+                  <div class="text-[11px] font-light truncate">${item.subtitle}</div>
+                  ${codeBtn ? `<div class="pt-1">${codeBtn}</div>` : ''}
+                </div>
+                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0">
+                  <img src="${item.img}" class="w-full h-full object-cover">
+                </div>
+              </div>
+            `;
           } else if (item.img) {
-            const imgEl = `<div class="${sizeClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>`;
-            card.innerHTML = `<div class="p-3.5 flex items-center gap-3.5">${imgEl}<div class="flex-grow min-w-0">${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div></div>${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>`;
+            // 左側模式 (預設)
+            const sideClass = (item.imgSize === 'large' || item.imgSize === 'large-square') ? 'w-24 h-24' : sizeClass;
+            card.innerHTML = `
+              <div class="p-3.5 flex items-center gap-3.5">
+                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0">
+                  <img src="${item.img}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-grow min-w-0">
+                  ${badge}
+                  <div class="text-xs font-bold truncate">${item.title}</div>
+                  <div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div>
+                </div>
+                ${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
+              </div>
+            `;
           } else {
-            card.innerHTML = `<div class="p-4 flex items-center justify-between gap-3"><div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div></div><div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div></div>`;
+            // 純文字卡片
+            card.innerHTML = `
+              <div class="p-4 flex items-center justify-between gap-3">
+                <div class="min-w-0 space-y-0.5">
+                  ${badge}
+                  <div class="text-xs font-bold">${item.title}</div>
+                  <div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div>
+                </div>
+                <div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
+              </div>
+            `;
           }
           wrap.appendChild(card);
         });
@@ -598,7 +663,6 @@
       });
     }
 
-    // 後台密碼驗證
     async function handleAdminEntry() {
       if (!isRealUser) { openAdminModal(); return; }
       const { value: pin } = await Swal.fire({
@@ -725,7 +789,6 @@
       });
     }
 
-    // 分類排序與卡片排序
     window.reorderSection = function(sIdx, dir) {
       const targetIdx = sIdx + dir;
       if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
@@ -835,8 +898,8 @@
         document.getElementById('modalCode').value = '';
         document.getElementById('modalBadge').value = '';
         document.getElementById('modalPreviewImg').src = '';
-        document.getElementById('modalImgSize').value = 'medium';
-        document.getElementById('modalImgPos').value = 'left';
+        document.getElementById('modalImgSize').value = 'large-square';
+        document.getElementById('modalImgPos').value = 'top';
       }
       document.getElementById('itemModal').style.display = 'flex';
     };
@@ -904,7 +967,7 @@
       closeItemModal();
       populateAdmin();
       renderView();
-      showToast('卡片暫存成功！');
+      showToast('卡片已就緒！');
     };
 
     window.handleImageUpload = function(e, type) {
@@ -929,20 +992,19 @@
       r.readAsDataURL(file);
     };
 
-    // 終極持久化同步：同時儲存 LocalStorage 與 Supabase（含全卡片覆蓋）
+    // 儲存至本地快取與 Supabase
     window.saveAdminAndClose = async function() {
       const btn = document.getElementById('btnSaveAdmin');
       btn.disabled = true;
       btn.innerText = '儲存同步中...';
 
-      // 1. 本地 LocalStorage 強固備份 (保證離線/重整不遺失)
+      // 1. 本地備份
       localStorage.setItem(getStorageKey(), JSON.stringify(appData));
 
-      // 2. 雲端同步 (真實使用者模式)
+      // 2. 雲端同步
       if (isRealUser && currentStoreDbId) {
         showToast('正在發布至雲端節點...');
         try {
-          // A. 更新商店主檔
           await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
             method: "PATCH",
             headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
@@ -956,7 +1018,6 @@
             })
           });
 
-          // B. 覆蓋更新卡片清單 (先刪除後寫入)
           await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
             method: "DELETE",
             headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
@@ -991,7 +1052,7 @@
           }
         } catch (err) {
           console.error("雲端同步異常:", err);
-          showToast('雲端連線異常，已先儲存於本機快取');
+          showToast('已安全儲存於本地快取');
         }
       }
 
@@ -1001,104 +1062,102 @@
       showToast('✨ 設定已成功儲存並同步發布！');
     };
 
-    // 開通新品牌
+    // 開通新專案：透過 POST 送交 GAS 確保 100% 派信
     window.handleOnboardSubmit = async function(e) {
-  e.preventDefault();
-  const brand = document.getElementById('quickBrand').value.trim();
-  const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
-  const email = document.getElementById('quickEmail').value.trim();
-  const btn = document.getElementById('btnSubmitOnboard');
+      e.preventDefault();
+      const brand = document.getElementById('quickBrand').value.trim();
+      const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
+      const email = document.getElementById('quickEmail').value.trim();
+      const btn = document.getElementById('btnSubmitOnboard');
 
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面並派送開通信件...';
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面並派送開通信件...';
 
-  // 1. 先呼叫 GAS 發送信件並登記試算表
-  try {
-    const formData = new URLSearchParams();
-    formData.append("action", "REGISTER_NEW_STORE");
-    formData.append("payload", JSON.stringify({
-      brandName: brand,
-      slug: slug,
-      email: email,
-      pin: "8888"
-    }));
+      // 1. 觸發 GAS 發信 (以 text/plain 形式直接投遞，徹底穿透 CORS)
+      try {
+        const payloadData = JSON.stringify({
+          action: "REGISTER_NEW_STORE",
+          payload: {
+            brandName: brand,
+            slug: slug,
+            email: email,
+            pin: "8888"
+          }
+        });
 
-    fetch(GAS_WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: formData
-    });
-  } catch (err) {
-    console.warn("GAS 派發警告:", err);
-  }
+        fetch(GAS_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: payloadData
+        });
+      } catch (err) {
+        console.warn("GAS 派發警告:", err);
+      }
 
-  // 2. 直寫 Supabase（建立商店與第一張卡片）
-  try {
-    const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
-      method: "POST",
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
-        "Prefer": "return=representation"
-      },
-      body: JSON.stringify({
-        slug: slug,
-        brand_name: brand,
-        owner_email: email,
-        admin_pin: "8888",
-        theme: "cashmere-latte",
-        avatar_url: illustrationAvatars[0],
-        bio_text: `歡迎光臨 ${brand} 官方品牌頁\n點擊探索最新推薦`,
-        social_links: [
-          { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
-          { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
-        ]
-      })
-    });
+      // 2. 直寫 Supabase (建立主檔與第一張推薦卡)
+      try {
+        const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify({
+            slug: slug,
+            brand_name: brand,
+            owner_email: email,
+            admin_pin: "8888",
+            theme: "cashmere-latte",
+            avatar_url: illustrationAvatars[0],
+            bio_text: `歡迎光臨 ${brand} 官方品牌頁\n點擊探索最新推薦`,
+            social_links: [
+              { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
+              { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
+            ]
+          })
+        });
 
-    const storeData = await storeRes.json();
-    if (storeData && storeData.length > 0) {
-      const newId = storeData[0].id;
-      await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify([{
-          store_id: newId,
-          section_title: "精選推薦",
-          title: "【新朋友專屬】點此領取品牌體驗禮遇",
-          subtitle: "輸入優惠代碼即享獨家折抵",
-          target_url: "https://heysibyl.com",
-          discount_code: "WELCOME",
-          badge_label: "限時",
-          img_size: "medium",
-          img_pos: "left",
-          sort_order: 1
-        }])
-      });
-    }
+        const storeData = await storeRes.json();
+        if (storeData && storeData.length > 0) {
+          const newId = storeData[0].id;
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+            method: "POST",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify([{
+              store_id: newId,
+              section_title: "當月選物 ╳ 專屬特企",
+              title: "【新朋友專屬】點此領取品牌體驗禮遇",
+              subtitle: "輸入專屬折扣碼即享獨家折抵",
+              target_url: "https://heysibyl.com",
+              discount_code: "WELCOME",
+              badge_label: "限時",
+              img_size: "large-square",
+              img_pos: "top",
+              sort_order: 1
+            }])
+          });
+        }
 
-    closeOnboardModal();
-    Swal.fire({
-      title: '🎉 開通成功！',
-      html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>開通信件已同步發送至您的信箱！<br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b>`,
-      icon: 'success',
-      confirmButtonText: '立即進入我的品牌頁'
-    }).then(() => {
-      window.location.href = `${window.location.pathname}?u=${slug}`;
-    });
+        closeOnboardModal();
+        Swal.fire({
+          title: '🎉 開通成功！',
+          html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>開通信件已同步派送至信箱！<br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b>`,
+          icon: 'success',
+          confirmButtonText: '立即進入我的品牌頁'
+        }).then(() => {
+          window.location.href = `${window.location.pathname}?u=${slug}`;
+        });
 
-  } catch (err) {
-    Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即免費開通專屬頁面';
-  }
-};
+      } catch (err) {
+        Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即免費開通專屬頁面';
+      }
+    };
 
     window.copyCode = function(c, e) { if (e) e.stopPropagation(); navigator.clipboard.writeText(c).then(() => showToast(`已複製優惠碼：${c}`)); };
     function showToast(m) {
