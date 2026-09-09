@@ -410,7 +410,7 @@
           <input required type="email" id="quickEmail" placeholder="yourname@gmail.com" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs">
         </div>
         <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-sparkles text-amber-300"></i><span>立即開通專屬微頁</span>
+          <i class="fa-solid fa-sparkles text-amber-300"></i><span>立即開通專屬品牌頁</span>
         </button>
       </form>
     </div>
@@ -1051,7 +1051,7 @@
         closeOnboardModal();
         Swal.fire({
           title: '🎉 開通成功！',
-          html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b><br>點擊確定立即前往您的微頁！`,
+          html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b><br>點擊確定立即前往您的品牌頁！`,
           icon: 'success',
           confirmButtonText: '立即進入我的品牌頁'
         }).then(() => {
@@ -1062,7 +1062,7 @@
         Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即開通專屬微頁';
+        btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即開通專屬品牌頁';
       }
     };
 
