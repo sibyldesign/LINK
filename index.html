@@ -751,10 +751,14 @@
         const box = document.createElement('div');
         box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
         box.innerHTML = `
-          <div class="flex justify-between items-center gap-2">
-            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
-            <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium cursor-pointer">刪除分類</button>
-          </div>
+<div class="flex justify-between items-center gap-2">
+  <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
+  <div class="flex items-center gap-1 flex-shrink-0">
+    <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer" title="分類上移">↑</button>
+    <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer" title="分類下移">↓</button>
+    <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium ml-1 cursor-pointer">刪除分類</button>
+  </div>
+</div>
           <div id="items-box-${sIdx}" class="space-y-1.5"></div>
           <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold cursor-pointer hover:bg-stone-50">+ 此分類新增卡片</button>
         `;
@@ -907,6 +911,15 @@ window.reorderItem = function(sIdx, iIdx, dir) {
       document.getElementById('itemModal').style.display = 'flex';
     };
 
+    window.reorderSection = function(sIdx, dir) {
+  const targetIdx = sIdx + dir;
+  if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
+  const temp = appData.sections[sIdx];
+  appData.sections[sIdx] = appData.sections[targetIdx];
+  appData.sections[targetIdx] = temp;
+  populateAdmin();
+  renderView();
+};
     window.closeItemModal = function() { document.getElementById('itemModal').style.display = 'none'; };
 
     // 一鍵設為「無需圖片」切換
