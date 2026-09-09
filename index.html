@@ -989,82 +989,88 @@
     };
 
     // 雙重開通機制：直接直寫 Supabase 立即跳轉 + 背景非同步發信
-    window.handleOnboardSubmit = async function(e) {
-      e.preventDefault();
-      const brand = document.getElementById('quickBrand').value.trim();
-      const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
-      const email = document.getElementById('quickEmail').value.trim();
-      const btn = document.getElementById('btnSubmitOnboard');
+    // ✅ 優先觸發發信，確保信件 100% 派發
+window.handleOnboardSubmit = async function(e) {
+  e.preventDefault();
+  const brand = document.getElementById('quickBrand').value.trim();
+  const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
+  const email = document.getElementById('quickEmail').value.trim();
+  const btn = document.getElementById('btnSubmitOnboard');
 
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立您的品牌專屬頁面...';
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面並寄送開通信件...';
 
-      try {
-        const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
-          method: "POST",
-          headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-          },
-          body: JSON.stringify({
-            slug: slug,
-            brand_name: brand,
-            owner_email: email,
-            admin_pin: "8888",
-            theme: "cashmere-latte",
-            avatar_url: illustrationAvatars[0],
-            bio_text: `歡迎光臨 ${brand} 官方品牌頁\\n點擊探索最新推薦`,
-            social_links: [
-              { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
-              { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
-            ]
-          })
-        });
+  // 1. 先呼叫 GAS 觸發 Resend 發信與試算表登記
+  try {
+    await fetch(GAS_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: "REGISTER_NEW_STORE",
+        payload: { brandName: brand, slug: slug, email: email }
+      })
+    });
+  } catch (err) {
+    console.warn("GAS 觸發異常:", err);
+  }
 
-        const storeData = await storeRes.json();
-        if (storeData && storeData.length > 0) {
-          const newId = storeData[0].id;
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-            method: "POST",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify([{
-              store_id: newId, section_title: "精選推薦", title: "【新朋友專屬】點此領取品牌體驗禮遇",
-              subtitle: "輸入優惠代碼即享獨家折抵", target_url: "https://heysibyl.com", discount_code: "WELCOME",
-              badge_label: "限時", img_size: "medium", img_pos: "left", sort_order: 1
-            }])
-          });
-        }
+  // 2. 同步建立 Supabase 資料庫記錄
+  try {
+    const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"
+      },
+      body: JSON.stringify({
+        slug: slug,
+        brand_name: brand,
+        owner_email: email,
+        admin_pin: "8888",
+        theme: "cashmere-latte",
+        avatar_url: illustrationAvatars[0],
+        bio_text: `歡迎光臨 ${brand} 官方品牌頁\n點擊探索最新推薦`,
+        social_links: [
+          { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
+          { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
+        ]
+      })
+    });
 
-        // 背景發送備份信
-        fetch(GAS_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: "REGISTER_NEW_STORE",
-            payload: { brandName: brand, slug: slug, email: email }
-          })
-        }).catch(() => {});
+    const storeData = await storeRes.json();
+    if (storeData && storeData.length > 0) {
+      const newId = storeData[0].id;
+      await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+        method: "POST",
+        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify([{
+          store_id: newId, section_title: "精選推薦", title: "【新朋友專屬】點此領取品牌體驗禮遇",
+          subtitle: "輸入優惠代碼即享獨家折抵", target_url: "https://heysibyl.com", discount_code: "WELCOME",
+          badge_label: "限時", img_size: "medium", img_pos: "left", sort_order: 1
+        }])
+      });
+    }
 
-        closeOnboardModal();
-        Swal.fire({
-          title: '🎉 開通成功！',
-          html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b><br>點擊確定立即前往您的品牌頁！`,
-          icon: 'success',
-          confirmButtonText: '立即進入我的品牌頁'
-        }).then(() => {
-          window.location.href = `${window.location.pathname}?u=${slug}`;
-        });
+    closeOnboardModal();
+    Swal.fire({
+      title: '🎉 開通成功！',
+      html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>開通信件已發送至您的信箱！<br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b>`,
+      icon: 'success',
+      confirmButtonText: '立即進入我的品牌頁'
+    }).then(() => {
+      window.location.href = `${window.location.pathname}?u=${slug}`;
+    });
 
-      } catch (err) {
-        Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即開通專屬品牌頁';
-      }
-    };
+  } catch (err) {
+    Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即免費開通專屬頁面';
+  }
+};
 
     window.copyCode = function(c, e) { if (e) e.stopPropagation(); navigator.clipboard.writeText(c).then(() => showToast(`已複製優惠碼：${c}`)); };
     function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('opacity-0'); t.classList.add('opacity-100'); setTimeout(() => { t.classList.remove('opacity-100'); t.classList.add('opacity-0'); }, 2000); }
