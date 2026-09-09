@@ -393,7 +393,7 @@
         <h3 class="text-base font-bold text-stone-900">免費開通專屬品牌連結頁</h3>
         <p class="text-xs text-stone-500 mt-1">送出後即刻自動建立，同時備份至您的信箱</p>
       </div>
-      <form onsubmit="handleOnboardSubmit(event)" class="space-y-3.5 text-xs text-stone-700">
+      <form onsubmit="(event)" class="space-y-3.5 text-xs text-stone-700">
         <div>
           <label class="block font-semibold mb-1">品牌 / 店家名稱</label>
           <input required type="text" id="quickBrand" placeholder="例：STUDIO XX" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs">
@@ -1032,24 +1032,28 @@ window.handleOnboardSubmit = async function(e) {
   const btn = document.getElementById('btnSubmitOnboard');
 
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面並寄送開通信件...';
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面並派送開通信件...';
 
-  // 1. 先呼叫 GAS 觸發 Resend 發信與試算表登記
+  // 1. 強制透過標準 URL 編碼呼叫 GAS (徹底避開所有 CORS 跨域限制)
   try {
-    await fetch(GAS_WEBHOOK_URL, {
+    const formData = new URLSearchParams();
+    formData.append("action", "REGISTER_NEW_STORE");
+    formData.append("payload", JSON.stringify({
+      brandName: brand,
+      slug: slug,
+      email: email
+    }));
+
+    fetch(GAS_WEBHOOK_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        action: "REGISTER_NEW_STORE",
-        payload: { brandName: brand, slug: slug, email: email }
-      })
+      body: formData
     });
   } catch (err) {
-    console.warn("GAS 觸發異常:", err);
+    console.warn("GAS 觸發提示:", err);
   }
 
-  // 2. 同步建立 Supabase 資料庫記錄
+  // 2. 直寫 Supabase (保證資料庫即刻開通)
   try {
     const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
       method: "POST",
@@ -1091,7 +1095,7 @@ window.handleOnboardSubmit = async function(e) {
     closeOnboardModal();
     Swal.fire({
       title: '🎉 開通成功！',
-      html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>開通信件已發送至您的信箱！<br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b>`,
+      html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>開通信件已派送至信箱！<br>預設管理密碼為：<b style="color:#8C7058;font-size:18px;">8888</b>`,
       icon: 'success',
       confirmButtonText: '立即進入我的品牌頁'
     }).then(() => {
