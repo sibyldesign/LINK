@@ -179,12 +179,23 @@
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
     <!-- 底部輕量化入口 -->
-    <div class="mt-12 flex flex-col items-center gap-3 w-full">
-      <button type="button" onclick="openOnboardModal()" class="px-5 py-2 rounded-full bg-white/75 hover:bg-white border border-stone-200/80 shadow-xs text-stone-700 hover:text-black text-xs font-medium transition flex items-center gap-2 active:scale-95 cursor-pointer">
-        <span class="w-1.5 h-1.5 rounded-full bg-stone-900"></span>
-        <span>免費開通您的專屬品牌連結頁</span>
-        <i class="fa-solid fa-chevron-right text-[9px] opacity-40"></i>
+    <!-- 強調免費開通與自由換色的宣傳卡片 -->
+    <div class="w-full mt-10 p-5 rounded-3xl bg-white/70 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
+      <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
+        <i class="fa-solid fa-palette text-[9px]"></i>
+        <span>免費開通 ╳ 自由換色</span>
+      </div>
+      <h3 class="text-sm font-bold text-stone-900">
+        想要擁有專屬美學品牌連結頁？
+      </h3>
+      <p class="text-[11px] text-stone-600 leading-relaxed max-w-[280px]">
+        免費開通即享羊絨米、黑曜灰、晨曦霧綠與法式暮粉等六色系隨時切換！
+      </p>
+      <button type="button" onclick="openOnboard()" class="w-full py-2.5 rounded-2xl bg-stone-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i>
+        <span>免費開通專屬頁面（信箱自動接收）</span>
       </button>
+    </div>
 
       <footer class="pt-2 flex flex-col items-center text-center">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-stone-600 hover:text-black transition">
