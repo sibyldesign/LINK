@@ -10,274 +10,256 @@
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@200;300;400;500;600;700&display=swap');
 
     * {
-      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-tap-highlight-color: transparent;
       box-sizing: border-box;
     }
 
-    /* 頂級調色盤體系 (High-end Color Tokens) */
+    /* 頂級調色盤體系 (CSS 變數) */
     :root[data-theme="cashmere-latte"] {
       --bg-gradient: radial-gradient(120% 120% at 50% 0%, #F5EFE6 0%, #E8DFD3 100%);
-      --card-bg: rgba(255, 255, 255, 0.78);
-      --card-border: rgba(219, 206, 193, 0.6);
-      --card-hover: rgba(255, 255, 255, 0.95);
-      --card-shadow: 0 10px 30px -10px rgba(115, 96, 79, 0.12), 0 2px 6px rgba(0,0,0,0.02);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(219, 206, 193, 0.8);
+      --card-hover: rgba(255, 255, 255, 0.98);
+      --card-shadow: 0 10px 28px -10px rgba(115, 96, 79, 0.16);
       --title-color: #2C241E;
       --desc-color: #7A6C62;
       --tag-bg: #EAE1D5;
       --tag-text: #5A4C40;
       --accent-color: #8C7058;
-      --btn-primary: #382F28;
-      --btn-primary-text: #FDFCFA;
-      --sheet-bg: #FAF6F0;
     }
 
     :root[data-theme="obsidian-minimal"] {
-      --bg-gradient: radial-gradient(120% 120% at 50% 0%, #16181A 0%, #0D0E10 100%);
-      --card-bg: rgba(28, 31, 35, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(38, 42, 48, 0.9);
-      --card-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.5);
+      --bg-gradient: radial-gradient(120% 120% at 50% 0%, #181A1D 0%, #0F1012 100%);
+      --card-bg: rgba(28, 31, 35, 0.85);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --card-hover: rgba(38, 42, 48, 0.98);
+      --card-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.6);
       --title-color: #F3F4F6;
       --desc-color: #9CA3AF;
       --tag-bg: #26292E;
       --tag-text: #D1D5DB;
       --accent-color: #E5E7EB;
-      --btn-primary: #F3F4F6;
-      --btn-primary-text: #111827;
-      --sheet-bg: #141618;
     }
 
     :root[data-theme="mist-sage"] {
       --bg-gradient: radial-gradient(120% 120% at 50% 0%, #EFF4F1 0%, #DFE8E3 100%);
-      --card-bg: rgba(255, 255, 255, 0.82);
-      --card-border: rgba(193, 209, 200, 0.65);
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(193, 209, 200, 0.75);
       --card-hover: rgba(255, 255, 255, 0.98);
-      --card-shadow: 0 10px 28px -8px rgba(65, 87, 75, 0.12);
+      --card-shadow: 0 10px 28px -8px rgba(65, 87, 75, 0.16);
       --title-color: #1F3028;
       --desc-color: #64756D;
       --tag-bg: #E2ECE6;
       --tag-text: #375346;
       --accent-color: #4C6F5E;
-      --btn-primary: #273B32;
-      --btn-primary-text: #FFFFFF;
-      --sheet-bg: #F4F8F6;
     }
 
     :root[data-theme="french-rose"] {
       --bg-gradient: radial-gradient(120% 120% at 50% 0%, #F9F2F2 0%, #EFE1E3 100%);
-      --card-bg: rgba(255, 255, 255, 0.82);
-      --card-border: rgba(228, 208, 211, 0.65);
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(228, 208, 211, 0.75);
       --card-hover: rgba(255, 255, 255, 0.98);
-      --card-shadow: 0 10px 28px -8px rgba(105, 68, 73, 0.1);
+      --card-shadow: 0 10px 28px -8px rgba(105, 68, 73, 0.14);
       --title-color: #332023;
       --desc-color: #7D6367;
       --tag-bg: #EEDADB;
       --tag-text: #613E43;
       --accent-color: #8E5A62;
-      --btn-primary: #4A2E33;
-      --btn-primary-text: #FFFFFF;
-      --sheet-bg: #FAF4F5;
     }
 
     body {
       background: var(--bg-gradient);
       min-height: 100vh;
       color: var(--title-color);
-      transition: background 0.4s ease, color 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease;
+      margin: 0;
+      padding: 0;
     }
 
-    /* 類 App 質感的立體毛玻璃卡片 */
     .app-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       box-shadow: var(--card-shadow);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.22s ease;
     }
     .app-card:hover {
       background: var(--card-hover);
       transform: translateY(-2px);
-      box-shadow: 0 16px 36px -10px rgba(0,0,0,0.12);
+      box-shadow: 0 14px 30px -8px rgba(0,0,0,0.14);
     }
     .app-card:active {
       transform: scale(0.985);
     }
-
-    /* 隱藏滾動條但保持絲滑滾動 */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    /* 抽屜平移動畫 */
-    .drawer-active {
-      transform: translateY(0%) !important;
-    }
   </style>
 </head>
-<body class="flex flex-col items-center justify-between selection:bg-stone-300">
+<body class="flex flex-col items-center justify-between">
 
-  <!-- 頂部浮動 App Bar (極簡膠囊設計) -->
-  <nav class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between z-30">
-    <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/30 shadow-xs">
+  <!-- 頂部浮動導航列 (確保絕對可點擊) -->
+  <header class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between relative z-20">
+    <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 backdrop-blur-md border border-white/50 shadow-xs">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
       <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
     </div>
 
     <div class="flex items-center gap-2">
       <!-- 快速分享按鈕 -->
-      <button onclick="openShareSheet()" class="w-9 h-9 rounded-full bg-white/60 hover:bg-white backdrop-blur-md border border-white/40 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95" title="分享">
+      <button type="button" onclick="openShare()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer">
         <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
       </button>
 
-      <!-- 進入業主控台開關 -->
-      <button onclick="openAdminSheet()" class="h-9 px-3.5 rounded-full bg-stone-900/90 hover:bg-black text-white text-xs font-medium backdrop-blur-md shadow-sm flex items-center gap-2 transition active:scale-95">
+      <!-- 設定後台按鈕 -->
+      <button type="button" onclick="openAdmin()" class="h-9 px-3.5 rounded-full bg-stone-900 hover:bg-black text-white text-xs font-medium shadow-sm flex items-center gap-2 transition active:scale-95 cursor-pointer">
         <i class="fa-solid fa-sliders text-[11px]"></i>
         <span>設定後台</span>
       </button>
     </div>
-  </nav>
+  </header>
 
-  <!-- 手機畫布核心內容區 (Native Mobile Container) -->
-  <main class="w-full max-w-[460px] px-5 pt-4 pb-20 flex-grow flex flex-col items-center">
+  <!-- 手機畫布核心內容區 -->
+  <main class="w-full max-w-[460px] px-5 pt-4 pb-12 flex-grow flex flex-col items-center relative z-10">
 
     <!-- 品牌 / 主理人形象 Header -->
-    <header class="w-full flex flex-col items-center text-center mb-7">
+    <div class="w-full flex flex-col items-center text-center mb-6">
       
-      <!-- 雙層光暈質感大圓頭像 -->
-      <div class="relative group cursor-pointer" onclick="openAdminSheet()">
-        <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/70 via-white/20 to-white/80 shadow-md">
+      <!-- 頭像 (點擊可直接打開後台更換) -->
+      <div onclick="openAdmin()" class="relative group cursor-pointer">
+        <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/90 via-white/40 to-white shadow-md">
           <img id="displayAvatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Avatar" class="w-full h-full rounded-full object-cover shadow-inner">
         </div>
         <div class="absolute bottom-0 right-1 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center text-[10px] shadow border border-white">
-          <i class="fa-solid fa-check"></i>
+          <i class="fa-solid fa-pen text-[9px]"></i>
         </div>
       </div>
 
-      <!-- 品牌標題 (中字 / 粗體) -->
+      <!-- 品牌名稱 (中字 粗體) -->
       <h1 id="displayName" class="mt-3.5 text-xl font-bold tracking-tight" style="color: var(--title-color);">
         STUDIO NINE
       </h1>
 
-      <!-- 品牌標語 / 簡介 (小字 / 細字體) -->
+      <!-- 品牌標語 / 簡介 (小字 細字體) -->
       <p id="displayBio" class="mt-2 text-xs leading-relaxed font-normal max-w-[320px]" style="color: var(--desc-color);">
         靜奢軟裝設計 ╳ 氣味感官工坊<br>探索慢節奏居家美學，預約私廚沙龍與空間選品
       </p>
 
-      <!-- 動態社群矩陣 (可點選多種圖示) -->
-      <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4">
-        <!-- 由 JS 動態生成社群圖示 -->
-      </div>
-    </header>
-
-    <!-- 項目清單分類容器 (動態渲染) -->
-    <div id="sectionsContainer" class="w-full space-y-6">
-      <!-- 卡片由 JS 自動生成 -->
+      <!-- 社群圖示矩陣 -->
+      <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- 底部品牌專屬註腳 (低調奢華轉化入口) -->
-    <footer class="mt-14 pt-6 border-t border-black/5 w-full flex flex-col items-center text-center">
-      <button onclick="openOnboardSheet()" class="group px-6 py-2.5 rounded-full bg-white/80 hover:bg-white shadow-xs hover:shadow-md border border-black/5 text-stone-800 text-xs font-medium transition flex items-center gap-2 active:scale-95">
-        <span class="w-1.5 h-1.5 rounded-full bg-stone-900"></span>
-        <span>免費開通您的微頁</span>
-        <i class="fa-solid fa-chevron-right text-[9px] opacity-40 group-hover:translate-x-0.5 transition"></i>
-      </button>
-      <div class="mt-3 text-[10px] font-medium tracking-wider uppercase opacity-40">
-        SIBYL BUTLER SYSTEM
+    <!-- 卡片項目分類清單 -->
+    <div id="sectionsContainer" class="w-full space-y-6"></div>
+
+    <!-- 強調免費開通與自由換色的宣傳卡片 -->
+    <div class="w-full mt-10 p-5 rounded-3xl bg-white/70 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
+      <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
+        <i class="fa-solid fa-palette text-[9px]"></i>
+        <span>免費開通 ╳ 自由換色</span>
       </div>
+      <h3 class="text-sm font-bold text-stone-900">
+        想要擁有自己的專屬美學微頁？
+      </h3>
+      <p class="text-[11px] text-stone-600 leading-relaxed max-w-[280px]">
+        不需綁卡，開通即享羊絨米、黑曜灰、晨曦霧綠與法式暮粉等四大色系隨時切換！
+      </p>
+      <button type="button" onclick="openOnboard()" class="w-full py-2.5 rounded-2xl bg-stone-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i>
+        <span>免費開通專屬頁面（信箱自動接收）</span>
+      </button>
+    </div>
+
+    <!-- 核心頁尾：Designed by Sibyl | 數位管家 -->
+    <footer class="mt-12 pt-5 border-t border-black/5 w-full flex flex-col items-center text-center">
+      <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-stone-700 hover:text-black transition">
+        <span>Designed by Sibyl | 數位管家</span>
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-40 group-hover:opacity-100 transition"></i>
+      </a>
+      <p class="mt-1.5 text-[10px] text-stone-400 font-normal">
+        獨立商業自動化 ╳ 解決方案微服務架構
+      </p>
     </footer>
 
   </main>
 
-  <!-- ==================== 業主多功能控制台 (Admin Bottom Sheet) ==================== -->
-  <div id="adminSheet" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
-    <!-- 遮罩背景 -->
-    <div id="adminBackdrop" onclick="closeAdminSheet()" class="absolute inset-0 bg-black/40 opacity-0 pointer-events-auto transition-opacity duration-300"></div>
+  <!-- ==================== 業主後台抽屜 (預設 display: none 防點擊穿透) ==================== -->
+  <div id="adminSheet" style="display: none;" class="fixed inset-0 z-50">
+    <div onclick="closeAdmin()" class="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
     
-    <!-- 抽屜本體 (類 iOS 圓角卡片面板) -->
-    <div id="adminPanel" class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[88vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 pointer-events-auto overflow-hidden">
+    <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[88vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col overflow-hidden">
       
-      <!-- 拖曳把手與標題 -->
-      <div class="pt-3 pb-3 px-6 border-b border-stone-100 flex flex-col items-center bg-stone-50/70">
+      <div class="pt-3 pb-3 px-6 border-b border-stone-100 flex flex-col items-center bg-stone-50">
         <div class="w-10 h-1 rounded-full bg-stone-300 mb-3"></div>
         <div class="w-full flex items-center justify-between">
           <div>
             <h2 class="text-sm font-bold text-stone-900 flex items-center gap-2">
               <i class="fa-solid fa-sliders text-stone-700"></i>
-              <span>微頁版面與內容管理</span>
+              <span>微頁版面與風格設定</span>
             </h2>
-            <p class="text-[11px] text-stone-500">所有變更皆即時預覽，支援獨立自訂</p>
+            <p class="text-[11px] text-stone-500">自由切換風格色彩，隨時即時生效</p>
           </div>
-          <button onclick="closeAdminSheet()" class="w-7 h-7 rounded-full bg-stone-200/80 hover:bg-stone-300 text-stone-600 flex items-center justify-center transition">
+          <button type="button" onclick="closeAdmin()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center transition cursor-pointer">
             <i class="fa-solid fa-xmark text-xs"></i>
           </button>
         </div>
       </div>
 
-      <!-- 滾動內容區塊 -->
-      <div class="p-6 overflow-y-auto space-y-7 flex-grow text-xs text-stone-700">
-
-        <!-- 1. 奢華美學色系選擇 -->
+      <div class="p-6 overflow-y-auto space-y-6 flex-grow text-xs text-stone-700">
+        <!-- 1. 色系切換 -->
         <div>
-          <label class="block font-bold text-stone-900 mb-2.5">
-            <i class="fa-solid fa-palette mr-1 text-stone-500"></i> 色系版型設定
+          <label class="block font-bold text-stone-900 mb-2">
+            <i class="fa-solid fa-palette mr-1 text-stone-500"></i> 多款美學風格色系 (隨時免費更換)
           </label>
           <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="setTheme('cashmere-latte')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-stone-200 bg-[#FAF6F0] text-stone-900 font-medium text-left transition hover:ring-2 hover:ring-stone-400">
-              <span class="w-5 h-5 rounded-full bg-[#E8DFD3] border border-stone-300 shadow-inner"></span>
+            <button type="button" onclick="setTheme('cashmere-latte')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-stone-200 bg-[#FAF6F0] text-stone-900 font-medium text-left transition hover:ring-2 hover:ring-stone-400 cursor-pointer">
+              <span class="w-5 h-5 rounded-full bg-[#E8DFD3] border border-stone-300 shadow-inner flex-shrink-0"></span>
               <div>
                 <div class="font-bold text-[11px]">羊絨暖米</div>
-                <div class="text-[9px] text-stone-500">韓系極簡與居家選物</div>
+                <div class="text-[9px] text-stone-500">韓系極簡與選品</div>
               </div>
             </button>
 
-            <button onclick="setTheme('obsidian-minimal')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-stone-800 bg-[#16181A] text-stone-100 font-medium text-left transition hover:ring-2 hover:ring-stone-400">
-              <span class="w-5 h-5 rounded-full bg-[#0D0E10] border border-stone-700"></span>
+            <button type="button" onclick="setTheme('obsidian-minimal')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-stone-800 bg-[#16181A] text-stone-100 font-medium text-left transition hover:ring-2 hover:ring-stone-400 cursor-pointer">
+              <span class="w-5 h-5 rounded-full bg-[#0D0E10] border border-stone-700 flex-shrink-0"></span>
               <div>
-                <div class="font-bold text-[11px]">黑曜簡約</div>
-                <div class="text-[9px] text-stone-400">潮牌、設計與工作室</div>
+                <div class="font-bold text-[11px]">黑曜極簡</div>
+                <div class="text-[9px] text-stone-400">暗夜高奢、潮牌設計</div>
               </div>
             </button>
 
-            <button onclick="setTheme('mist-sage')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-emerald-200 bg-[#EFF4F1] text-emerald-950 font-medium text-left transition hover:ring-2 hover:ring-stone-400">
-              <span class="w-5 h-5 rounded-full bg-[#DFE8E3] border border-emerald-300"></span>
+            <button type="button" onclick="setTheme('mist-sage')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-emerald-200 bg-[#EFF4F1] text-emerald-950 font-medium text-left transition hover:ring-2 hover:ring-stone-400 cursor-pointer">
+              <span class="w-5 h-5 rounded-full bg-[#DFE8E3] border border-emerald-300 flex-shrink-0"></span>
               <div>
                 <div class="font-bold text-[11px]">晨曦霧綠</div>
-                <div class="text-[9px] text-stone-500">芳療、瑜珈、植物沙龍</div>
+                <div class="text-[9px] text-stone-500">芳療、瑜珈、植物</div>
               </div>
             </button>
 
-            <button onclick="setTheme('french-rose')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-pink-200 bg-[#F9F2F2] text-pink-950 font-medium text-left transition hover:ring-2 hover:ring-stone-400">
-              <span class="w-5 h-5 rounded-full bg-[#EFE1E3] border border-pink-300"></span>
+            <button type="button" onclick="setTheme('french-rose')" class="flex items-center gap-2.5 p-2.5 rounded-xl border border-pink-200 bg-[#F9F2F2] text-pink-950 font-medium text-left transition hover:ring-2 hover:ring-stone-400 cursor-pointer">
+              <span class="w-5 h-5 rounded-full bg-[#EFE1E3] border border-pink-300 flex-shrink-0"></span>
               <div>
                 <div class="font-bold text-[11px]">法式暮粉</div>
-                <div class="text-[9px] text-stone-500">精緻美業、甜點烘焙</div>
+                <div class="text-[9px] text-stone-500">美業、烘焙與甜點</div>
               </div>
             </button>
           </div>
         </div>
 
-        <!-- 2. 主理人 / 品牌核心設定 -->
-        <div class="space-y-3.5 bg-stone-50 p-4 rounded-2xl border border-stone-200/70">
-          <div class="font-bold text-stone-900 text-xs flex items-center justify-between">
-            <span><i class="fa-regular fa-id-badge mr-1 text-stone-500"></i> 基本形象與頭像</span>
+        <!-- 2. 基本形象 -->
+        <div class="space-y-3.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div class="font-bold text-stone-900 text-xs">
+            <i class="fa-regular fa-id-badge mr-1 text-stone-500"></i> 基本資料設定
           </div>
 
-          <!-- 圖片直傳區域 (支援本機檔案直選上傳轉接) -->
           <div class="flex items-center gap-4">
             <img id="adminAvatarThumb" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow">
             <div class="flex-grow">
               <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-stone-300 font-medium text-[11px] hover:bg-stone-100 transition shadow-2xs">
                 <i class="fa-solid fa-arrow-up-from-bracket text-[10px]"></i>
-                <span>更換頭像 (支援直接選圖)</span>
-                <input type="file" accept="image/*" class="hidden" onchange="handleImageDirectUpload(event, 'avatar')">
+                <span>更換頭像 (直接選圖)</span>
+                <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'avatar')">
               </label>
-              <p class="text-[10px] text-stone-400 mt-1">選圖後將直接儲存至雲端節點</p>
+              <p class="text-[10px] text-stone-400 mt-1">支援本機選圖即時同步</p>
             </div>
           </div>
 
@@ -287,213 +269,199 @@
           </div>
 
           <div>
-            <label class="block font-medium text-stone-700 mb-1">簡介說明 (小字 細字體，支援斷行)</label>
+            <label class="block font-medium text-stone-700 mb-1">簡介說明 (小字 細字體)</label>
             <textarea id="inputBrandBio" rows="2" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs font-normal focus:outline-none focus:ring-2 focus:ring-stone-400 leading-relaxed" oninput="updateProfileLive()"></textarea>
           </div>
         </div>
 
-        <!-- 3. 多功能社群矩陣設置 (可挑選圖示與連結) -->
+        <!-- 3. 社群圖示矩陣 -->
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-stone-900"><i class="fa-solid fa-share-nodes mr-1 text-stone-500"></i> 社群與聯繫方式矩陣</span>
-            <button onclick="addNewSocialIcon()" class="text-[11px] text-stone-700 hover:text-black font-semibold flex items-center gap-1">
+            <span class="font-bold text-stone-900"><i class="fa-solid fa-share-nodes mr-1 text-stone-500"></i> 社群與官方入口</span>
+            <button type="button" onclick="addNewSocialIcon()" class="text-[11px] text-stone-700 hover:text-black font-semibold flex items-center gap-1 cursor-pointer">
               <i class="fa-solid fa-plus text-[10px]"></i> 增加圖示
             </button>
           </div>
-          <div id="adminSocialsList" class="space-y-2">
-            <!-- 動態生成社群輸入列 -->
-          </div>
+          <div id="adminSocialsList" class="space-y-2"></div>
         </div>
 
-        <!-- 4. 分類標題與卡片內容管理器 -->
+        <!-- 4. 項目與分類清單 -->
         <div class="space-y-4">
           <div class="flex items-center justify-between border-t pt-4 border-stone-200">
-            <span class="font-bold text-stone-900"><i class="fa-solid fa-layer-group mr-1 text-stone-500"></i> 分類標題與項目內容</span>
-            <button onclick="openNewItemModal()" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-black text-white text-[11px] font-medium flex items-center gap-1.5 shadow transition">
+            <span class="font-bold text-stone-900"><i class="fa-solid fa-layer-group mr-1 text-stone-500"></i> 分類與卡片項目</span>
+            <button type="button" onclick="openNewItemModal()" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-black text-white text-[11px] font-medium flex items-center gap-1.5 shadow transition cursor-pointer">
               <i class="fa-solid fa-plus text-[10px]"></i> 新增卡片項目
             </button>
           </div>
-
-          <div id="adminSectionsList" class="space-y-4">
-            <!-- 動態生成各分類與卡片項目 -->
-          </div>
+          <div id="adminSectionsList" class="space-y-4"></div>
         </div>
-
       </div>
 
-      <!-- 抽屜底部動作列 -->
       <div class="px-6 py-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between">
         <span class="text-[11px] text-stone-500 flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span>雲端節點同步就緒</span>
+          <span>雲端節點就緒</span>
         </span>
-        <button onclick="saveAndSync()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md transition active:scale-95 flex items-center gap-1.5">
+        <button type="button" onclick="saveAndSync()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md transition active:scale-95 flex items-center gap-1.5 cursor-pointer">
           <i class="fa-solid fa-cloud-arrow-up"></i>
           <span>儲存並發布</span>
         </button>
       </div>
-
     </div>
   </div>
 
-  <!-- ==================== 新增/編輯卡片彈窗 (Item Editor Modal) ==================== -->
-  <div id="itemModal" class="fixed inset-0 z-60 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-    <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4 text-xs">
+  <!-- ==================== 新增/編輯卡片彈窗 ==================== -->
+  <div id="itemModal" style="display: none;" class="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+    <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-4 text-xs max-h-[90vh] overflow-y-auto">
       
       <div class="flex items-center justify-between border-b pb-2">
-        <h3 class="font-bold text-stone-900 text-sm">編輯卡片內容與版型</h3>
-        <button onclick="closeItemModal()" class="text-stone-400 hover:text-black">
+        <h3 class="font-bold text-stone-900 text-sm">編輯卡片內容與排版</h3>
+        <button type="button" onclick="closeItemModal()" class="text-stone-400 hover:text-black cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
       <div class="space-y-3">
-        <!-- 分類選擇 / 新分類 -->
         <div>
-          <label class="block font-medium text-stone-700 mb-1">所屬分類區塊</label>
-          <input type="text" id="modalSectionTitle" class="w-full border rounded-lg px-3 py-2 text-xs" placeholder="例：精選設計特企、選品沙龍">
+          <label class="block font-medium text-stone-700 mb-1">所屬分類區塊名稱</label>
+          <input type="text" id="modalSectionTitle" class="w-full border rounded-xl px-3 py-2 text-xs" placeholder="例：當月特企、空間預約">
         </div>
 
-        <!-- 主題標題 (中字 粗體) -->
         <div>
           <label class="block font-medium text-stone-700 mb-1">主題名稱 (中字 粗體)</label>
-          <input type="text" id="modalTitle" class="w-full border rounded-lg px-3 py-2 text-xs font-semibold" placeholder="例：【法式亞麻】手工編織生活抱枕組">
+          <input type="text" id="modalTitle" class="w-full border rounded-xl px-3 py-2 text-xs font-semibold" placeholder="例：【法式亞麻】手工編織生活抱枕組">
         </div>
 
-        <!-- 內容描述 (小字 細字體) -->
         <div>
           <label class="block font-medium text-stone-700 mb-1">內容說明 (小字 細字體)</label>
-          <input type="text" id="modalSubtitle" class="w-full border rounded-lg px-3 py-2 text-xs font-light text-stone-600" placeholder="例：限量 30 組，現省 $450，全館滿額即享免運">
+          <input type="text" id="modalSubtitle" class="w-full border rounded-xl px-3 py-2 text-xs font-light text-stone-600" placeholder="例：限量 30 組，輸入代碼享 9 折">
         </div>
 
-        <!-- 圖片直傳與尺寸/擺放設定 -->
-        <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-2.5">
-          <label class="block font-bold text-stone-800">🖼 圖片直傳與排版定位</label>
+        <!-- 圖片直傳與排版 -->
+        <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-2.5">
+          <label class="block font-bold text-stone-800">圖片上傳與排版定位</label>
           
           <div class="flex items-center gap-3">
-            <img id="modalPreviewImg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=200&q=80" class="w-12 h-12 rounded-lg object-cover border bg-white">
-            <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-white border border-stone-300 font-medium text-[11px] hover:bg-stone-100 transition shadow-2xs">
+            <img id="modalPreviewImg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=200&q=80" class="w-12 h-12 rounded-xl object-cover border bg-white">
+            <label class="cursor-pointer px-3 py-1.5 rounded-xl bg-white border border-stone-300 font-medium text-[11px] hover:bg-stone-100 transition shadow-2xs">
               <span>上傳圖片</span>
-              <input type="file" accept="image/*" class="hidden" onchange="handleImageDirectUpload(event, 'card')">
+              <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'card')">
             </label>
-            <button onclick="clearModalImg()" class="text-stone-400 hover:text-rose-500 text-[11px]">不使用圖片</button>
+            <button type="button" onclick="clearModalImg()" class="text-stone-400 hover:text-rose-500 text-[11px] cursor-pointer">移除圖片</button>
           </div>
 
           <div class="grid grid-cols-2 gap-2 pt-1">
             <div>
-              <label class="block text-[10px] text-stone-500 mb-1">圖片大小顯示</label>
-              <select id="modalImgSize" class="w-full border rounded-lg px-2 py-1.5 text-xs bg-white">
-                <option value="small">小 (精緻方形縮圖)</option>
-                <option value="medium" selected>中 (標準長方縮圖)</option>
+              <label class="block text-[10px] text-stone-500 mb-1">圖片尺寸比例</label>
+              <select id="modalImgSize" class="w-full border rounded-xl px-2 py-1.5 text-xs bg-white">
+                <option value="small">小 (精緻方形)</option>
+                <option value="medium" selected>中 (標準長方)</option>
                 <option value="large">大 (全幅橫向海報)</option>
               </select>
             </div>
             <div>
               <label class="block text-[10px] text-stone-500 mb-1">圖片擺放位置</label>
-              <select id="modalImgPos" class="w-full border rounded-lg px-2 py-1.5 text-xs bg-white">
-                <option value="left" selected>左側 (標準圖文排列)</option>
-                <option value="right">右側 (右置圖標風格)</option>
-                <option value="top">上方 (滿版置頂海報)</option>
+              <select id="modalImgPos" class="w-full border rounded-xl px-2 py-1.5 text-xs bg-white">
+                <option value="left" selected>左側 (標準圖文)</option>
+                <option value="right">右側 (右置焦點)</option>
+                <option value="top">上方 (置頂滿版海報)</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- 跳轉連結與折扣碼 -->
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-medium text-stone-700 mb-1">點擊跳轉網址</label>
-            <input type="text" id="modalUrl" class="w-full border rounded-lg px-3 py-2 text-xs" placeholder="https://...">
+            <input type="text" id="modalUrl" class="w-full border rounded-xl px-3 py-2 text-xs" placeholder="https://...">
           </div>
           <div>
             <label class="block font-medium text-stone-700 mb-1">專屬折扣碼 (選填)</label>
-            <input type="text" id="modalCode" class="w-full border rounded-lg px-3 py-2 text-xs font-mono uppercase" placeholder="NINE90">
+            <input type="text" id="modalCode" class="w-full border rounded-xl px-3 py-2 text-xs font-mono uppercase" placeholder="SIBYL90">
           </div>
         </div>
 
-        <!-- 醒目標籤 (如: 限量、獨家) -->
         <div>
-          <label class="block font-medium text-stone-700 mb-1">角標標籤文字 (選填)</label>
-          <input type="text" id="modalBadge" class="w-full border rounded-lg px-3 py-2 text-xs" placeholder="例：9折限定、熱銷中">
+          <label class="block font-medium text-stone-700 mb-1">醒目標籤文字 (選填)</label>
+          <input type="text" id="modalBadge" class="w-full border rounded-xl px-3 py-2 text-xs" placeholder="例：本月主打、即將截止">
         </div>
       </div>
 
       <div class="flex justify-end gap-2 pt-3 border-t">
-        <button onclick="closeItemModal()" class="px-4 py-2 rounded-lg border text-stone-600 hover:bg-stone-50">取消</button>
-        <button onclick="saveModalItem()" class="px-5 py-2 rounded-lg bg-stone-900 text-white font-medium hover:bg-black">確定儲存</button>
+        <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-xl border text-stone-600 hover:bg-stone-50 cursor-pointer">取消</button>
+        <button type="button" onclick="saveModalItem()" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-medium hover:bg-black cursor-pointer">確定儲存</button>
       </div>
-
     </div>
   </div>
 
-  <!-- ==================== 免費無感開通抽屜 (Onboarding Sheet) ==================== -->
-  <div id="onboardSheet" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
-    <div id="onboardBackdrop" onclick="closeOnboardSheet()" class="absolute inset-0 bg-black/40 opacity-0 pointer-events-auto transition-opacity duration-300"></div>
+  <!-- ==================== 免費全自動開通抽屜 ==================== -->
+  <div id="onboardSheet" style="display: none;" class="fixed inset-0 z-50">
+    <div onclick="closeOnboard()" class="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
     
-    <div id="onboardPanel" class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6 transform translate-y-full transition-transform duration-300 pointer-events-auto">
+    <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6">
       <div class="w-10 h-1 rounded-full bg-stone-300 mx-auto mb-4"></div>
       
       <div class="text-center mb-5">
         <div class="w-10 h-10 rounded-2xl bg-stone-900 text-white flex items-center justify-center mx-auto mb-2 text-sm shadow">
-          <i class="fa-solid fa-sparkles"></i>
+          <i class="fa-solid fa-paper-plane"></i>
         </div>
-        <h3 class="text-base font-bold text-stone-900">30 秒開通專屬品牌微頁</h3>
-        <p class="text-xs text-stone-500 mt-1">擁有極速流暢、質感滿分的手機首頁與導流微頁</p>
+        <h3 class="text-base font-bold text-stone-900">免費開通專屬品牌微頁</h3>
+        <p class="text-xs text-stone-500 mt-1">送出後 notice@heysibyl.com 將自動寄送管理連結至信箱</p>
       </div>
 
-      <form onsubmit="handleQuickOnboard(event)" class="space-y-3.5 text-xs text-stone-700">
+      <form onsubmit="handleOnboardSubmit(event)" class="space-y-3.5 text-xs text-stone-700">
         <div>
-          <label class="block font-semibold mb-1">品牌 / 店面名稱</label>
-          <input required type="text" id="quickBrand" placeholder="例：Rosa Salon、Studio Nine" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-stone-400 focus:outline-none">
+          <label class="block font-semibold mb-1">品牌 / 店家名稱</label>
+          <input required type="text" id="quickBrand" placeholder="例：STUDIO NINE" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-stone-400 focus:outline-none">
         </div>
 
         <div>
-          <label class="block font-semibold mb-1">希望的專屬代號</label>
+          <label class="block font-semibold mb-1">專屬網址代號</label>
           <div class="flex items-center">
-            <span class="bg-stone-100 border border-r-0 rounded-l-xl px-3 py-2.5 text-stone-500 text-[11px] font-mono">link.heysibyl.com/</span>
+            <span class="bg-stone-100 border border-r-0 rounded-l-xl px-3 py-2.5 text-stone-500 text-[11px] font-mono">link.heysibyl.com/?u=</span>
             <input required type="text" id="quickSlug" placeholder="studio9" class="w-full border border-stone-200 rounded-r-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-stone-400 focus:outline-none font-mono">
           </div>
         </div>
 
         <div>
-          <label class="block font-semibold mb-1">聯絡方式 (LINE 或 Email)</label>
-          <input required type="text" id="quickContact" placeholder="開通完成後為您派發專屬管理權限" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-stone-400 focus:outline-none">
+          <label class="block font-semibold mb-1">開通收取信箱</label>
+          <input required type="email" id="quickEmail" placeholder="yourname@gmail.com" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-stone-400 focus:outline-none">
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition active:scale-98 mt-2">
-          立即建立專屬頁面
+        <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition active:scale-98 mt-2 flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-sparkles text-amber-300"></i>
+          <span>立即全自動開通並接收通知</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- 分享與 QR Code 彈窗 -->
-  <div id="shareSheet" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+  <!-- 分享彈窗 -->
+  <div id="shareSheet" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
     <div class="bg-white rounded-3xl p-6 max-w-xs w-full text-center space-y-4 shadow-2xl">
       <div class="w-40 h-40 bg-stone-100 mx-auto rounded-2xl flex items-center justify-center border border-stone-200 p-2">
-        <!-- 模擬 QR Code -->
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://link.heysibyl.com" class="w-full h-full object-contain rounded-lg">
+        <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://link.heysibyl.com" class="w-full h-full object-contain rounded-lg">
       </div>
       <div>
-        <h4 class="font-bold text-stone-900 text-sm">分享 STUDIO NINE</h4>
+        <h4 id="shareBrandTitle" class="font-bold text-stone-900 text-sm">STUDIO NINE</h4>
         <p class="text-[11px] text-stone-500 font-mono mt-0.5">link.heysibyl.com</p>
       </div>
       <div class="flex gap-2">
-        <button onclick="copyCurrentLink()" class="flex-1 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-semibold shadow">複製連結</button>
-        <button onclick="closeShareSheet()" class="px-4 py-2.5 rounded-xl border text-stone-600 text-xs">關閉</button>
+        <button type="button" onclick="copyShareLink()" class="flex-1 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-semibold shadow cursor-pointer">複製連結</button>
+        <button type="button" onclick="closeShare()" class="px-4 py-2.5 rounded-xl border text-stone-600 text-xs cursor-pointer">關閉</button>
       </div>
     </div>
   </div>
 
-  <!-- 浮動 Toast 提示 -->
-  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/90 backdrop-blur-md text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50 flex items-center gap-2">
+  <!-- Toast 浮動提示 -->
+  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50 flex items-center gap-2">
     <i class="fa-solid fa-circle-check text-emerald-400"></i>
-    <span id="toastMsg">成功複製</span>
+    <span id="toastMsg">操作已完成</span>
   </div>
 
-  <!-- ==================== 資料與互動邏輯 (JavaScript) ==================== -->
+  <!-- ==================== 完整穩定 JavaScript (全域綁定) ==================== -->
   <script>
-    // 預設資料：全新獨立美學品牌案例 (STUDIO NINE)
+    // 預設資料
     let appData = {
       theme: 'cashmere-latte',
       brandName: 'STUDIO NINE',
@@ -504,7 +472,7 @@
         { icon: 'fa-brands fa-threads', label: 'Threads', url: 'https://threads.net' },
         { icon: 'fa-brands fa-line', label: 'LINE Official', url: 'https://line.me' },
         { icon: 'fa-brands fa-youtube', label: 'YouTube', url: 'https://youtube.com' },
-        { icon: 'fa-regular fa-envelope', label: '合作信箱', url: 'mailto:contact@studionine.tw' }
+        { icon: 'fa-regular fa-envelope', label: '合作信箱', url: 'mailto:notice@heysibyl.com' }
       ],
       sections: [
         {
@@ -516,8 +484,8 @@
               title: '【法式亞麻】手工織造抱枕與羊絨毯禮盒',
               subtitle: '限時首度開放預購，輸入代碼享九折獨家禮遇',
               img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
-              imgSize: 'medium', // small, medium, large
-              imgPos: 'left',    // left, right, top
+              imgSize: 'medium',
+              imgPos: 'left',
               url: 'https://heysibyl.com',
               discountCode: 'NINE90',
               badge: '本月主打'
@@ -545,7 +513,7 @@
               subtitle: '以在地當令旬味為靈感的 7 道私廚微醺晚宴',
               img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80',
               imgSize: 'large',
-              imgPos: 'top', // 置頂滿版海報
+              imgPos: 'top',
               url: 'https://heysibyl.com',
               discountCode: '',
               badge: '預約席位'
@@ -556,7 +524,7 @@
               subtitle: '專業軟裝顧問 1 對 1 諮詢服務，線上預約評估',
               img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400&q=80',
               imgSize: 'medium',
-              imgPos: 'right', // 右置圖片
+              imgPos: 'right',
               url: 'https://heysibyl.com',
               discountCode: '',
               badge: ''
@@ -566,19 +534,17 @@
       ]
     };
 
-    // 渲染前端公開微頁
+    // 渲染微頁主體
     function renderPublicView() {
-      // 1. 套用當前主題色彩變數
       document.documentElement.setAttribute('data-theme', appData.theme);
-
-      // 2. 個人品牌形象
       document.getElementById('displayName').innerText = appData.brandName;
       document.getElementById('displayBio').innerHTML = appData.bio.replace(/\\n/g, '<br>');
       document.getElementById('displayAvatar').src = appData.avatar;
+      document.getElementById('shareBrandTitle').innerText = appData.brandName;
 
-      // 3. 社群圖示矩陣
-      const socialsContainer = document.getElementById('displaySocials');
-      socialsContainer.innerHTML = '';
+      // 社群
+      const socBox = document.getElementById('displaySocials');
+      socBox.innerHTML = '';
       appData.socials.forEach(s => {
         const a = document.createElement('a');
         a.href = s.url;
@@ -586,69 +552,48 @@
         a.className = 'w-9 h-9 rounded-full bg-white/70 hover:bg-white border border-white/50 shadow-xs flex items-center justify-center text-sm transition transform hover:scale-110 active:scale-95';
         a.style.color = 'var(--title-color)';
         a.innerHTML = `<i class="${s.icon}"></i>`;
-        a.title = s.label;
-        socialsContainer.appendChild(a);
+        socBox.appendChild(a);
       });
 
-      // 4. 分類區塊與卡片清單
-      const container = document.getElementById('sectionsContainer');
-      container.innerHTML = '';
+      // 卡片列表
+      const secBox = document.getElementById('sectionsContainer');
+      secBox.innerHTML = '';
 
-      appData.sections.forEach(section => {
-        const secWrap = document.createElement('div');
-        secWrap.className = 'w-full space-y-3';
+      appData.sections.forEach(sec => {
+        const wrap = document.createElement('div');
+        wrap.className = 'w-full space-y-3';
 
-        // 分類標題 (精緻字體排印，非陽春居中)
-        const headerEl = document.createElement('div');
-        headerEl.className = 'flex items-center gap-3 px-1 my-3';
-        headerEl.innerHTML = `
-          <div class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent-color);"></div>
-          <h2 class="text-xs font-bold tracking-widest uppercase opacity-80" style="color: var(--title-color);">${section.title}</h2>
-          <div class="flex-grow h-[1px] opacity-15" style="background-color: var(--title-color);"></div>
+        wrap.innerHTML = `
+          <div class="flex items-center gap-3 px-1 my-3">
+            <div class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent-color);"></div>
+            <h2 class="text-xs font-bold tracking-widest uppercase opacity-80" style="color: var(--title-color);">${sec.title}</h2>
+            <div class="flex-grow h-[1px] opacity-15" style="background-color: var(--title-color);"></div>
+          </div>
         `;
-        secWrap.appendChild(headerEl);
 
-        // 卡片渲染
-        section.items.forEach(item => {
+        sec.items.forEach(item => {
           const card = document.createElement('div');
           card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer';
 
-          // 點擊整張卡片跳轉
           card.onclick = (e) => {
             if (e.target.closest('.copy-btn')) return;
             window.open(item.url, '_blank');
           };
 
-          // 排版邏輯 (大圖置頂 top / 傳統左側 left / 右側圖 right)
           const hasImg = !!item.img;
-          let layoutHtml = '';
-
-          // 圖片尺寸對應 class
-          const sizeMap = {
-            small: 'w-12 h-12',
-            medium: 'w-16 h-16',
-            large: 'w-full h-36'
-          };
+          const sizeMap = { small: 'w-12 h-12', medium: 'w-16 h-16', large: 'w-full h-36' };
           const imgSizeClass = sizeMap[item.imgSize || 'medium'];
 
-          // 角標
-          const badgeHtml = item.badge ? `
-            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1.5" style="background-color: var(--tag-bg); color: var(--tag-text);">
-              ${item.badge}
-            </span>
-          ` : '';
-
-          // 折扣碼按鈕
+          const badgeHtml = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1.5" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
           const codeBtnHtml = item.discountCode ? `
-            <button onclick="copyDiscountCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg bg-white/90 hover:bg-white text-stone-800 border border-black/10 flex items-center gap-1.5 shadow-2xs transition active:scale-95">
+            <button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg bg-white/90 hover:bg-white text-stone-800 border border-black/10 flex items-center gap-1.5 shadow-2xs transition active:scale-95 cursor-pointer">
               <i class="fa-regular fa-copy text-[10px]"></i>
               <span>${item.discountCode}</span>
             </button>
           ` : '';
 
           if (item.imgPos === 'top' && hasImg) {
-            // 置頂滿版大圖
-            layoutHtml = `
+            card.innerHTML = `
               <div class="w-full ${imgSizeClass} overflow-hidden bg-stone-200">
                 <img src="${item.img}" class="w-full h-full object-cover">
               </div>
@@ -663,8 +608,7 @@
               </div>
             `;
           } else if (item.imgPos === 'right' && hasImg) {
-            // 右側放置圖片
-            layoutHtml = `
+            card.innerHTML = `
               <div class="p-3.5 flex items-center justify-between gap-3">
                 <div class="flex-grow space-y-1 min-w-0">
                   ${badgeHtml}
@@ -678,13 +622,8 @@
               </div>
             `;
           } else {
-            // 預設左側圖
-            const imgEl = hasImg ? `
-              <div class="${imgSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-200 shadow-inner">
-                <img src="${item.img}" class="w-full h-full object-cover">
-              </div>
-            ` : '';
-            layoutHtml = `
+            const imgEl = hasImg ? `<div class="${imgSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-200 shadow-inner"><img src="${item.img}" class="w-full h-full object-cover"></div>` : '';
+            card.innerHTML = `
               <div class="p-3.5 flex items-center gap-3.5">
                 ${imgEl}
                 <div class="flex-grow min-w-0 space-y-0.5">
@@ -692,73 +631,109 @@
                   <div class="text-xs sm:text-sm font-bold tracking-tight line-clamp-1" style="color: var(--title-color);">${item.title}</div>
                   <div class="text-[11px] font-light leading-relaxed line-clamp-2" style="color: var(--desc-color);">${item.subtitle}</div>
                 </div>
-                <div class="flex-shrink-0">
-                  ${codeBtnHtml ? codeBtnHtml : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
-                </div>
+                <div class="flex-shrink-0">${codeBtnHtml ? codeBtnHtml : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
               </div>
             `;
           }
 
-          card.innerHTML = layoutHtml;
-          secWrap.appendChild(card);
+          wrap.appendChild(card);
         });
 
-        container.appendChild(secWrap);
+        secBox.appendChild(wrap);
       });
     }
 
-    // 渲染管理抽屜介面
-    function populateAdminDrawer() {
+    // 抽屜面板開關控制 (透過 display 保證絕不阻擋點擊)
+    window.openAdmin = function() {
+      populateAdmin();
+      document.getElementById('adminSheet').style.display = 'block';
+    };
+    window.closeAdmin = function() {
+      document.getElementById('adminSheet').style.display = 'none';
+    };
+
+    window.openOnboard = function() {
+      document.getElementById('onboardSheet').style.display = 'block';
+    };
+    window.closeOnboard = function() {
+      document.getElementById('onboardSheet').style.display = 'none';
+    };
+
+    window.openShare = function() {
+      document.getElementById('shareSheet').style.display = 'flex';
+    };
+    window.closeShare = function() {
+      document.getElementById('shareSheet').style.display = 'none';
+    };
+
+    window.copyShareLink = function() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('已複製頁面連結');
+        closeShare();
+      });
+    };
+
+    window.setTheme = function(themeKey) {
+      appData.theme = themeKey;
+      document.documentElement.setAttribute('data-theme', themeKey);
+      showToast('已切換美學色系！');
+    };
+
+    window.updateProfileLive = function() {
+      appData.brandName = document.getElementById('inputBrandName').value;
+      appData.bio = document.getElementById('inputBrandBio').value;
+      renderPublicView();
+    };
+
+    // 填充後台
+    function populateAdmin() {
       document.getElementById('inputBrandName').value = appData.brandName;
       document.getElementById('inputBrandBio').value = appData.bio;
       document.getElementById('adminAvatarThumb').src = appData.avatar;
 
-      // 渲染社群清單
-      const socContainer = document.getElementById('adminSocialsList');
-      socContainer.innerHTML = '';
+      // 社群列表
+      const socBox = document.getElementById('adminSocialsList');
+      socBox.innerHTML = '';
       appData.socials.forEach((s, idx) => {
         const row = document.createElement('div');
         row.className = 'flex items-center gap-2 bg-white p-2 rounded-xl border border-stone-200';
         row.innerHTML = `
-          <select onchange="updateSocialIcon(${idx}, this.value)" class="text-xs border rounded-lg px-2 py-1 bg-stone-50">
+          <select onchange="appData.socials[${idx}].icon = this.value; renderPublicView();" class="text-xs border rounded-lg px-2 py-1 bg-stone-50">
             <option value="fa-brands fa-instagram" ${s.icon.includes('instagram') ? 'selected' : ''}>Instagram</option>
             <option value="fa-brands fa-threads" ${s.icon.includes('threads') ? 'selected' : ''}>Threads</option>
             <option value="fa-brands fa-line" ${s.icon.includes('line') ? 'selected' : ''}>LINE</option>
             <option value="fa-brands fa-youtube" ${s.icon.includes('youtube') ? 'selected' : ''}>YouTube</option>
             <option value="fa-brands fa-tiktok" ${s.icon.includes('tiktok') ? 'selected' : ''}>TikTok</option>
-            <option value="fa-brands fa-facebook" ${s.icon.includes('facebook') ? 'selected' : ''}>Facebook</option>
             <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
           </select>
-          <input type="text" value="${s.url}" oninput="updateSocialUrl(${idx}, this.value)" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono" placeholder="URL">
-          <button onclick="removeSocial(${idx})" class="w-6 h-6 rounded-lg text-stone-400 hover:text-rose-500 flex items-center justify-center">
+          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderPublicView();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono" placeholder="網址">
+          <button type="button" onclick="appData.socials.splice(${idx}, 1); populateAdmin(); renderPublicView();" class="w-6 h-6 rounded-lg text-stone-400 hover:text-rose-500 flex items-center justify-center cursor-pointer">
             <i class="fa-regular fa-trash-can text-[11px]"></i>
           </button>
         `;
-        socContainer.appendChild(row);
+        socBox.appendChild(row);
       });
 
-      // 渲染分類與項目列表
-      const secContainer = document.getElementById('adminSectionsList');
-      secContainer.innerHTML = '';
+      // 分類列表
+      const secBox = document.getElementById('adminSectionsList');
+      secBox.innerHTML = '';
       appData.sections.forEach((sec, sIdx) => {
         const box = document.createElement('div');
-        box.className = 'p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80 space-y-3';
-        
+        box.className = 'p-3.5 bg-stone-50 rounded-2xl border border-stone-200 space-y-3';
         box.innerHTML = `
           <div class="flex items-center justify-between">
-            <input type="text" value="${sec.title}" oninput="updateSectionTitle(${sIdx}, this.value)" class="font-bold text-stone-900 bg-white border border-stone-200 rounded-lg px-2.5 py-1 text-xs flex-grow mr-2">
-            <button onclick="removeSection(${sIdx})" class="text-[11px] text-stone-400 hover:text-rose-500">刪除分類</button>
+            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderPublicView();" class="font-bold text-stone-900 bg-white border border-stone-200 rounded-lg px-2.5 py-1 text-xs flex-grow mr-2">
+            <button type="button" onclick="if(confirm('刪除整組分類？')){ appData.sections.splice(${sIdx}, 1); populateAdmin(); renderPublicView(); }" class="text-[11px] text-stone-400 hover:text-rose-500 cursor-pointer">刪除分類</button>
           </div>
           <div id="secItems-${sIdx}" class="space-y-2"></div>
         `;
+        secBox.appendChild(box);
 
-        secContainer.appendChild(box);
-
-        const itemsBox = box.querySelector(`#secItems-${sIdx}`);
+        const itemsContainer = box.querySelector(`#secItems-${sIdx}`);
         sec.items.forEach((item, iIdx) => {
-          const itemRow = document.createElement('div');
-          itemRow.className = 'flex items-center justify-between p-2.5 rounded-xl bg-white border border-stone-200/60 shadow-2xs';
-          itemRow.innerHTML = `
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between p-2.5 rounded-xl bg-white border border-stone-200 shadow-2xs';
+          row.innerHTML = `
             <div class="flex items-center gap-2.5 overflow-hidden">
               <img src="${item.img || 'https://via.placeholder.com/60'}" class="w-9 h-9 rounded-lg object-cover flex-shrink-0 border">
               <div class="truncate">
@@ -767,58 +742,60 @@
               </div>
             </div>
             <div class="flex items-center gap-1.5 flex-shrink-0">
-              <button onclick="editExistingItem(${sIdx}, ${iIdx})" class="px-2 py-1 rounded bg-stone-100 hover:bg-stone-200 text-[11px] font-medium">編輯</button>
-              <button onclick="moveItemOrder(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px]">↑</button>
-              <button onclick="moveItemOrder(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px]">↓</button>
-              <button onclick="deleteItem(${sIdx}, ${iIdx})" class="w-6 h-6 rounded text-stone-400 hover:text-rose-500 flex items-center justify-center text-[11px]"><i class="fa-regular fa-trash-can"></i></button>
+              <button type="button" onclick="editItem(${sIdx}, ${iIdx})" class="px-2 py-1 rounded bg-stone-100 hover:bg-stone-200 text-[11px] font-medium cursor-pointer">編輯</button>
+              <button type="button" onclick="moveItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer">↑</button>
+              <button type="button" onclick="moveItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer">↓</button>
+              <button type="button" onclick="appData.sections[${sIdx}].items.splice(${iIdx}, 1); populateAdmin(); renderPublicView();" class="w-6 h-6 rounded text-stone-400 hover:text-rose-500 flex items-center justify-center text-[11px] cursor-pointer"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           `;
-          itemsBox.appendChild(itemRow);
+          itemsContainer.appendChild(row);
         });
       });
     }
 
-    // 主題色更換
-    function setTheme(themeKey) {
-      appData.theme = themeKey;
-      document.documentElement.setAttribute('data-theme', themeKey);
-      showToast('已切換色系風格');
-    }
-
-    // 即時更新個人檔案
-    function updateProfileLive() {
-      appData.brandName = document.getElementById('inputBrandName').value;
-      appData.bio = document.getElementById('inputBrandBio').value;
+    window.addNewSocialIcon = function() {
+      appData.socials.push({ icon: 'fa-brands fa-instagram', label: 'Instagram', url: 'https://' });
+      populateAdmin();
       renderPublicView();
-    }
+    };
 
-    // 處理圖片直接上傳 (FileReader 本機直選轉發)
-    function handleImageDirectUpload(e, targetType) {
+    window.moveItem = function(sIdx, iIdx, dir) {
+      const items = appData.sections[sIdx].items;
+      const target = iIdx + dir;
+      if (target < 0 || target >= items.length) return;
+      const temp = items[iIdx];
+      items[iIdx] = items[target];
+      items[target] = temp;
+      populateAdmin();
+      renderPublicView();
+    };
+
+    // 圖片上傳
+    window.handleImageUpload = function(e, type) {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = (event) => {
-        const base64Url = event.target.result;
-        if (targetType === 'avatar') {
-          appData.avatar = base64Url;
-          document.getElementById('adminAvatarThumb').src = base64Url;
+        const url = event.target.result;
+        if (type === 'avatar') {
+          appData.avatar = url;
+          document.getElementById('adminAvatarThumb').src = url;
           renderPublicView();
-          showToast('頭像已直傳儲存！');
-        } else if (targetType === 'card') {
-          document.getElementById('modalPreviewImg').src = base64Url;
-          showToast('卡片圖片已選取！');
+          showToast('頭像已更換！');
+        } else if (type === 'card') {
+          document.getElementById('modalPreviewImg').src = url;
+          showToast('卡片圖片已選取');
         }
       };
       reader.readAsDataURL(file);
-    }
+    };
 
-    // 卡片編輯 Modal 邏輯
-    let currentEditing = { sIdx: null, iIdx: null };
+    // 卡片 Modal
+    let editingPointer = { sIdx: null, iIdx: null };
 
-    function openNewItemModal() {
-      currentEditing = { sIdx: 0, iIdx: null };
-      document.getElementById('modalSectionTitle').value = appData.sections[0] ? appData.sections[0].title : '精選推薦';
+    window.openNewItemModal = function() {
+      editingPointer = { sIdx: 0, iIdx: null };
+      document.getElementById('modalSectionTitle').value = appData.sections[0] ? appData.sections[0].title : '當月特企';
       document.getElementById('modalTitle').value = '';
       document.getElementById('modalSubtitle').value = '';
       document.getElementById('modalUrl').value = 'https://';
@@ -827,212 +804,99 @@
       document.getElementById('modalImgSize').value = 'medium';
       document.getElementById('modalImgPos').value = 'left';
       document.getElementById('modalPreviewImg').src = 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=200&q=80';
-      document.getElementById('itemModal').classList.remove('hidden');
-    }
+      document.getElementById('itemModal').style.display = 'flex';
+    };
 
-    function editExistingItem(sIdx, iIdx) {
-      currentEditing = { sIdx, iIdx };
-      const item = appData.sections[sIdx].items[iIdx];
+    window.editItem = function(sIdx, iIdx) {
+      editingPointer = { sIdx, iIdx };
+      const it = appData.sections[sIdx].items[iIdx];
       document.getElementById('modalSectionTitle').value = appData.sections[sIdx].title;
-      document.getElementById('modalTitle').value = item.title;
-      document.getElementById('modalSubtitle').value = item.subtitle;
-      document.getElementById('modalUrl').value = item.url;
-      document.getElementById('modalCode').value = item.discountCode || '';
-      document.getElementById('modalBadge').value = item.badge || '';
-      document.getElementById('modalImgSize').value = item.imgSize || 'medium';
-      document.getElementById('modalImgPos').value = item.imgPos || 'left';
-      document.getElementById('modalPreviewImg').src = item.img || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=200&q=80';
-      document.getElementById('itemModal').classList.remove('hidden');
-    }
+      document.getElementById('modalTitle').value = it.title;
+      document.getElementById('modalSubtitle').value = it.subtitle || '';
+      document.getElementById('modalUrl').value = it.url;
+      document.getElementById('modalCode').value = it.discountCode || '';
+      document.getElementById('modalBadge').value = it.badge || '';
+      document.getElementById('modalImgSize').value = it.imgSize || 'medium';
+      document.getElementById('modalImgPos').value = it.imgPos || 'left';
+      document.getElementById('modalPreviewImg').src = it.img || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=200&q=80';
+      document.getElementById('itemModal').style.display = 'flex';
+    };
 
-    function closeItemModal() {
-      document.getElementById('itemModal').classList.add('hidden');
-    }
+    window.closeItemModal = function() {
+      document.getElementById('itemModal').style.display = 'none';
+    };
 
-    function clearModalImg() {
+    window.clearModalImg = function() {
       document.getElementById('modalPreviewImg').src = '';
-    }
+    };
 
-    function saveModalItem() {
+    window.saveModalItem = function() {
       const title = document.getElementById('modalTitle').value.trim();
-      if (!title) {
-        alert('請輸入主題名稱');
-        return;
-      }
+      if (!title) { alert('請填寫主題名稱'); return; }
 
-      const itemData = {
+      const itemObj = {
         id: 'item-' + Date.now(),
         title: title,
         subtitle: document.getElementById('modalSubtitle').value.trim(),
         url: document.getElementById('modalUrl').value.trim() || '#',
         discountCode: document.getElementById('modalCode').value.trim(),
         badge: document.getElementById('modalBadge').value.trim(),
-        img: document.getElementById('modalPreviewImg').src.includes('http') || document.getElementById('modalPreviewImg').src.includes('data:') ? document.getElementById('modalPreviewImg').src : '',
+        img: document.getElementById('modalPreviewImg').src,
         imgSize: document.getElementById('modalImgSize').value,
         imgPos: document.getElementById('modalImgPos').value
       };
 
-      if (currentEditing.iIdx !== null) {
-        // 更新現有項目
-        appData.sections[currentEditing.sIdx].items[currentEditing.iIdx] = itemData;
+      if (editingPointer.iIdx !== null) {
+        appData.sections[editingPointer.sIdx].items[editingPointer.iIdx] = itemObj;
       } else {
-        // 新增項目至第一個分類
         if (appData.sections.length === 0) {
           appData.sections.push({ id: 'sec-1', title: '精選推薦', items: [] });
         }
-        appData.sections[currentEditing.sIdx || 0].items.unshift(itemData);
+        appData.sections[editingPointer.sIdx || 0].items.unshift(itemObj);
       }
 
       closeItemModal();
+      populateAdmin();
       renderPublicView();
-      populateAdminDrawer();
-      showToast('項目儲存完畢！');
-    }
+      showToast('項目儲存成功！');
+    };
 
-    // 項目順序調整與刪除
-    function moveItemOrder(sIdx, iIdx, dir) {
-      const items = appData.sections[sIdx].items;
-      const target = iIdx + dir;
-      if (target < 0 || target >= items.length) return;
-      const temp = items[iIdx];
-      items[iIdx] = items[target];
-      items[target] = temp;
-      renderPublicView();
-      populateAdminDrawer();
-    }
+    // 一鍵開通
+    window.handleOnboardSubmit = function(e) {
+      e.preventDefault();
+      const brand = document.getElementById('quickBrand').value.trim();
+      const email = document.getElementById('quickEmail').value.trim();
+      const btn = document.getElementById('btnSubmitOnboard');
 
-    function deleteItem(sIdx, iIdx) {
-      appData.sections[sIdx].items.splice(iIdx, 1);
-      renderPublicView();
-      populateAdminDrawer();
-    }
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在全自動開通...';
 
-    function updateSectionTitle(sIdx, val) {
-      appData.sections[sIdx].title = val;
-      renderPublicView();
-    }
-
-    function removeSection(sIdx) {
-      if (confirm('確定移除整個分類嗎？')) {
-        appData.sections.splice(sIdx, 1);
+      setTimeout(() => {
+        closeOnboard();
+        showToast(`開通成功！已發送通知信至 ${email}`);
+        appData.brandName = brand;
+        appData.bio = '歡迎光臨 ' + brand + ' 官方微頁\\n所有最新資訊與選品皆收錄於此';
         renderPublicView();
-        populateAdminDrawer();
-      }
-    }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即全自動開通並接收通知';
+        setTimeout(openAdmin, 600);
+      }, 1000);
+    };
 
-    // 社群圖示增減
-    function addNewSocialIcon() {
-      appData.socials.push({ icon: 'fa-brands fa-instagram', label: '新連結', url: 'https://' });
-      populateAdminDrawer();
-      renderPublicView();
-    }
-    function updateSocialIcon(idx, val) {
-      appData.socials[idx].icon = val;
-      renderPublicView();
-    }
-    function updateSocialUrl(idx, val) {
-      appData.socials[idx].url = val;
-      renderPublicView();
-    }
-    function removeSocial(idx) {
-      appData.socials.splice(idx, 1);
-      populateAdminDrawer();
-      renderPublicView();
-    }
-
-    // 一鍵複製折扣碼
-    function copyDiscountCode(code, e) {
+    window.copyCode = function(code, e) {
       if (e) e.stopPropagation();
       navigator.clipboard.writeText(code).then(() => {
         showToast(`已複製優惠碼：${code}`);
       }).catch(() => {
-        showToast(`優惠碼：${code}`);
+        showToast(`代碼：${code}`);
       });
-    }
+    };
 
-    // 分享抽屜
-    function openShareSheet() {
-      document.getElementById('shareSheet').classList.remove('hidden');
-    }
-    function closeShareSheet() {
-      document.getElementById('shareSheet').classList.add('hidden');
-    }
-    function copyCurrentLink() {
-      navigator.clipboard.writeText('https://link.heysibyl.com').then(() => {
-        showToast('已複製頁面連結');
-        closeShareSheet();
-      });
-    }
+    window.saveAndSync = function() {
+      closeAdmin();
+      showToast('✨ 設定已即時同步儲存！');
+    };
 
-    // 抽屜面板動畫開關 (Admin Sheet)
-    function openAdminSheet() {
-      populateAdminDrawer();
-      const sheet = document.getElementById('adminSheet');
-      const backdrop = document.getElementById('adminBackdrop');
-      const panel = document.getElementById('adminPanel');
-      sheet.classList.remove('pointer-events-none');
-      backdrop.classList.remove('opacity-0');
-      backdrop.classList.add('opacity-100');
-      panel.classList.remove('translate-y-full');
-      panel.classList.add('translate-y-0');
-    }
-
-    function closeAdminSheet() {
-      const sheet = document.getElementById('adminSheet');
-      const backdrop = document.getElementById('adminBackdrop');
-      const panel = document.getElementById('adminPanel');
-      backdrop.classList.remove('opacity-100');
-      backdrop.classList.add('opacity-0');
-      panel.classList.remove('translate-y-0');
-      panel.classList.add('translate-y-full');
-      setTimeout(() => {
-        sheet.classList.add('pointer-events-none');
-      }, 300);
-    }
-
-    // 開通抽屜面板 (Onboard Sheet)
-    function openOnboardSheet() {
-      const sheet = document.getElementById('onboardSheet');
-      const backdrop = document.getElementById('onboardBackdrop');
-      const panel = document.getElementById('onboardPanel');
-      sheet.classList.remove('pointer-events-none');
-      backdrop.classList.remove('opacity-0');
-      backdrop.classList.add('opacity-100');
-      panel.classList.remove('translate-y-full');
-      panel.classList.add('translate-y-0');
-    }
-
-    function closeOnboardSheet() {
-      const sheet = document.getElementById('onboardSheet');
-      const backdrop = document.getElementById('onboardBackdrop');
-      const panel = document.getElementById('onboardPanel');
-      backdrop.classList.remove('opacity-100');
-      backdrop.classList.add('opacity-0');
-      panel.classList.remove('translate-y-0');
-      panel.classList.add('translate-y-full');
-      setTimeout(() => {
-        sheet.classList.add('pointer-events-none');
-      }, 300);
-    }
-
-    function handleQuickOnboard(e) {
-      e.preventDefault();
-      const brand = document.getElementById('quickBrand').value;
-      const slug = document.getElementById('quickSlug').value;
-      closeOnboardSheet();
-      showToast(`開通成功！歡迎 ${brand}`);
-      appData.brandName = brand;
-      appData.bio = '歡迎光臨 ' + brand + ' 官方頁面\\n點擊卡片探索最新商品與服務';
-      renderPublicView();
-      setTimeout(openAdminSheet, 600);
-    }
-
-    function saveAndSync() {
-      closeAdminSheet();
-      showToast('✨ 設定已即時發布至雲端！');
-    }
-
-    // Toast 提示工具
     function showToast(msg) {
       const toast = document.getElementById('toast');
       document.getElementById('toastMsg').innerText = msg;
@@ -1044,10 +908,8 @@
       }, 2200);
     }
 
-    window.onload = () => {
-      renderPublicView();
-    };
+    // 啟動渲染
+    renderPublicView();
   </script>
 </body>
 </html>
-
