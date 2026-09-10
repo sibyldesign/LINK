@@ -119,6 +119,16 @@
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
+    <!-- ✅ 在卡片分類清單上方新增：品牌輪播牆區塊 -->
+<div id="carouselWrapper" class="w-full mb-6 relative overflow-hidden rounded-2xl select-none" style="display: none;">
+  <div id="carouselTrack" class="flex transition-transform duration-500 ease-out"></div>
+  <!-- 底部白點進度條 -->
+  <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10"></div>
+</div>
+
+<!-- 卡片分類清單 -->
+<div id="sectionsContainer" class="w-full space-y-6"></div>
+    
     <!-- 卡片分類清單 -->
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
@@ -247,6 +257,45 @@
           </div>
           <div id="adminSocialsList" class="space-y-2"></div>
         </div>
+
+        <!-- 🎠 品牌輪播牆管理 -->
+<div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+  <div class="flex items-center justify-between">
+    <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
+      <i class="fa-solid fa-images text-stone-600"></i>
+      <span>品牌視覺輪播牆</span>
+    </div>
+    <!-- 啟用 / 關閉 Switch -->
+    <label class="relative inline-flex items-center cursor-pointer">
+      <input type="checkbox" id="inputCarouselEnabled" class="sr-only peer" onchange="toggleCarouselEnabled(this.checked)">
+      <div class="w-9 h-5 bg-stone-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+    </label>
+  </div>
+
+  <div id="adminCarouselConfig" class="space-y-3 pt-1" style="display: none;">
+    <!-- 比例選擇 -->
+    <div>
+      <label class="block text-[11px] font-medium text-stone-600 mb-1">輪播畫幅比例</label>
+      <select id="selectCarouselAspect" onchange="changeCarouselAspect(this.value)" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs">
+        <option value="landscape">橫式海報 (16:9 橫向)</option>
+        <option value="square">經典方形 (1:1 正方形)</option>
+        <option value="story">直式限動 (9:16 直式)</option>
+      </select>
+    </div>
+
+    <!-- 圖片上傳 (至多7張) 與預覽列表 -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="text-[11px] text-stone-500">圖片上傳 (最多 7 張)</span>
+        <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-white border border-stone-300 text-[11px] font-medium hover:bg-stone-100 cursor-pointer">
+          <i class="fa-solid fa-plus mr-1"></i>新增照片
+          <input type="file" accept="image/*" class="hidden" onchange="handleCarouselUpload(event)">
+        </label>
+      </div>
+      <div id="adminCarouselThumbList" class="flex gap-2 overflow-x-auto py-1"></div>
+    </div>
+  </div>
+</div>
 
         <!-- 分類與卡片項目 -->
         <div class="space-y-3">
@@ -428,7 +477,16 @@
       avatar: illustrationAvatars[0],
       bio: '靜奢空間選品 ╳ 氣味感官工坊\n探索慢節奏生活美學，預約一對一軟裝諮詢',
       adminPin: '8888',
-      socials: [
+  // ✅ 擴充輪播圖結構：
+  carousel: {
+    enabled: true,
+    aspectRatio: 'landscape', // 'landscape'(16:9橫), 'square'(1:1), 'story'(9:16直)
+    images: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+    ]
+  },
+  socials: [
         { icon: 'fa-brands fa-instagram', label: 'Instagram', url: 'https://instagram.com' },
         { icon: 'fa-brands fa-threads', label: 'Threads', url: 'https://threads.net' },
         { icon: 'fa-brands fa-line', label: 'LINE Official', url: 'https://line.me' },
@@ -749,7 +807,183 @@
         });
         secBox.appendChild(wrap);
       });
+      renderCarousel();
     }
+
+    let carouselTimer = null;
+let currentSlide = 0;
+let touchStartX = 0;
+let touchEndX = 0;
+
+function renderCarousel() {
+  const c = appData.carousel;
+  const wrap = document.getElementById('carouselWrapper');
+  const track = document.getElementById('carouselTrack');
+  const dots = document.getElementById('carouselDots');
+  if (carouselTimer) clearInterval(carouselTimer);
+
+  if (!c || !c.enabled || !c.images || c.images.length === 0) {
+    wrap.style.display = 'none';
+    return;
+  }
+
+  wrap.style.display = 'block';
+
+  // 依照比例動態指定畫幅高度
+  const aspectClassMap = {
+    'landscape': 'aspect-video w-full',
+    'square': 'aspect-square w-full',
+    'story': 'aspect-[9/16] w-full max-w-[340px] mx-auto'
+  };
+  wrap.className = `w-full mb-6 relative overflow-hidden rounded-2xl select-none shadow-xs border border-white/60 ${aspectClassMap[c.aspectRatio] || 'aspect-video w-full'}`;
+
+  // 渲染 Slides
+  track.innerHTML = '';
+  c.images.forEach(imgUrl => {
+    const slide = document.createElement('div');
+    slide.className = 'w-full h-full flex-shrink-0';
+    slide.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover pointer-events-none">`;
+    track.appendChild(slide);
+  });
+
+  // 渲染白點進度條
+  dots.innerHTML = '';
+  c.images.forEach((_, idx) => {
+    const dot = document.createElement('button');
+    dot.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
+    dot.onclick = () => goToSlide(idx);
+    dots.appendChild(dot);
+  });
+
+  updateSlidePosition();
+
+  // 自動定時輪播 (3.8 秒)
+  if (c.images.length > 1) {
+    carouselTimer = setInterval(() => {
+      currentSlide = (currentSlide + 1) % c.images.length;
+      updateSlidePosition();
+    }, 3800);
+  }
+
+  // 手機左右滑動手勢
+  wrap.ontouchstart = (e) => { touchStartX = e.changedTouches[0].screenX; };
+  wrap.ontouchend = (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 45) {
+      // 往左滑下一張
+      currentSlide = (currentSlide + 1) % c.images.length;
+      updateSlidePosition();
+    } else if (touchEndX - touchStartX > 45) {
+      // 往右滑上一張
+      currentSlide = (currentSlide - 1 + c.images.length) % c.images.length;
+      updateSlidePosition();
+    }
+  };
+}
+
+function goToSlide(idx) {
+  currentSlide = idx;
+  updateSlidePosition();
+}
+
+function updateSlidePosition() {
+  const track = document.getElementById('carouselTrack');
+  const dots = document.getElementById('carouselDots').children;
+  if (!track) return;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  Array.from(dots).forEach((d, idx) => {
+    d.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
+  });
+}
+
+// ----------------- 後台控制邏輯 -----------------
+
+function populateCarouselAdmin() {
+  if (!appData.carousel) {
+    appData.carousel = { enabled: false, aspectRatio: 'landscape', images: [] };
+  }
+  const c = appData.carousel;
+  document.getElementById('inputCarouselEnabled').checked = c.enabled;
+  document.getElementById('selectCarouselAspect').value = c.aspectRatio || 'landscape';
+  document.getElementById('adminCarouselConfig').style.display = c.enabled ? 'block' : 'none';
+
+  const list = document.getElementById('adminCarouselThumbList');
+  list.innerHTML = '';
+  c.images.forEach((img, idx) => {
+    const item = document.createElement('div');
+    item.className = 'relative w-14 h-14 rounded-xl overflow-hidden border border-stone-200 flex-shrink-0 bg-stone-100 group';
+    item.innerHTML = `
+      <img src="${img}" class="w-full h-full object-cover">
+      <button type="button" onclick="removeCarouselImage(${idx})" class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-black/70 text-white text-[9px] flex items-center justify-center cursor-pointer">✕</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+// 在 populateAdmin() 內呼叫以同步後台狀態
+// 在 populateAdmin() 的結尾加上：populateCarouselAdmin();
+
+window.toggleCarouselEnabled = function(enabled) {
+  appData.carousel.enabled = enabled;
+  document.getElementById('adminCarouselConfig').style.display = enabled ? 'block' : 'none';
+  renderView();
+  autoSaveToCloud();
+};
+
+window.changeCarouselAspect = function(val) {
+  appData.carousel.aspectRatio = val;
+  renderView();
+  autoSaveToCloud();
+};
+
+window.handleCarouselUpload = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!appData.carousel.images) appData.carousel.images = [];
+  if (appData.carousel.images.length >= 7) {
+    Swal.fire({ title: '已達上限', text: '輪播牆至多上傳 7 張圖片', icon: 'warning' });
+    return;
+  }
+
+  showToast('圖片壓縮處理中...');
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      const MAX_SIZE = 960;
+      if (width > height && width > MAX_SIZE) {
+        height = Math.round((height * MAX_SIZE) / width);
+        width = MAX_SIZE;
+      } else if (height > MAX_SIZE) {
+        width = Math.round((width * MAX_SIZE) / height);
+        height = MAX_SIZE;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const compressed = canvas.toDataURL('image/jpeg', 0.85);
+      appData.carousel.images.push(compressed);
+      populateCarouselAdmin();
+      renderView();
+      autoSaveToCloud();
+      showToast('輪播圖已加入！');
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.removeCarouselImage = function(idx) {
+  appData.carousel.images.splice(idx, 1);
+  populateCarouselAdmin();
+  renderView();
+  autoSaveToCloud();
+};
 
     async function handleAdminEntry() {
       if (!isRealUser) { openAdminModal(); return; }
