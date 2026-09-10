@@ -169,7 +169,7 @@
       </div>
       <div>
         <h4 id="leadModalTitle" class="font-bold text-stone-900 text-sm">領取好友專屬禮遇</h4>
-        <p id="leadModalDesc" class="text-xs text-stone-600 mt-1 leading-relaxed">加入 LINE 官方好友，即享首次預約專屬抵用代碼！</p>
+        <p id="leadModalDesc" class="text-xs text-stone-600 mt-1 leading-relaxed">加入 LINE 官方好友，即享專屬福利！</p>
       </div>
       <div class="flex flex-col gap-2">
         <a id="btnLineLeadAction" href="#" target="_blank" class="w-full py-2.5 rounded-xl bg-[#06C755] hover:bg-[#05b34c] text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5">
@@ -289,20 +289,24 @@
           </div>
         </div>
 
-        <!-- LINE 導流彈窗 -->
-        <div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-brands fa-line text-emerald-600 text-sm"></i><span>LINE 官方好友導流彈窗</span></span>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="inputLineLeadEnabled" class="sr-only peer" onchange="toggleLineLeadEnabled(this.checked)">
-              <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
-            </label>
-          </div>
-          <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
-            <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
-            <input type="text" id="inputLineLeadTitle" placeholder="彈窗標題 (例：領取好友專屬體驗禮遇)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
-          </div>
-        </div>
+        <!-- 💬 LINE 導流留客彈窗設定 -->
+<div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+  <div class="flex items-center justify-between">
+    <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-brands fa-line text-emerald-600 text-sm"></i><span>LINE 官方好友導流彈窗</span></span>
+    <label class="relative inline-flex items-center cursor-pointer">
+      <input type="checkbox" id="inputLineLeadEnabled" class="sr-only peer" onchange="toggleLineLeadEnabled(this.checked)">
+      <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+    </label>
+  </div>
+  <!-- 💡 新增的小說明 -->
+  <p class="text-[11px] text-stone-500 leading-relaxed">
+    當訪客在前台點擊任意卡片時，將隨機彈出此視窗，引導訪客加入 LINE 官方帳號。
+  </p>
+  <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
+    <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
+    <input type="text" id="inputLineLeadTitle" placeholder="彈窗標題 (例：領取好友專屬體驗禮遇)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
+  </div>
+</div>
 
         <!-- 基本形象 -->
         <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
@@ -635,8 +639,8 @@
       return currentSlug ? `sibyl_data_${currentSlug}` : 'sibyl_demo_data';
     }
 
-    // ✅ 加入 DEMO_VERSION 強制刷新，徹底解決舊暫存蓋過新範例的問題
-const DEMO_DATA_VERSION = 'v20260911_new';
+    // ✅ 加入版本號 DEMO_VERSION 強制刷新，徹底解決舊暫存蓋過新範例的問題
+const DEMO_DATA_VERSION = 'v20260911_new2';
 
 async function initPage() {
   const p = new URLSearchParams(window.location.search);
