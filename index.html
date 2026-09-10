@@ -52,46 +52,45 @@
     .app-card { background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--card-shadow); backdrop-filter: blur(14px); transition: all 0.22s ease; }
     .app-card:hover { background: var(--card-hover); transform: translateY(-2px); }
 
-    /* SweetAlert2 奢華拿鐵美學風格 */
     div:where(.swal2-container) div:where(.swal2-popup) {
       background: #FAF6F0 !important; border: 1px solid #DFD1C0 !important; border-radius: 28px !important;
       padding: 24px 20px !important; box-shadow: 0 20px 40px -10px rgba(74, 59, 44, 0.2) !important; color: #2C241E !important;
     }
-    div:where(.swal2-container) .swal2-title { color: #2C241E !important; font-size: 16px !important; font-weight: 700 !important; padding-top: 4px !important; }
-    div:where(.swal2-container) .swal2-html-container { color: #7A6C62 !important; font-size: 12px !important; line-height: 1.6 !important; margin: 10px 0 16px 0 !important; }
+    div:where(.swal2-container) .swal2-title { color: #2C241E !important; font-size: 16px !important; font-weight: 700 !important; }
+    div:where(.swal2-container) .swal2-html-container { color: #7A6C62 !important; font-size: 12px !important; line-height: 1.6 !important; margin: 8px 0 14px 0 !important; }
     div:where(.swal2-container) .swal2-input {
       border: 1px solid #DFD1C0 !important; background: #FFFFFF !important; border-radius: 14px !important;
-      font-size: 13px !important; height: 42px !important; color: #2C241E !important; box-shadow: none !important;
-      margin: 10px auto !important; text-align: center !important;
+      font-size: 13px !important; height: 42px !important; color: #2C241E !important; text-align: center !important;
     }
-    div:where(.swal2-container) .swal2-input:focus { border-color: #8C7058 !important; box-shadow: 0 0 0 2px rgba(140, 112, 88, 0.2) !important; }
-    div:where(.swal2-container) .swal2-actions { gap: 8px !important; margin-top: 16px !important; }
-    div:where(.swal2-container) button.swal2-confirm {
-      background: #2C241E !important; color: #FFFFFF !important; border-radius: 14px !important;
-      font-size: 12px !important; font-weight: 600 !important; padding: 10px 22px !important; box-shadow: 0 4px 12px rgba(44, 36, 30, 0.15) !important;
-    }
-    div:where(.swal2-container) button.swal2-confirm:hover { background: #000000 !important; }
-    div:where(.swal2-container) button.swal2-cancel {
-      background: #EAE1D5 !important; color: #5A4C40 !important; border-radius: 14px !important;
-      font-size: 12px !important; font-weight: 600 !important; padding: 10px 20px !important;
-    }
-    div:where(.swal2-container) button.swal2-cancel:hover { background: #DFD1C0 !important; }
+    div:where(.swal2-container) button.swal2-confirm { background: #2C241E !important; color: #FFFFFF !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; padding: 10px 22px !important; }
+    div:where(.swal2-container) button.swal2-cancel { background: #EAE1D5 !important; color: #5A4C40 !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; padding: 10px 20px !important; }
+
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 16s linear infinite; }
   </style>
 </head>
 <body class="flex flex-col items-center justify-between">
 
-  <!-- 頂部導航列 -->
-  <header class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between relative z-20">
-    <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 hover:bg-white backdrop-blur-md border border-white/50 shadow-xs transition active:scale-95 cursor-pointer" title="回到首頁">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80 hover:opacity-100">link.heysibyl.com</span>
-    </a>
+  <!-- 置頂跑馬燈公告 -->
+  <div id="marqueeBanner" class="w-full bg-stone-900 text-white text-[11px] py-1.5 px-4 overflow-hidden relative z-30" style="display: none;">
+    <div class="flex items-center gap-2 max-w-[480px] mx-auto overflow-hidden">
+      <span class="flex-shrink-0 font-bold px-1.5 py-0.5 rounded bg-amber-500 text-stone-950 text-[9px]">公告</span>
+      <div class="overflow-hidden whitespace-nowrap flex-grow">
+        <span id="marqueeText" class="animate-marquee inline-block"></span>
+      </div>
+    </div>
+  </div>
 
+  <!-- 頂部導航列 -->
+  <header class="w-full max-w-[480px] px-5 pt-3 pb-2 flex items-center justify-between relative z-20">
+    <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 hover:bg-white backdrop-blur-md border border-white/50 shadow-xs transition active:scale-95 cursor-pointer">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
+    </a>
     <div class="flex items-center gap-2">
-      <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer" title="分享">
+      <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer">
         <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
       </button>
-
       <button type="button" onclick="handleAdminEntry()" class="h-9 px-3.5 rounded-full bg-stone-900 hover:bg-black text-white text-xs font-medium shadow-sm flex items-center gap-2 transition active:scale-95 cursor-pointer">
         <i class="fa-solid fa-sliders text-[11px]"></i>
         <span id="btnAdminLabel">設定後台</span>
@@ -100,47 +99,39 @@
   </header>
 
   <!-- 主體畫布 -->
-  <main class="w-full max-w-[460px] px-5 pt-4 pb-14 flex-grow flex flex-col items-center relative z-10">
+  <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-3 pb-14 flex-grow flex flex-col items-center relative z-10">
 
-    <!-- 品牌頭像與名稱 -->
-    <div class="w-full flex flex-col items-center text-center mb-6">
+    <!-- 模組 A：品牌頭像與名片介紹 (已徹底移除鉛筆) -->
+    <div id="profileModule" class="w-full flex flex-col items-center text-center mb-6 transition-all">
       <div onclick="handleAdminEntry()" class="relative group cursor-pointer">
         <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/90 via-white/40 to-white shadow-md">
           <img id="displayAvatar" src="" alt="頭像" class="w-full h-full rounded-full object-cover bg-[#E8DFD3]">
         </div>
-        <div class="absolute bottom-0 right-1 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center text-[10px] shadow border border-white">
-          <i class="fa-solid fa-pen text-[9px]"></i>
-        </div>
       </div>
-
       <h1 id="displayName" class="mt-3.5 text-xl font-bold tracking-tight" style="color: var(--title-color);"></h1>
       <p id="displayBio" class="mt-2 text-xs leading-relaxed font-normal max-w-[320px]" style="color: var(--desc-color);"></p>
-
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- ✅ 在卡片分類清單上方新增：品牌輪播牆區塊 -->
-<div id="carouselWrapper" class="w-full mb-6 relative overflow-hidden rounded-2xl select-none" style="display: none;">
-  <div id="carouselTrack" class="flex transition-transform duration-500 ease-out"></div>
-  <!-- 底部白點進度條 -->
-  <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10"></div>
-</div>
+    <!-- 模組 B：品牌輪播牆 -->
+    <div id="carouselWrapper" class="w-full mb-6 relative overflow-hidden rounded-2xl select-none" style="display: none;">
+      <div id="carouselTrack" class="flex transition-transform duration-500 ease-out"></div>
+      <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10"></div>
+    </div>
 
-<!-- 卡片分類清單 -->
-<div id="sectionsContainer" class="w-full space-y-6"></div>
-    
-    <!-- 卡片分類清單 -->
+    <!-- 模組 C：卡片分類清單 -->
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
-    <!-- 底部功能區塊 -->
-    <div class="w-full mt-12 space-y-4 flex flex-col items-center">
+    <!-- 模組 D：底部功能與頁尾 (強制 order: 99，保證 100% 固定在最下方！) -->
+    <footer id="footerContainer" class="w-full mt-12 flex flex-col items-center space-y-4" style="order: 99 !important;">
       <div id="demoSwitchBar" style="display: none;" class="w-full text-center">
         <button type="button" onclick="switchToDemoMode()" class="px-4 py-2 rounded-full bg-white/80 hover:bg-white border border-stone-200 shadow-xs text-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 mx-auto transition active:scale-95 cursor-pointer">
           <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i>
-          <span>查看完整操作示範</span>
+          <span>查看完整官方示範</span>
         </button>
       </div>
 
+      <!-- 開通卡片 -->
       <div class="w-full p-5 rounded-3xl bg-white/75 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
         <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
           <i class="fa-solid fa-palette text-[9px]"></i>
@@ -156,7 +147,8 @@
         </button>
       </div>
 
-      <footer class="pt-2 flex flex-col items-center text-center max-w-[340px] mx-auto space-y-1.5">
+      <!-- 品牌金句介紹 -->
+      <div class="pt-2 flex flex-col items-center text-center max-w-[340px] mx-auto space-y-1.5">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-bold tracking-wide text-stone-700 hover:text-black transition">
           <span>Designed by Sibyl | 數位管家</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-40 group-hover:opacity-100 transition"></i>
@@ -164,38 +156,55 @@
         <p class="text-[11px] text-stone-500 leading-relaxed">
           不只是品牌頁，更有眾多數位管家！超輕量月費即可擁有預約排程系統、行政管家與購物商城，免費享有無限升級服務
         </p>
-      </footer>
-    </div>
+      </div>
+    </footer>
   </main>
 
-  <!-- ==================== 業主後台抽屜 ==================== -->
+  <!-- LINE 導流留客彈窗 -->
+  <div id="lineLeadModal" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center p-4">
+    <div onclick="closeLineLeadModal()" class="absolute inset-0 bg-black/60 backdrop-blur-xs"></div>
+    <div class="relative z-10 bg-[#FAF6F0] w-full max-w-xs rounded-3xl p-6 shadow-2xl text-center space-y-4 border border-[#DFD1C0]">
+      <div class="w-12 h-12 rounded-2xl bg-[#06C755] text-white flex items-center justify-center mx-auto text-xl shadow-md">
+        <i class="fa-brands fa-line"></i>
+      </div>
+      <div>
+        <h4 id="leadModalTitle" class="font-bold text-stone-900 text-sm">領取好友專屬禮遇</h4>
+        <p id="leadModalDesc" class="text-xs text-stone-600 mt-1 leading-relaxed">加入 LINE 官方好友，即享首次預約專屬抵用代碼！</p>
+      </div>
+      <div class="flex flex-col gap-2">
+        <a id="btnLineLeadAction" href="#" target="_blank" class="w-full py-2.5 rounded-xl bg-[#06C755] hover:bg-[#05b34c] text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5">
+          <i class="fa-brands fa-line text-sm"></i><span>前往加入好友</span>
+        </a>
+        <button type="button" onclick="closeLineLeadModal()" class="w-full py-2 text-stone-400 hover:text-stone-700 text-xs font-medium cursor-pointer">稍後再說</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 後台管理抽屜 -->
   <div id="adminSheet" style="display: none;" class="fixed inset-0 z-50">
     <div onclick="closeAdminModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
-    <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[88vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col overflow-hidden">
-      
+    <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[90vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col overflow-hidden">
       <div class="pt-3 pb-3 px-6 border-b border-stone-100 flex flex-col items-center bg-stone-50">
         <div class="w-10 h-1 rounded-full bg-stone-300 mb-3"></div>
         <div class="w-full flex items-center justify-between">
           <div>
             <h2 class="text-sm font-bold text-stone-900 flex items-center gap-2">
               <i class="fa-solid fa-sliders text-stone-700"></i>
-              <span>品牌連結頁管理後台</span>
+              <span>品牌管理後台</span>
             </h2>
-            <p class="text-[11px] text-stone-500">修改主題、更換密碼與維護卡片內容</p>
+            <p class="text-[11px] text-stone-500">修改視覺主題、公告跑馬燈、輪播與卡片排版</p>
           </div>
           <div class="flex items-center gap-2">
             <button type="button" onclick="promptChangePin()" class="text-[11px] text-stone-600 hover:text-black font-semibold border px-2.5 py-1 rounded-lg bg-white cursor-pointer">
               <i class="fa-solid fa-key mr-1"></i>改密碼
             </button>
-            <button type="button" onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center cursor-pointer">
-              <i class="fa-solid fa-xmark text-xs"></i>
-            </button>
+            <button type="button" onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center cursor-pointer">✕</button>
           </div>
         </div>
       </div>
 
       <div class="p-6 overflow-y-auto space-y-6 flex-grow text-xs text-stone-700">
-        <!-- 色系切換 -->
+        <!-- 主題切換 -->
         <div>
           <label class="block font-bold text-stone-900 mb-2">🎨 視覺風格主題 (六款美學色系)</label>
           <div class="grid grid-cols-2 gap-2.5">
@@ -226,7 +235,76 @@
           </div>
         </div>
 
-        <!-- 基本資料 -->
+        <!-- 跑馬燈公告 -->
+        <div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-bullhorn text-stone-600"></i><span>置頂跑馬燈公告</span></span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="inputMarqueeEnabled" class="sr-only peer" onchange="toggleMarqueeEnabled(this.checked)">
+              <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+            </label>
+          </div>
+          <div id="marqueeConfigBox" class="space-y-1.5 pt-1" style="display: none;">
+            <input type="text" id="inputMarqueeText" placeholder="例：📢 限量白陶擴香座已抵達工作室，滿千即享超取免運優惠！" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateMarqueeText(this.value)">
+          </div>
+        </div>
+
+        <!-- 輪播牆設定 -->
+        <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-images text-stone-600"></i><span>品牌視覺輪播牆</span></span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="inputCarouselEnabled" class="sr-only peer" onchange="toggleCarouselEnabled(this.checked)">
+              <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+            </label>
+          </div>
+          <div id="adminCarouselConfig" class="space-y-3 pt-1" style="display: none;">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-medium text-stone-500 mb-1">畫幅比例</label>
+                <select id="selectCarouselAspect" onchange="changeCarouselAspect(this.value)" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs">
+                  <option value="landscape">橫式海報 (16:9)</option>
+                  <option value="square">經典方形 (1:1)</option>
+                  <option value="story">直式限動 (9:16)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-stone-500 mb-1">模組顯示位置</label>
+                <select id="selectCarouselOrder" onchange="changeCarouselOrder(this.value)" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs">
+                  <option value="below">位於簡介下方 (推薦)</option>
+                  <option value="above">置頂於簡介上方</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] text-stone-500">輪播照片 (<span id="carouselCount">0</span>/7 張)</span>
+                <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-white border border-stone-300 text-[11px] font-medium hover:bg-stone-100 shadow-xs">
+                  <i class="fa-solid fa-plus mr-1"></i>新增照片
+                  <input type="file" accept="image/*" class="hidden" onchange="handleCarouselUpload(event)">
+                </label>
+              </div>
+              <div id="adminCarouselThumbList" class="flex gap-2 overflow-x-auto py-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LINE 導流彈窗 -->
+        <div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-brands fa-line text-emerald-600 text-sm"></i><span>LINE 官方好友導流彈窗</span></span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="inputLineLeadEnabled" class="sr-only peer" onchange="toggleLineLeadEnabled(this.checked)">
+              <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+            </label>
+          </div>
+          <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
+            <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
+            <input type="text" id="inputLineLeadTitle" placeholder="彈窗標題 (例：領取好友專屬體驗禮遇)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
+          </div>
+        </div>
+
+        <!-- 基本形象 -->
         <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
           <div class="font-bold text-stone-900 text-xs">👤 基本形象設定</div>
           <div class="flex items-center gap-4">
@@ -236,11 +314,11 @@
                 <i class="fa-solid fa-arrow-up-from-bracket text-[10px]"></i><span>上傳頭像</span>
                 <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'avatar')">
               </label>
-              <button type="button" onclick="cycleIllustrationAvatar()" class="block text-[10px] text-stone-500 hover:text-black underline">換一款預設手繪人像</button>
+              <button type="button" onclick="cycleIllustrationAvatar()" class="block text-[10px] text-stone-500 hover:text-black underline">換一款手繪人像</button>
             </div>
           </div>
           <div>
-            <label class="block font-medium mb-1">品牌名稱 / 稱呼</label>
+            <label class="block font-medium mb-1">品牌稱呼 / 名稱</label>
             <input type="text" id="inputBrandName" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold" oninput="syncLiveProfile()">
           </div>
           <div>
@@ -258,45 +336,6 @@
           <div id="adminSocialsList" class="space-y-2"></div>
         </div>
 
-        <!-- 🎠 品牌輪播牆管理 -->
-<div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
-  <div class="flex items-center justify-between">
-    <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
-      <i class="fa-solid fa-images text-stone-600"></i>
-      <span>品牌視覺輪播牆</span>
-    </div>
-    <!-- 啟用 / 關閉 Switch -->
-    <label class="relative inline-flex items-center cursor-pointer">
-      <input type="checkbox" id="inputCarouselEnabled" class="sr-only peer" onchange="toggleCarouselEnabled(this.checked)">
-      <div class="w-9 h-5 bg-stone-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
-    </label>
-  </div>
-
-  <div id="adminCarouselConfig" class="space-y-3 pt-1" style="display: none;">
-    <!-- 比例選擇 -->
-    <div>
-      <label class="block text-[11px] font-medium text-stone-600 mb-1">輪播畫幅比例</label>
-      <select id="selectCarouselAspect" onchange="changeCarouselAspect(this.value)" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs">
-        <option value="landscape">橫式海報 (16:9 橫向)</option>
-        <option value="square">經典方形 (1:1 正方形)</option>
-        <option value="story">直式限動 (9:16 直式)</option>
-      </select>
-    </div>
-
-    <!-- 圖片上傳 (至多7張) 與預覽列表 -->
-    <div>
-      <div class="flex items-center justify-between mb-1.5">
-        <span class="text-[11px] text-stone-500">圖片上傳 (最多 7 張)</span>
-        <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-white border border-stone-300 text-[11px] font-medium hover:bg-stone-100 cursor-pointer">
-          <i class="fa-solid fa-plus mr-1"></i>新增照片
-          <input type="file" accept="image/*" class="hidden" onchange="handleCarouselUpload(event)">
-        </label>
-      </div>
-      <div id="adminCarouselThumbList" class="flex gap-2 overflow-x-auto py-1"></div>
-    </div>
-  </div>
-</div>
-
         <!-- 分類與卡片項目 -->
         <div class="space-y-3">
           <div class="flex items-center justify-between border-t pt-4 border-stone-200">
@@ -311,20 +350,21 @@
       </div>
 
       <div class="px-6 py-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between">
-        <span class="text-[11px] text-stone-500">雲端節點就緒</span>
-        <button type="button" id="btnSaveAdmin" onclick="saveAdminAndClose()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md cursor-pointer">儲存並同步雲端</button>
+        <span class="text-[11px] text-stone-500">雲端即時連動中</span>
+        <button type="button" id="btnSaveAdmin" onclick="saveAdminAndClose()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md cursor-pointer">儲存並同步發布</button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== 卡片編輯彈窗 (支援 大 方形 + 上方) ==================== -->
+  <!-- 卡片編輯彈窗 -->
   <div id="itemModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <div onclick="closeItemModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 id="modalHeaderTitle" class="font-bold text-stone-900 text-sm">編輯卡片項目</h3>
+        <h3 id="modalHeaderTitle" class="font-bold text-stone-900 text-sm">編輯卡片內容</h3>
         <button type="button" onclick="closeItemModal()" class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center cursor-pointer">✕</button>
       </div>
+
       <div class="space-y-3">
         <div>
           <label class="block font-semibold mb-1">放入哪個分類？</label>
@@ -332,18 +372,24 @@
         </div>
         <div>
           <label class="block font-semibold mb-1">主題名稱 (中字 粗體)</label>
-          <input type="text" id="modalTitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold" placeholder="例：【法式亞麻】生活毯">
+          <input type="text" id="modalTitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-semibold" placeholder="例：【法式亞麻】手工織造生活毯">
         </div>
         <div>
           <label class="block font-semibold mb-1">內容說明 (小字 細字體)</label>
-          <input type="text" id="modalSubtitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-light text-stone-600" placeholder="例：限量現貨供應中">
+          <input type="text" id="modalSubtitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-light text-stone-600" placeholder="例：以天然山林氣息安撫日常緊繃">
+        </div>
+
+        <div class="p-3 bg-amber-50/50 rounded-2xl border border-amber-200 space-y-1.5">
+          <label class="block font-bold text-amber-950 text-[11px]"><i class="fa-solid fa-hourglass-half mr-1 text-amber-600"></i>限時活動截止時間 (選填，啟用倒數鐘)</label>
+          <input type="datetime-local" id="modalCountdownEnd" class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-stone-700">
+          <p class="text-[10px] text-amber-800/80">設定截止時間後，卡片會自動浮現精緻倒數時鐘，營造活動氛圍！</p>
         </div>
 
         <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-2.5">
           <div class="flex items-center justify-between">
             <label class="font-bold text-stone-800">圖片設定</label>
-            <button type="button" onclick="setNoImageMode()" id="btnNoImageToggle" class="px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer">
-              <i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>
+            <button type="button" onclick="setNoImageMode()" id="btnNoImageToggle" class="px-2.5 py-1 rounded-lg text-[11px] font-medium border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer">
+              設為無需圖片 (純文字卡片)
             </button>
           </div>
           <div id="imageSettingsBody" class="space-y-2">
@@ -353,25 +399,23 @@
                 <span id="noImgPlaceholder" class="text-[10px] text-stone-400 font-light" style="display: none;">無圖片</span>
               </div>
               <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-white border border-stone-300 font-medium text-[11px] hover:bg-stone-100 shadow-2xs">
-                <i class="fa-solid fa-arrow-up-from-bracket text-[10px] mr-1"></i><span>上傳圖片檔案</span>
+                <span>上傳圖片檔案</span>
                 <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'card')">
               </label>
               <button type="button" onclick="clearModalImg()" class="text-stone-400 hover:text-rose-500 text-[11px] cursor-pointer">清除重選</button>
             </div>
-            
-            <!-- 尺寸與位置設定 (已擴充 大 (方形)) -->
             <div id="imgLayoutRow" class="grid grid-cols-2 gap-2 pt-1">
               <div>
-                <label class="block text-[10px] text-stone-500 mb-1">圖片比例尺寸</label>
+                <label class="block text-[10px] text-stone-500 mb-1">比例尺寸</label>
                 <select id="modalImgSize" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
                   <option value="small">小 (方形 48px)</option>
                   <option value="medium" selected>中 (標準長方 64px)</option>
-                  <option value="large-square">大 (方形 300px)</option>
+                  <option value="large-square">大 (正方形 300px)</option>
                   <option value="large">大 (滿版長海報)</option>
                 </select>
               </div>
               <div>
-                <label class="block text-[10px] text-stone-500 mb-1">圖片擺放位置</label>
+                <label class="block text-[10px] text-stone-500 mb-1">擺放位置</label>
                 <select id="modalImgPos" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
                   <option value="top">上方 (置頂推薦)</option>
                   <option value="left" selected>左側</option>
@@ -386,8 +430,9 @@
           <input type="text" id="modalUrl" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs" placeholder="跳轉網址 https://">
           <input type="text" id="modalCode" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-mono uppercase" placeholder="優惠代碼 (選填)">
         </div>
-        <input type="text" id="modalBadge" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs" placeholder="角標標籤 (例：本月主打)">
+        <input type="text" id="modalBadge" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs" placeholder="角標標籤 (例：熱銷限定)">
       </div>
+
       <div class="flex justify-end gap-2 pt-3 border-t">
         <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-xl border text-stone-600 cursor-pointer">取消</button>
         <button type="button" onclick="saveItemData()" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-medium cursor-pointer">確定儲存</button>
@@ -401,9 +446,8 @@
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6">
       <div class="w-10 h-1 rounded-full bg-stone-300 mx-auto mb-4"></div>
       <div class="text-center mb-5">
-        <div class="w-10 h-10 rounded-2xl bg-stone-900 text-white flex items-center justify-center mx-auto mb-2 text-sm shadow"><i class="fa-solid fa-paper-plane"></i></div>
-        <h3 class="text-base font-bold text-stone-900">免費開通專屬品牌連結頁</h3>
-        <p class="text-xs text-stone-500 mt-1">送出後即刻自動建立，同時備份至您的信箱</p>
+        <h3 class="text-base font-bold text-stone-900">免費開通專屬品牌微頁</h3>
+        <p class="text-xs text-stone-500 mt-1">無需綁卡，30秒擁有高質感數位名片</p>
       </div>
       <form onsubmit="handleOnboardSubmit(event)" class="space-y-3.5 text-xs text-stone-700">
         <div>
@@ -422,14 +466,13 @@
           <input required type="email" id="quickEmail" placeholder="yourname@gmail.com" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs">
         </div>
         <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-sparkles text-amber-300"></i><span>立即開通專屬品牌頁</span>
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i><span>立即開通專屬品牌頁</span>
         </button>
-
         <div class="text-center pt-2">
-  <button type="button" onclick="findMySlugPrompt()" class="text-[11px] text-stone-400 hover:text-stone-800 underline cursor-pointer">
-    忘記專屬網址？輸入 Email 免費找回
-  </button>
-</div>
+          <button type="button" onclick="findMySlugPrompt()" class="text-[11px] text-stone-400 hover:text-stone-800 underline cursor-pointer">
+            忘記專屬網址？輸入 Email 免費找回
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -452,12 +495,9 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-[200]">
     操作完成
   </div>
-
-  <!-- ==================== 穩健腳本邏輯 ==================== -->
   <script>
     const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxJlhG1eDEwuyjiJedTtvND-iwIzGXA3sfc_iN_Pq-15LIKWwlHGDX5tFRVdlOzfanONA/exec";
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
@@ -471,22 +511,34 @@
     ];
     let avatarIndex = 0;
 
+    // 全新原創示範資料：輪播 4 張圖 ＋ 全尺寸版型示範
     const demoData = {
       theme: 'cashmere-latte',
-      brandName: 'STUDIO XX',
+      brandName: 'STUDIO AURA ╳ 慢奢選品',
       avatar: illustrationAvatars[0],
-      bio: '靜奢空間選品 ╳ 氣味感官工坊\n探索慢節奏生活美學，預約一對一軟裝諮詢',
+      bio: '靜奢空間選品 ╳ 氣味感官工坊\n探索慢節奏生活美學，預約一對一軟裝與香氛諮詢',
       adminPin: '8888',
-  // ✅ 擴充輪播圖結構：
-  carousel: {
-    enabled: true,
-    aspectRatio: 'landscape', // 'landscape'(16:9橫), 'square'(1:1), 'story'(9:16直)
-    images: [
-      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
-    ]
-  },
-  socials: [
+      marquee: {
+        enabled: true,
+        text: '📢 當季限量白陶香氛擴香座已抵達工作室，滿千即享超取免運優惠！'
+      },
+      carousel: {
+        enabled: true,
+        aspectRatio: 'landscape',
+        position: 'below',
+        images: [
+          'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80'
+        ]
+      },
+      lineLead: {
+        enabled: true,
+        url: 'https://heysibyl.com',
+        title: '領取好友專屬體驗禮遇'
+      },
+      socials: [
         { icon: 'fa-brands fa-instagram', label: 'Instagram', url: 'https://instagram.com' },
         { icon: 'fa-brands fa-threads', label: 'Threads', url: 'https://threads.net' },
         { icon: 'fa-brands fa-line', label: 'LINE Official', url: 'https://line.me' },
@@ -495,21 +547,78 @@
       sections: [
         {
           id: 'sec-1',
-          title: 'MONTHLY SPECIAL ╳ 當月選物限定',
+          title: 'SEASONAL SPECIAL ╳ 當季主打特企',
           items: [
             {
               id: 'item-101',
-              title: '【法式亞麻】手工織造抱枕與羊絨毯禮盒',
-              subtitle: '限量開放預購，輸入專屬代碼享九折獨家禮遇',
-              img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80',
-              imgSize: 'large-square', imgPos: 'top', url: 'https://heysibyl.com', discountCode: 'NINE90', badge: '本月主打'
+              title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
+              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100',
+              img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
+              imgSize: 'large-square',
+              imgPos: 'top',
+              url: 'https://heysibyl.com',
+              discountCode: 'AURA100',
+              badge: '限時特惠',
+              countdownEnd: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
+              clicks: 78
             },
             {
               id: 'item-102',
-              title: '晨霧檜木香氛精油 ╳ 手工黑陶擴香座',
-              subtitle: '純天然低溫萃取，以空間氣味安撫日常疲憊',
-              img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=400&q=80',
-              imgSize: 'small', imgPos: 'left', url: 'https://heysibyl.com', discountCode: '', badge: '僅剩8組'
+              title: '法式亞麻生活抱枕組（手工梭織限量款）',
+              subtitle: '厚磅質樸手感，為起居空間注入溫潤暖意',
+              img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
+              imgSize: 'medium',
+              imgPos: 'left',
+              url: 'https://heysibyl.com',
+              discountCode: '',
+              badge: '熱銷',
+              countdownEnd: '',
+              clicks: 45
+            },
+            {
+              id: 'item-103',
+              title: '草本舒緩複方滾珠精油 (10ml 便攜瓶)',
+              subtitle: '隨身放鬆必備，淡雅甜橙與雪松草本調',
+              img: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=300&q=80',
+              imgSize: 'small',
+              imgPos: 'right',
+              url: 'https://heysibyl.com',
+              discountCode: 'MINI88',
+              badge: '隨行款',
+              countdownEnd: '',
+              clicks: 31
+            }
+          ]
+        },
+        {
+          id: 'sec-2',
+          title: 'SPACES & BOOKINGS ╳ 空間預約與諮詢',
+          items: [
+            {
+              id: 'item-201',
+              title: '秋季私廚感官餐桌（每週僅開放五席微醺晚宴）',
+              subtitle: '以在地當令旬味為靈感的 7 道私廚微醺晚宴，需提前預約',
+              img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+              imgSize: 'large',
+              imgPos: 'top',
+              url: 'https://heysibyl.com',
+              discountCode: '',
+              badge: '席位預約',
+              countdownEnd: '',
+              clicks: 112
+            },
+            {
+              id: 'item-202',
+              title: '一對一空間氣味與軟裝佈置定製方案',
+              subtitle: '由專屬顧問實地評估，量身打造專屬空間香氛美學',
+              img: '',
+              imgSize: 'medium',
+              imgPos: 'left',
+              url: 'https://heysibyl.com',
+              discountCode: 'VIPCONSULT',
+              badge: '官方服務',
+              countdownEnd: '',
+              clicks: 56
             }
           ]
         }
@@ -520,116 +629,54 @@
     let isRealUser = false;
     let currentStoreDbId = null;
     let currentSlug = null;
+    let countdownInterval = null;
 
     function getStorageKey() {
       return currentSlug ? `sibyl_data_${currentSlug}` : 'sibyl_demo_data';
     }
 
-    window.findMySlugPrompt = async function() {
-  const { value: email } = await Swal.fire({
-    title: '找回您的專屬網址',
-    text: '請輸入開通時填寫的電子信箱：',
-    input: 'email',
-    inputPlaceholder: 'yourname@gmail.com',
-    showCancelButton: true,
-    confirmButtonText: '查詢網址',
-    cancelButtonText: '取消'
-  });
+    // ✅ 加入 DEMO_VERSION 強制刷新，徹底解決舊暫存蓋過新範例的問題
+const DEMO_DATA_VERSION = 'v20260910_aura';
 
-  if (email) {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?owner_email=eq.${email.trim()}&select=slug,brand_name`, {
-        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-      });
-      const data = await res.json();
-      if (data && data.length > 0) {
-        const store = data[0];
-        Swal.fire({
-          title: '已找到您的品牌頁面！',
-          html: `品牌名稱：<b>${store.brand_name}</b><br><br>專屬網址：<br><b style="color:#8C7058;font-size:15px;">link.heysibyl.com/?u=${store.slug}</b>`,
-          icon: 'success',
-          confirmButtonText: '立即前往'
-        }).then(() => {
-          window.location.href = `https://link.heysibyl.com/?u=${store.slug}`;
-        });
-      } else {
-        Swal.fire('查無紀錄', '找不到此信箱開通的頁面，請確認輸入是否正確。', 'warning');
-      }
-    } catch(err) {
-      Swal.fire('查詢失敗', '連線異常，請稍後重試。', 'error');
+async function initPage() {
+  const p = new URLSearchParams(window.location.search);
+  const slug = p.get('u');
+  currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
+
+  if (currentSlug) {
+    // 真實用戶：優先讀取該用戶的本地快取，再讀取雲端
+    const localCache = localStorage.getItem(getStorageKey());
+    if (localCache) {
+      try {
+        appData = JSON.parse(localCache);
+        renderView();
+      } catch (e) {}
     }
-  }
-};
-    
-    async function autoSaveToCloud() {
-  localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-  
-  if (isRealUser && currentStoreDbId) {
-    try {
-      await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-        method: "PATCH",
-        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          brand_name: appData.brandName, bio_text: appData.bio, theme: appData.theme,
-          avatar_url: appData.avatar, social_links: appData.socials, admin_pin: appData.adminPin
-        })
-      });
+    await loadStoreFromSupabase(currentSlug);
+  } else {
+    // 官方示範模式：比對版本號，若版本不同則強制套用全新 demoData
+    isRealUser = false;
+    const cachedVer = localStorage.getItem('sibyl_demo_ver');
+    const localCache = localStorage.getItem('sibyl_demo_data');
 
-      await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-        method: "DELETE",
-        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-      });
-
-      const itemsToInsert = [];
-      let sortIdx = 0;
-      for (const sec of appData.sections) {
-        for (const it of (sec.items || [])) {
-          itemsToInsert.push({
-            store_id: currentStoreDbId, section_title: sec.title, title: it.title,
-            subtitle: it.subtitle || '', thumbnail_url: it.img || '',
-            img_size: it.imgSize || 'medium', img_pos: it.imgPos || 'left',
-            target_url: it.url || '#', discount_code: it.discountCode || '',
-            badge_label: it.badge || '', sort_order: sortIdx++
-          });
-        }
+    if (cachedVer === DEMO_DATA_VERSION && localCache) {
+      try {
+        appData = JSON.parse(localCache);
+      } catch (e) {
+        appData = JSON.parse(JSON.stringify(demoData));
       }
-
-      if (itemsToInsert.length > 0) {
-        await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-          method: "POST",
-          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-          body: JSON.stringify(itemsToInsert)
-        });
-      }
-    } catch(err) {
-      console.warn("背景自動同步提示:", err);
+    } else {
+      // 強制寫入最新示範資料
+      appData = JSON.parse(JSON.stringify(demoData));
+      localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
+      localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
     }
+
+    document.getElementById('demoSwitchBar').style.display = 'none';
+    document.getElementById('btnAdminLabel').innerText = '示範設定後台';
+    renderView();
   }
 }
-    
-    async function initPage() {
-      const p = new URLSearchParams(window.location.search);
-      const slug = p.get('u');
-      currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
-
-      // 優先讀取本地備份，防止任何資料遺失
-      const localCache = localStorage.getItem(getStorageKey());
-      if (localCache) {
-        try {
-          appData = JSON.parse(localCache);
-          renderView();
-        } catch (e) {}
-      }
-
-      if (currentSlug) {
-        await loadStoreFromSupabase(currentSlug);
-      } else {
-        isRealUser = false;
-        document.getElementById('demoSwitchBar').style.display = 'none';
-        document.getElementById('btnAdminLabel').innerText = '示範設定後台';
-        renderView();
-      }
-    }
 
     async function loadStoreFromSupabase(slug) {
       try {
@@ -644,9 +691,18 @@
           appData.theme = s.theme || 'cashmere-latte';
           appData.brandName = s.brand_name || slug;
           appData.avatar = s.avatar_url || illustrationAvatars[0];
-          appData.bio = s.bio_text || '';
           appData.adminPin = s.admin_pin || '8888';
           appData.socials = s.social_links || [];
+
+          try {
+            const parsedMeta = JSON.parse(s.bio_text);
+            appData.bio = parsedMeta.bio || '';
+            if (parsedMeta.marquee) appData.marquee = parsedMeta.marquee;
+            if (parsedMeta.carousel) appData.carousel = parsedMeta.carousel;
+            if (parsedMeta.lineLead) appData.lineLead = parsedMeta.lineLead;
+          } catch(e) {
+            appData.bio = s.bio_text || '';
+          }
 
           if (s.bio_items && s.bio_items.length > 0) {
             const map = {};
@@ -662,7 +718,9 @@
                 imgPos: it.img_pos || 'left',
                 url: it.target_url || '#',
                 discountCode: it.discount_code || '',
-                badge: it.badge_label || ''
+                badge: it.badge_label || '',
+                countdownEnd: it.countdown_end || '',
+                clicks: it.click_count || 0
               });
             });
             appData.sections = Object.values(map);
@@ -678,14 +736,15 @@
           switchToDemoMode();
         }
       } catch (e) {
-        console.warn("雲端讀取異常，改採本地暫存:", e);
         renderView();
       }
     }
 
     window.switchToDemoMode = function() {
-      window.location.href = window.location.pathname;
-    };
+  localStorage.removeItem('sibyl_demo_data');
+  localStorage.removeItem('sibyl_demo_ver');
+  window.location.href = window.location.pathname;
+};
 
     function renderView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
@@ -695,6 +754,17 @@
       document.getElementById('shareBrandTitle').innerText = appData.brandName;
       document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(window.location.href)}`;
 
+      // 跑馬燈
+      const mar = appData.marquee;
+      const marEl = document.getElementById('marqueeBanner');
+      if (mar && mar.enabled && mar.text) {
+        marEl.style.display = 'block';
+        document.getElementById('marqueeText').innerText = mar.text;
+      } else {
+        marEl.style.display = 'none';
+      }
+
+      // 社群列表
       const socBox = document.getElementById('displaySocials');
       socBox.innerHTML = '';
       (appData.socials || []).forEach(s => {
@@ -706,9 +776,10 @@
         socBox.appendChild(a);
       });
 
+      // 渲染卡片分類
       const secBox = document.getElementById('sectionsContainer');
       secBox.innerHTML = '';
-      (appData.sections || []).forEach(sec => {
+      (appData.sections || []).forEach((sec, sIdx) => {
         const wrap = document.createElement('div');
         wrap.className = 'w-full space-y-3';
         wrap.innerHTML = `
@@ -718,12 +789,16 @@
             <div class="flex-grow h-[1px] opacity-15" style="background-color: var(--title-color);"></div>
           </div>
         `;
-        (sec.items || []).forEach(item => {
+
+        (sec.items || []).forEach((item, iIdx) => {
           const card = document.createElement('div');
           card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer';
-          card.onclick = (e) => { if (!e.target.closest('.copy-btn')) window.open(item.url, '_blank'); };
+          card.onclick = (e) => {
+            if (!e.target.closest('.copy-btn')) {
+              handleCardClickTrack(sIdx, iIdx, item.url);
+            }
+          };
 
-          // 尺寸類別：新增 large-square (大方形)
           const sizeClassMap = {
             'small': 'w-12 h-12',
             'medium': 'w-16 h-16',
@@ -731,32 +806,26 @@
             'large': 'w-full h-40'
           };
           const sizeClass = sizeClassMap[item.imgSize] || 'w-16 h-16';
-
           const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
           const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs">${item.discountCode}</button>` : '';
 
-          // 渲染：頂部置頂 (Top) 支援 大(滿版) 與 大(方形)
+          const countdownHtml = item.countdownEnd ? `
+            <div class="mt-2 py-1 px-2 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono" data-countdown="${item.countdownEnd}">
+              <span><i class="fa-solid fa-clock mr-1 text-amber-600"></i>活動倒數</span>
+              <span class="countdown-timer font-bold tracking-wider">計算中...</span>
+            </div>
+          ` : '';
+
           if (item.img && item.imgPos === 'top') {
             const isSquare = item.imgSize === 'large-square';
-            const imgContainerClass = isSquare 
-              ? 'w-full p-4 pb-0 flex justify-center bg-stone-50/50' 
-              : 'w-full h-40 overflow-hidden bg-stone-100';
-            const imgInsideClass = isSquare 
-              ? 'w-full aspect-square max-w-[340px] rounded-2xl object-cover shadow-sm' 
-              : 'w-full h-full object-cover';
-
+            const imgContainerClass = isSquare ? 'w-full p-4 pb-0 flex justify-center bg-stone-50/50' : 'w-full h-40 overflow-hidden bg-stone-100';
+            const imgInsideClass = isSquare ? 'w-full aspect-square max-w-[340px] rounded-2xl object-cover shadow-sm' : 'w-full h-full object-cover';
             card.innerHTML = `
-              <div class="${imgContainerClass}">
-                <img src="${item.img}" class="${imgInsideClass}">
-              </div>
+              <div class="${imgContainerClass}"><img src="${item.img}" class="${imgInsideClass}"></div>
               <div class="p-4 space-y-1">
-                ${badge}
-                <div class="text-xs font-bold">${item.title}</div>
-                <div class="text-[11px] font-light leading-relaxed">${item.subtitle}</div>
-                <div class="pt-2 flex justify-between items-center">
-                  <span class="text-[10px] opacity-60">探索詳情 ➔</span>
-                  ${codeBtn}
-                </div>
+                ${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light leading-relaxed">${item.subtitle}</div>
+                ${countdownHtml}
+                <div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60">探索詳情 ➔</span>${codeBtn}</div>
               </div>
             `;
           } else if (item.img && item.imgPos === 'right') {
@@ -764,42 +833,33 @@
             card.innerHTML = `
               <div class="p-3.5 flex justify-between items-center gap-3">
                 <div class="min-w-0 space-y-0.5">
-                  ${badge}
-                  <div class="text-xs font-bold truncate">${item.title}</div>
-                  <div class="text-[11px] font-light truncate">${item.subtitle}</div>
+                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate">${item.subtitle}</div>
+                  ${countdownHtml}
                   ${codeBtn ? `<div class="pt-1">${codeBtn}</div>` : ''}
                 </div>
-                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0">
-                  <img src="${item.img}" class="w-full h-full object-cover">
-                </div>
+                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>
               </div>
             `;
           } else if (item.img) {
-            // 左側模式 (預設)
             const sideClass = (item.imgSize === 'large' || item.imgSize === 'large-square') ? 'w-24 h-24' : sizeClass;
             card.innerHTML = `
               <div class="p-3.5 flex items-center gap-3.5">
-                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0">
-                  <img src="${item.img}" class="w-full h-full object-cover">
-                </div>
+                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>
                 <div class="flex-grow min-w-0">
-                  ${badge}
-                  <div class="text-xs font-bold truncate">${item.title}</div>
-                  <div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div>
+                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div>
+                  ${countdownHtml}
                 </div>
                 ${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
               </div>
             `;
           } else {
-            // 純文字卡片
             card.innerHTML = `
-              <div class="p-4 flex items-center justify-between gap-3">
-                <div class="min-w-0 space-y-0.5">
-                  ${badge}
-                  <div class="text-xs font-bold">${item.title}</div>
-                  <div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div>
+              <div class="p-4 flex flex-col justify-between gap-1">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div></div>
+                  <div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
                 </div>
-                <div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
+                ${countdownHtml}
               </div>
             `;
           }
@@ -807,274 +867,191 @@
         });
         secBox.appendChild(wrap);
       });
+
       renderCarousel();
+      startCountdownTimers();
     }
 
+    // 點擊計數追蹤與 LINE 彈窗留客
+    function handleCardClickTrack(sIdx, iIdx, targetUrl) {
+      if (appData.sections[sIdx] && appData.sections[sIdx].items[iIdx]) {
+        appData.sections[sIdx].items[iIdx].clicks = (appData.sections[sIdx].items[iIdx].clicks || 0) + 1;
+        autoSaveToCloud();
+      }
+
+      const lead = appData.lineLead;
+      const hasShownLead = sessionStorage.getItem('has_shown_line_lead');
+      if (lead && lead.enabled && !hasShownLead && Math.random() > 0.45) {
+        sessionStorage.setItem('has_shown_line_lead', 'true');
+        openLineLeadModal(targetUrl);
+      } else {
+        window.open(targetUrl, '_blank');
+      }
+    }
+
+    function openLineLeadModal(targetUrl) {
+      const modal = document.getElementById('lineLeadModal');
+      const lead = appData.lineLead;
+      document.getElementById('leadModalTitle').innerText = lead.title || '領取官方專屬禮遇';
+      document.getElementById('btnLineLeadAction').href = lead.url || '#';
+      document.getElementById('btnLineLeadAction').onclick = () => {
+        closeLineLeadModal();
+        setTimeout(() => { window.open(targetUrl, '_blank'); }, 500);
+      };
+      modal.style.display = 'flex';
+    }
+    window.closeLineLeadModal = function() { document.getElementById('lineLeadModal').style.display = 'none'; };
+
+    // 倒數計時計算
+    function startCountdownTimers() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      function update() {
+        document.querySelectorAll('[data-countdown]').forEach(el => {
+          const end = new Date(el.getAttribute('data-countdown')).getTime();
+          const now = Date.now();
+          const diff = end - now;
+          const timerEl = el.querySelector('.countdown-timer');
+          if (diff <= 0) {
+            timerEl.innerText = '活動已截止';
+          } else {
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / 1000 / 60) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            timerEl.innerText = `${d > 0 ? d + '天 ' : ''}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+          }
+        });
+      }
+      update();
+      countdownInterval = setInterval(update, 1000);
+    }
+
+    // 輪播模組核心邏輯
     let carouselTimer = null;
-let currentSlide = 0;
-let touchStartX = 0;
-let touchEndX = 0;
+    let currentSlide = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-function renderCarousel() {
-  const c = appData.carousel;
-  const wrap = document.getElementById('carouselWrapper');
-  const track = document.getElementById('carouselTrack');
-  const dots = document.getElementById('carouselDots');
-  if (carouselTimer) clearInterval(carouselTimer);
+    function renderCarousel() {
+      const c = appData.carousel;
+      const wrap = document.getElementById('carouselWrapper');
+      const prof = document.getElementById('profileModule');
+      const track = document.getElementById('carouselTrack');
+      const dots = document.getElementById('carouselDots');
+      if (carouselTimer) clearInterval(carouselTimer);
 
-  if (!c || !c.enabled || !c.images || c.images.length === 0) {
-    wrap.style.display = 'none';
-    return;
-  }
-
-  wrap.style.display = 'block';
-
-  // 依照比例動態指定畫幅高度
-  const aspectClassMap = {
-    'landscape': 'aspect-video w-full',
-    'square': 'aspect-square w-full',
-    'story': 'aspect-[9/16] w-full max-w-[340px] mx-auto'
-  };
-  wrap.className = `w-full mb-6 relative overflow-hidden rounded-2xl select-none shadow-xs border border-white/60 ${aspectClassMap[c.aspectRatio] || 'aspect-video w-full'}`;
-
-  // 渲染 Slides
-  track.innerHTML = '';
-  c.images.forEach(imgUrl => {
-    const slide = document.createElement('div');
-    slide.className = 'w-full h-full flex-shrink-0';
-    slide.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover pointer-events-none">`;
-    track.appendChild(slide);
-  });
-
-  // 渲染白點進度條
-  dots.innerHTML = '';
-  c.images.forEach((_, idx) => {
-    const dot = document.createElement('button');
-    dot.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
-    dot.onclick = () => goToSlide(idx);
-    dots.appendChild(dot);
-  });
-
-  updateSlidePosition();
-
-  // 自動定時輪播 (3.8 秒)
-  if (c.images.length > 1) {
-    carouselTimer = setInterval(() => {
-      currentSlide = (currentSlide + 1) % c.images.length;
-      updateSlidePosition();
-    }, 3800);
-  }
-
-  // 手機左右滑動手勢
-  wrap.ontouchstart = (e) => { touchStartX = e.changedTouches[0].screenX; };
-  wrap.ontouchend = (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    if (touchStartX - touchEndX > 45) {
-      // 往左滑下一張
-      currentSlide = (currentSlide + 1) % c.images.length;
-      updateSlidePosition();
-    } else if (touchEndX - touchStartX > 45) {
-      // 往右滑上一張
-      currentSlide = (currentSlide - 1 + c.images.length) % c.images.length;
-      updateSlidePosition();
-    }
-  };
-}
-
-function goToSlide(idx) {
-  currentSlide = idx;
-  updateSlidePosition();
-}
-
-function updateSlidePosition() {
-  const track = document.getElementById('carouselTrack');
-  const dots = document.getElementById('carouselDots').children;
-  if (!track) return;
-  track.style.transform = `translateX(-${currentSlide * 100}%)`;
-  Array.from(dots).forEach((d, idx) => {
-    d.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
-  });
-}
-
-// ----------------- 後台控制邏輯 -----------------
-
-function populateCarouselAdmin() {
-  if (!appData.carousel) {
-    appData.carousel = { enabled: false, aspectRatio: 'landscape', images: [] };
-  }
-  const c = appData.carousel;
-  document.getElementById('inputCarouselEnabled').checked = c.enabled;
-  document.getElementById('selectCarouselAspect').value = c.aspectRatio || 'landscape';
-  document.getElementById('adminCarouselConfig').style.display = c.enabled ? 'block' : 'none';
-
-  const list = document.getElementById('adminCarouselThumbList');
-  list.innerHTML = '';
-  c.images.forEach((img, idx) => {
-    const item = document.createElement('div');
-    item.className = 'relative w-14 h-14 rounded-xl overflow-hidden border border-stone-200 flex-shrink-0 bg-stone-100 group';
-    item.innerHTML = `
-      <img src="${img}" class="w-full h-full object-cover">
-      <button type="button" onclick="removeCarouselImage(${idx})" class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-black/70 text-white text-[9px] flex items-center justify-center cursor-pointer">✕</button>
-    `;
-    list.appendChild(item);
-  });
-}
-
-// 在 populateAdmin() 內呼叫以同步後台狀態
-// 在 populateAdmin() 的結尾加上：populateCarouselAdmin();
-
-window.toggleCarouselEnabled = function(enabled) {
-  appData.carousel.enabled = enabled;
-  document.getElementById('adminCarouselConfig').style.display = enabled ? 'block' : 'none';
-  renderView();
-  autoSaveToCloud();
-};
-
-window.changeCarouselAspect = function(val) {
-  appData.carousel.aspectRatio = val;
-  renderView();
-  autoSaveToCloud();
-};
-
-window.handleCarouselUpload = function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (!appData.carousel.images) appData.carousel.images = [];
-  if (appData.carousel.images.length >= 7) {
-    Swal.fire({ title: '已達上限', text: '輪播牆至多上傳 7 張圖片', icon: 'warning' });
-    return;
-  }
-
-  showToast('圖片壓縮處理中...');
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
-      const MAX_SIZE = 960;
-      if (width > height && width > MAX_SIZE) {
-        height = Math.round((height * MAX_SIZE) / width);
-        width = MAX_SIZE;
-      } else if (height > MAX_SIZE) {
-        width = Math.round((width * MAX_SIZE) / height);
-        height = MAX_SIZE;
+      if (!c || !c.enabled || !c.images || c.images.length === 0) {
+        wrap.style.display = 'none';
+        return;
       }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
+      wrap.style.display = 'block';
 
-      const compressed = canvas.toDataURL('image/jpeg', 0.85);
-      appData.carousel.images.push(compressed);
-      populateCarouselAdmin();
-      renderView();
-      autoSaveToCloud();
-      showToast('輪播圖已加入！');
-    };
-    img.src = event.target.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-window.removeCarouselImage = function(idx) {
-  appData.carousel.images.splice(idx, 1);
-  populateCarouselAdmin();
-  renderView();
-  autoSaveToCloud();
-};
-
-    async function handleAdminEntry() {
-      if (!isRealUser) { openAdminModal(); return; }
-      const { value: pin } = await Swal.fire({
-        title: '請輸入管理 PIN 碼', text: '驗證身分以進入您的品牌管理後台', input: 'password', inputPlaceholder: '預設 8888',
-        showCancelButton: true, confirmButtonText: '登入後台', cancelButtonText: '取消'
-      });
-      if (pin === appData.adminPin) {
-        if (pin === '8888') { await forceChangeDefaultPin(); } else { openAdminModal(); }
-      } else if (pin) {
-        Swal.fire({ title: '密碼錯誤', text: '若忘記密碼，請聯繫官方 LINE 由總管中心為您重設。', icon: 'error' });
+      // 嚴格控制 order，避免頁尾被推到頂部
+      if (c.position === 'above') {
+        wrap.style.order = '1';
+        prof.style.order = '2';
+        document.getElementById('sectionsContainer').style.order = '3';
+      } else {
+        prof.style.order = '1';
+        wrap.style.order = '2';
+        document.getElementById('sectionsContainer').style.order = '3';
       }
-    }
 
-    async function forceChangeDefaultPin() {
-      const { value: newPin } = await Swal.fire({
-        title: '首次登入安全設定', text: '偵測到您仍使用預設密碼 8888，請自訂一組 4-6 位數新 PIN 碼：', input: 'password',
-        inputPlaceholder: '請輸入新 PIN 碼 (至少 4 位數)', allowOutsideClick: false, confirmButtonText: '確認並進入後台',
-        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
+      const aspectClassMap = {
+        'landscape': 'aspect-video w-full',
+        'square': 'aspect-square w-full',
+        'story': 'aspect-[9/16] w-full max-w-[340px] mx-auto'
+      };
+      wrap.className = `w-full mb-6 relative overflow-hidden rounded-2xl select-none shadow-xs border border-white/60 ${aspectClassMap[c.aspectRatio] || 'aspect-video w-full'}`;
+
+      track.innerHTML = '';
+      c.images.forEach(imgUrl => {
+        const slide = document.createElement('div');
+        slide.className = 'w-full h-full flex-shrink-0';
+        slide.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover pointer-events-none">`;
+        track.appendChild(slide);
       });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-        if (currentStoreDbId) {
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH", headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ admin_pin: appData.adminPin })
-          });
+
+      dots.innerHTML = '';
+      c.images.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
+        dot.onclick = () => { currentSlide = idx; updateSlidePosition(); };
+        dots.appendChild(dot);
+      });
+
+      if (currentSlide >= c.images.length) currentSlide = 0;
+      updateSlidePosition();
+
+      if (c.images.length > 1) {
+        carouselTimer = setInterval(() => {
+          currentSlide = (currentSlide + 1) % c.images.length;
+          updateSlidePosition();
+        }, 3800);
+      }
+
+      wrap.ontouchstart = (e) => { touchStartX = e.changedTouches[0].screenX; };
+      wrap.ontouchend = (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 45) {
+          currentSlide = (currentSlide + 1) % c.images.length;
+          updateSlidePosition();
+        } else if (touchEndX - touchStartX > 45) {
+          currentSlide = (currentSlide - 1 + c.images.length) % c.images.length;
+          updateSlidePosition();
         }
-        Swal.fire({ title: '密碼設定成功！', text: '請妥善保管您的管理 PIN 碼', icon: 'success' });
-        openAdminModal();
-      }
+      };
     }
 
-    async function promptChangePin() {
-      const { value: newPin } = await Swal.fire({
-        title: '修改管理 PIN 碼', text: '設定新的後台防護密碼', input: 'password', inputPlaceholder: '輸入新密碼 (至少 4 位數)',
-        showCancelButton: true, confirmButtonText: '儲存新密碼', cancelButtonText: '取消',
-        inputValidator: (v) => (!v || v.length < 4) ? '密碼長度至少需 4 碼' : null
+    function updateSlidePosition() {
+      const track = document.getElementById('carouselTrack');
+      const dots = document.getElementById('carouselDots').children;
+      if (!track) return;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      Array.from(dots).forEach((d, idx) => {
+        d.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
       });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-        if (currentStoreDbId) {
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH", headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ admin_pin: appData.adminPin })
-          });
-        }
-        Swal.fire({ title: '密碼修改成功！', icon: 'success' });
-      }
     }
 
-    window.openAdminModal = function() { populateAdmin(); document.getElementById('adminSheet').style.display = 'block'; };
-    window.closeAdminModal = function() { document.getElementById('adminSheet').style.display = 'none'; };
-    window.openOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'block'; };
-    window.closeOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'none'; };
-    window.openShareModal = function() { document.getElementById('shareSheet').style.display = 'flex'; };
-    window.closeShareModal = function() { document.getElementById('shareSheet').style.display = 'none'; };
-
-    window.copyShareUrl = function() {
-      navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
-    };
-
-    window.changeTheme = function(k) { appData.theme = k; document.documentElement.setAttribute('data-theme', k); showToast('色系已套用！'); };
-    window.syncLiveProfile = function() { appData.brandName = document.getElementById('inputBrandName').value; appData.bio = document.getElementById('inputBrandBio').value; renderView(); };
-    window.cycleIllustrationAvatar = function() { avatarIndex = (avatarIndex + 1) % illustrationAvatars.length; appData.avatar = illustrationAvatars[avatarIndex]; document.getElementById('adminAvatarThumb').src = appData.avatar; renderView(); };
-
+    // ----------------- 後台管理聯動與初始化 -----------------
     function populateAdmin() {
       document.getElementById('inputBrandName').value = appData.brandName;
       document.getElementById('inputBrandBio').value = appData.bio;
       document.getElementById('adminAvatarThumb').src = appData.avatar;
 
+      // 跑馬燈
+      if (!appData.marquee) appData.marquee = { enabled: false, text: '' };
+      document.getElementById('inputMarqueeEnabled').checked = appData.marquee.enabled;
+      document.getElementById('inputMarqueeText').value = appData.marquee.text || '';
+      document.getElementById('marqueeConfigBox').style.display = appData.marquee.enabled ? 'block' : 'none';
+
+      // LINE 導流
+      if (!appData.lineLead) appData.lineLead = { enabled: false, url: '', title: '' };
+      document.getElementById('inputLineLeadEnabled').checked = appData.lineLead.enabled;
+      document.getElementById('inputLineLeadUrl').value = appData.lineLead.url || '';
+      document.getElementById('inputLineLeadTitle').value = appData.lineLead.title || '';
+      document.getElementById('lineLeadConfigBox').style.display = appData.lineLead.enabled ? 'block' : 'none';
+
+      // 社群列表
       const socBox = document.getElementById('adminSocialsList');
       socBox.innerHTML = '';
       appData.socials.forEach((s, idx) => {
         const row = document.createElement('div');
         row.className = 'flex items-center gap-2 bg-white p-2 rounded-xl border';
         row.innerHTML = `
-          <select onchange="appData.socials[${idx}].icon = this.value; renderView();" class="text-xs border rounded-lg px-2 py-1">
+          <select onchange="appData.socials[${idx}].icon = this.value; renderView(); autoSaveToCloud();" class="text-xs border rounded-lg px-2 py-1">
             <option value="fa-brands fa-instagram" ${s.icon.includes('instagram') ? 'selected' : ''}>IG</option>
             <option value="fa-brands fa-threads" ${s.icon.includes('threads') ? 'selected' : ''}>Threads</option>
             <option value="fa-brands fa-line" ${s.icon.includes('line') ? 'selected' : ''}>LINE</option>
             <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
           </select>
-          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
-          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer">✕</button>
+          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView(); autoSaveToCloud();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
+          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView(); autoSaveToCloud();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer">✕</button>
         `;
         socBox.appendChild(row);
       });
 
+      // 分類與卡片項目 (含點擊量顯示 Tracker)
       const secBox = document.getElementById('adminSectionsList');
       secBox.innerHTML = '';
       appData.sections.forEach((sec, sIdx) => {
@@ -1082,10 +1059,10 @@ window.removeCarouselImage = function(idx) {
         box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
         box.innerHTML = `
           <div class="flex justify-between items-center gap-2">
-            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
+            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView(); autoSaveToCloud();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
             <div class="flex items-center gap-1 flex-shrink-0">
-              <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer" title="分類上移">↑</button>
-              <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer" title="分類下移">↓</button>
+              <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer">↑</button>
+              <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer">↓</button>
               <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium ml-1 cursor-pointer">刪除分類</button>
             </div>
           </div>
@@ -1098,10 +1075,13 @@ window.removeCarouselImage = function(idx) {
           const row = document.createElement('div');
           row.className = 'flex justify-between items-center p-2 rounded-xl bg-white border text-xs';
           row.innerHTML = `
-            <div class="truncate mr-2 font-bold">${it.title}</div>
+            <div class="truncate mr-2 font-bold flex items-center gap-2">
+              <span class="truncate">${it.title}</span>
+              <span class="px-1.5 py-0.5 rounded bg-stone-100 text-stone-500 text-[9px] font-mono flex-shrink-0" title="累積點擊數"><i class="fa-solid fa-chart-simple text-[8px] mr-0.5"></i>${it.clicks || 0}</span>
+            </div>
             <div class="flex items-center gap-1">
-              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer" title="上移">↑</button>
-              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer" title="下移">↓</button>
+              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer">↑</button>
+              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer">↓</button>
               <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200 font-medium">編輯</button>
               <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer" title="刪除">✕</button>
             </div>
@@ -1109,74 +1089,190 @@ window.removeCarouselImage = function(idx) {
           container.appendChild(row);
         });
       });
+
+      populateCarouselAdmin();
     }
 
-    window.reorderSection = function(sIdx, dir) {
-      const targetIdx = sIdx + dir;
-      if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
-      const temp = appData.sections[sIdx];
-      appData.sections[sIdx] = appData.sections[targetIdx];
-      appData.sections[targetIdx] = temp;
-      populateAdmin();
+    // 輪播後台配置渲染
+    function populateCarouselAdmin() {
+      if (!appData.carousel) {
+        appData.carousel = { enabled: false, aspectRatio: 'landscape', position: 'below', images: [] };
+      }
+      const c = appData.carousel;
+      document.getElementById('inputCarouselEnabled').checked = Boolean(c.enabled);
+      document.getElementById('selectCarouselAspect').value = c.aspectRatio || 'landscape';
+      document.getElementById('selectCarouselOrder').value = c.position || 'below';
+      document.getElementById('adminCarouselConfig').style.display = c.enabled ? 'block' : 'none';
+      document.getElementById('carouselCount').innerText = (c.images || []).length;
+
+      const list = document.getElementById('adminCarouselThumbList');
+      list.innerHTML = '';
+      (c.images || []).forEach((img, idx) => {
+        const item = document.createElement('div');
+        item.className = 'relative w-16 h-16 rounded-xl overflow-hidden border border-stone-300 flex-shrink-0 bg-stone-100 flex flex-col justify-between p-1';
+        item.style.backgroundImage = `url(${img})`;
+        item.style.backgroundSize = 'cover';
+        item.style.backgroundPosition = 'center';
+        item.innerHTML = `
+          <div class="flex justify-between items-center z-10">
+            <span class="text-[9px] bg-black/60 text-white rounded px-1">${idx + 1}</span>
+            <button type="button" onclick="removeCarouselImage(${idx})" class="w-4 h-4 rounded-full bg-rose-600 text-white text-[9px] flex items-center justify-center cursor-pointer shadow">✕</button>
+          </div>
+          <div class="flex justify-between gap-1 z-10 bg-black/40 p-0.5 rounded-lg">
+            <button type="button" onclick="reorderCarouselImage(${idx}, -1)" class="text-white text-[10px] px-1 hover:text-amber-300 cursor-pointer">◀</button>
+            <button type="button" onclick="reorderCarouselImage(${idx}, 1)" class="text-white text-[10px] px-1 hover:text-amber-300 cursor-pointer">▶</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    // 跑馬燈開關
+    window.toggleMarqueeEnabled = function(en) {
+      appData.marquee.enabled = en;
+      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
       renderView();
+      autoSaveToCloud();
     };
-
-    window.reorderItem = function(sIdx, iIdx, dir) {
-      const items = appData.sections[sIdx].items;
-      const targetIdx = iIdx + dir;
-      if (targetIdx < 0 || targetIdx >= items.length) return;
-      const temp = items[iIdx];
-      items[iIdx] = items[targetIdx];
-      items[targetIdx] = temp;
-      populateAdmin();
+    window.updateMarqueeText = function(txt) {
+      appData.marquee.text = txt.trim();
       renderView();
+      autoSaveToCloud();
     };
 
-    window.addSocialLink = function() { appData.socials.push({ icon: 'fa-brands fa-instagram', label: 'IG', url: 'https://' }); populateAdmin(); renderView(); };
+    // LINE 導流開關
+    window.toggleLineLeadEnabled = function(en) {
+      appData.lineLead.enabled = en;
+      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
+      renderView();
+      autoSaveToCloud();
+    };
+    window.updateLineLeadConfig = function() {
+      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
+      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
+      autoSaveToCloud();
+    };
 
-    window.deleteSection = async function(idx) {
-      const secTitle = appData.sections[idx].title;
-      const res = await Swal.fire({
-        title: '確定刪除分類？', text: `刪除「${secTitle}」將會連帶清除此分類下的所有卡片。`, icon: 'warning',
-        showCancelButton: true, confirmButtonText: '確認刪除', cancelButtonText: '取消'
-      });
-      if (res.isConfirmed) {
-        appData.sections.splice(idx, 1);
-        populateAdmin();
-        renderView();
-        showToast('分類已刪除');
+    // 輪播開關與排版
+    window.toggleCarouselEnabled = function(enabled) {
+      appData.carousel.enabled = enabled;
+      document.getElementById('adminCarouselConfig').style.display = enabled ? 'block' : 'none';
+      renderView();
+      autoSaveToCloud();
+    };
+    window.changeCarouselAspect = function(val) {
+      appData.carousel.aspectRatio = val;
+      renderView();
+      autoSaveToCloud();
+    };
+    window.changeCarouselOrder = function(val) {
+      appData.carousel.position = val;
+      renderView();
+      autoSaveToCloud();
+    };
+    window.reorderCarouselImage = function(idx, dir) {
+      const target = idx + dir;
+      const imgs = appData.carousel.images;
+      if (target < 0 || target >= imgs.length) return;
+      const temp = imgs[idx];
+      imgs[idx] = imgs[target];
+      imgs[target] = temp;
+      populateCarouselAdmin();
+      renderView();
+      autoSaveToCloud();
+    };
+    window.removeCarouselImage = function(idx) {
+      appData.carousel.images.splice(idx, 1);
+      populateCarouselAdmin();
+      renderView();
+      autoSaveToCloud();
+    };
+
+    // Canvas 圖片壓縮機制 (100% 杜絕高解析 AI 圖卡死)
+    window.handleCarouselUpload = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!appData.carousel.images) appData.carousel.images = [];
+      if (appData.carousel.images.length >= 7) {
+        Swal.fire({ title: '已達上限', text: '輪播牆至多上傳 7 張圖片', icon: 'warning' });
+        return;
       }
+      showToast('圖片壓縮處理中...');
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIZE = 960;
+          if (width > height && width > MAX_SIZE) {
+            height = Math.round((height * MAX_SIZE) / width);
+            width = MAX_SIZE;
+          } else if (height > MAX_SIZE) {
+            width = Math.round((width * MAX_SIZE) / height);
+            height = MAX_SIZE;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.85);
+          appData.carousel.images.push(compressed);
+          populateCarouselAdmin();
+          renderView();
+          autoSaveToCloud();
+          showToast('輪播圖已加入並自動備份！');
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
     };
 
-    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
-      const itTitle = appData.sections[sIdx].items[iIdx].title;
-      const res = await Swal.fire({
-        title: '刪除此項目？', text: `確定要移除「${itTitle}」卡片嗎？`, icon: 'question',
-        showCancelButton: true, confirmButtonText: '確定移除', cancelButtonText: '取消'
-      });
-      if (res.isConfirmed) {
-        appData.sections[sIdx].items.splice(iIdx, 1);
-        populateAdmin();
-        renderView();
-        showToast('項目已移除');
-      }
+    window.handleImageUpload = function(e, type) {
+      const file = e.target.files[0];
+      if (!file) return;
+      showToast('圖片處理中...');
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIZE = 800;
+          if (width > height && width > MAX_SIZE) {
+            height = Math.round((height * MAX_SIZE) / width);
+            width = MAX_SIZE;
+          } else if (height > MAX_SIZE) {
+            width = Math.round((width * MAX_SIZE) / height);
+            height = MAX_SIZE;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.85);
+
+          if (type === 'avatar') {
+            appData.avatar = compressed;
+            document.getElementById('adminAvatarThumb').src = compressed;
+            renderView();
+            autoSaveToCloud();
+            showToast('頭像已更新！');
+          } else {
+            const imgEl = document.getElementById('modalPreviewImg');
+            imgEl.src = compressed;
+            imgEl.style.display = 'block';
+            document.getElementById('noImgPlaceholder').style.display = 'none';
+            document.getElementById('imgLayoutRow').style.display = 'grid';
+            showToast('卡片圖片已就緒');
+          }
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
     };
 
-    window.openCreateSectionModal = async function() {
-      const { value: newName } = await Swal.fire({
-        title: '新增專屬分類', text: '請輸入新的分類名稱 (如：限時好物、特選專欄、預約服務)',
-        input: 'text', inputPlaceholder: '例如：限時推薦', showCancelButton: true,
-        confirmButtonText: '建立分類', cancelButtonText: '取消',
-        inputValidator: (val) => (!val || !val.trim()) ? '分類名稱不可為空！' : null
-      });
-      if (newName) {
-        appData.sections.push({ id: 'sec-' + Date.now(), title: newName.trim(), items: [] });
-        populateAdmin();
-        renderView();
-        showToast('分類建立成功！');
-      }
-    };
-
+    // 項目編輯彈窗
     let editingPointer = { sIdx: null, iIdx: null };
     window.openItemModal = function(sIdx, iIdx) {
       editingPointer = { sIdx, iIdx };
@@ -1190,19 +1286,9 @@ window.removeCarouselImage = function(idx) {
 
       const it = (sIdx !== null && iIdx !== null && appData.sections[sIdx]) ? appData.sections[sIdx].items[iIdx] : null;
       const hasImg = Boolean(it && it.img);
-
       document.getElementById('modalPreviewImg').style.display = hasImg ? 'block' : 'none';
       document.getElementById('noImgPlaceholder').style.display = hasImg ? 'none' : 'inline';
       document.getElementById('imgLayoutRow').style.display = hasImg ? 'grid' : 'none';
-
-      const btn = document.getElementById('btnNoImageToggle');
-      if (hasImg) {
-        btn.innerHTML = '<i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>';
-        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer';
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-image text-[10px] mr-1"></i><span>恢復使用圖片</span>';
-        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-amber-300 bg-amber-50 text-amber-800 cursor-pointer';
-      }
 
       if (it) {
         document.getElementById('modalTitle').value = it.title;
@@ -1210,6 +1296,7 @@ window.removeCarouselImage = function(idx) {
         document.getElementById('modalUrl').value = it.url;
         document.getElementById('modalCode').value = it.discountCode || '';
         document.getElementById('modalBadge').value = it.badge || '';
+        document.getElementById('modalCountdownEnd').value = it.countdownEnd || '';
         document.getElementById('modalPreviewImg').src = it.img || '';
         document.getElementById('modalImgSize').value = it.imgSize || 'medium';
         document.getElementById('modalImgPos').value = it.imgPos || 'left';
@@ -1219,6 +1306,7 @@ window.removeCarouselImage = function(idx) {
         document.getElementById('modalUrl').value = 'https://';
         document.getElementById('modalCode').value = '';
         document.getElementById('modalBadge').value = '';
+        document.getElementById('modalCountdownEnd').value = '';
         document.getElementById('modalPreviewImg').src = '';
         document.getElementById('modalImgSize').value = 'large-square';
         document.getElementById('modalImgPos').value = 'top';
@@ -1227,29 +1315,12 @@ window.removeCarouselImage = function(idx) {
     };
 
     window.closeItemModal = function() { document.getElementById('itemModal').style.display = 'none'; };
-
     window.setNoImageMode = function() {
-      const imgEl = document.getElementById('modalPreviewImg');
-      const placeholder = document.getElementById('noImgPlaceholder');
-      const layoutRow = document.getElementById('imgLayoutRow');
-      const btn = document.getElementById('btnNoImageToggle');
-
-      if (imgEl.src && imgEl.style.display !== 'none') {
-        imgEl.src = '';
-        imgEl.style.display = 'none';
-        placeholder.style.display = 'inline';
-        layoutRow.style.display = 'none';
-        btn.innerHTML = '<i class="fa-solid fa-image text-[10px] mr-1"></i><span>恢復使用圖片</span>';
-        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-amber-300 bg-amber-50 text-amber-800 cursor-pointer';
-      } else {
-        imgEl.style.display = 'block';
-        placeholder.style.display = 'none';
-        layoutRow.style.display = 'grid';
-        btn.innerHTML = '<i class="fa-solid fa-ban text-[10px] mr-1"></i><span>設為無需圖片 (純文字卡片)</span>';
-        btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-medium transition border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 cursor-pointer';
-      }
+      document.getElementById('modalPreviewImg').src = '';
+      document.getElementById('modalPreviewImg').style.display = 'none';
+      document.getElementById('noImgPlaceholder').style.display = 'inline';
+      document.getElementById('imgLayoutRow').style.display = 'none';
     };
-
     window.clearModalImg = function() {
       document.getElementById('modalPreviewImg').src = '';
       document.getElementById('modalPreviewImg').style.display = 'none';
@@ -1271,9 +1342,11 @@ window.removeCarouselImage = function(idx) {
         url: document.getElementById('modalUrl').value.trim() || '#',
         discountCode: document.getElementById('modalCode').value.trim(),
         badge: document.getElementById('modalBadge').value.trim(),
+        countdownEnd: document.getElementById('modalCountdownEnd').value,
         img: currentImg,
         imgSize: document.getElementById('modalImgSize').value,
-        imgPos: document.getElementById('modalImgPos').value
+        imgPos: document.getElementById('modalImgPos').value,
+        clicks: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) ? (appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].clicks || 0) : 0
       };
 
       if (editingPointer.sIdx !== null && editingPointer.iIdx !== null) {
@@ -1286,91 +1359,31 @@ window.removeCarouselImage = function(idx) {
       } else {
         appData.sections[targetSec].items.unshift(itObj);
       }
-      // 在 saveItemData() 的結尾處加入：
-closeItemModal();
-populateAdmin();
-renderView();
-autoSaveToCloud(); // 👈 加入此行，關閉彈窗當下即自動備份雲端！
-showToast('卡片已就緒並同步備份！');
+      closeItemModal();
+      populateAdmin();
+      renderView();
+      autoSaveToCloud();
+      showToast('卡片已就緒並同步備份！');
     };
 
-    window.handleImageUpload = function(e, type) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  if (file.size > 15 * 1024 * 1024) {
-    Swal.fire({ title: '圖片過大', text: '請選擇 15MB 以下的圖檔', icon: 'warning' });
-    return;
-  }
-
-  showToast('圖片處理中...');
-  const reader = new FileReader();
-  reader.onload = function(event) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
-      const MAX_SIZE = 800; // 等比縮放上限，保證 1 秒內極速上傳
-
-      if (width > height) {
-        if (width > MAX_SIZE) {
-          height = Math.round((height * MAX_SIZE) / width);
-          width = MAX_SIZE;
-        }
-      } else {
-        if (height > MAX_SIZE) {
-          width = Math.round((width * MAX_SIZE) / height);
-          height = MAX_SIZE;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
-
-      if (type === 'avatar') {
-        appData.avatar = compressedDataUrl;
-        document.getElementById('adminAvatarThumb').src = compressedDataUrl;
-        renderView();
-        autoSaveToCloud();
-        showToast('頭像已更換並自動備份！');
-      } else {
-        const imgEl = document.getElementById('modalPreviewImg');
-        imgEl.src = compressedDataUrl;
-        imgEl.style.display = 'block';
-        document.getElementById('noImgPlaceholder').style.display = 'none';
-        document.getElementById('imgLayoutRow').style.display = 'grid';
-        showToast('圖片就緒');
-      }
-    };
-    img.src = event.target.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-    // 儲存至本地快取與 Supabase
-    window.saveAdminAndClose = async function() {
-      const btn = document.getElementById('btnSaveAdmin');
-      btn.disabled = true;
-      btn.innerText = '儲存同步中...';
-
-      // 1. 本地備份
+    // 背景自動靜默同步寫入
+    async function autoSaveToCloud() {
       localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
-      // 2. 雲端同步
       if (isRealUser && currentStoreDbId) {
-        showToast('正在發布至雲端節點...');
         try {
+          const metaPayload = JSON.stringify({
+            bio: appData.bio,
+            marquee: appData.marquee,
+            carousel: appData.carousel,
+            lineLead: appData.lineLead
+          });
+
           await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
             method: "PATCH",
             headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify({
               brand_name: appData.brandName,
-              bio_text: appData.bio,
+              bio_text: metaPayload,
               theme: appData.theme,
               avatar_url: appData.avatar,
               social_links: appData.socials,
@@ -1410,125 +1423,214 @@ showToast('卡片已就緒並同步備份！');
               body: JSON.stringify(itemsToInsert)
             });
           }
-        } catch (err) {
-          console.error("雲端同步異常:", err);
-          showToast('已安全儲存於本地快取');
+        } catch(err) {
+          console.warn("雲端同步異常:", err);
         }
       }
+    }
 
+    window.saveAdminAndClose = async function() {
+      const btn = document.getElementById('btnSaveAdmin');
+      btn.disabled = true;
+      btn.innerText = '儲存發布中...';
+      await autoSaveToCloud();
       btn.disabled = false;
-      btn.innerText = '儲存並同步雲端';
+      btn.innerText = '儲存並同步發布';
       closeAdminModal();
       showToast('✨ 設定已成功儲存並同步發布！');
     };
 
-    // 開通新專案：透過 POST 送交 GAS 確保 100% 派信
-    window.handleOnboardSubmit = async function(e) {
-  e.preventDefault();
-  const brand = document.getElementById('quickBrand').value.trim();
-  const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
-  const email = document.getElementById('quickEmail').value.trim();
-  const btn = document.getElementById('btnSubmitOnboard');
+    // 彈窗開關控制
+    window.openAdminModal = function() { populateAdmin(); document.getElementById('adminSheet').style.display = 'block'; };
+    window.closeAdminModal = function() { document.getElementById('adminSheet').style.display = 'none'; };
+    window.openOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'block'; };
+    window.closeOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'none'; };
+    window.openShareModal = function() { document.getElementById('shareSheet').style.display = 'flex'; };
+    window.closeShareModal = function() { document.getElementById('shareSheet').style.display = 'none'; };
 
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面並派送開通信件...';
+    window.copyShareUrl = function() {
+      navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
+    };
 
-  // 1. 同步呼叫 GAS 寄信（美業同款：先確保 GAS 收到請求）
-  try {
-    const postBody = JSON.stringify({
-      action: "REGISTER_NEW_STORE",
-      payload: {
-        brandName: brand,
-        slug: slug,
-        email: email,
-        pin: "8888"
-      }
-    });
+    window.changeTheme = function(k) { appData.theme = k; document.documentElement.setAttribute('data-theme', k); autoSaveToCloud(); showToast('色系已套用！'); };
+    window.syncLiveProfile = function() { appData.brandName = document.getElementById('inputBrandName').value; appData.bio = document.getElementById('inputBrandBio').value; renderView(); autoSaveToCloud(); };
+    window.cycleIllustrationAvatar = function() { avatarIndex = (avatarIndex + 1) % illustrationAvatars.length; appData.avatar = illustrationAvatars[avatarIndex]; document.getElementById('adminAvatarThumb').src = appData.avatar; renderView(); autoSaveToCloud(); };
+    window.addSocialLink = function() { appData.socials.push({ icon: 'fa-brands fa-instagram', label: 'IG', url: 'https://' }); populateAdmin(); renderView(); autoSaveToCloud(); };
 
-    await fetch(GAS_WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: postBody
-    });
-  } catch (err) {
-    console.warn("GAS 派發提示:", err);
-  }
+    window.reorderSection = function(sIdx, dir) {
+      const targetIdx = sIdx + dir;
+      if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
+      const temp = appData.sections[sIdx];
+      appData.sections[sIdx] = appData.sections[targetIdx];
+      appData.sections[targetIdx] = temp;
+      populateAdmin(); renderView(); autoSaveToCloud();
+    };
+    window.reorderItem = function(sIdx, iIdx, dir) {
+      const items = appData.sections[sIdx].items;
+      const targetIdx = iIdx + dir;
+      if (targetIdx < 0 || targetIdx >= items.length) return;
+      const temp = items[iIdx];
+      items[iIdx] = items[targetIdx];
+      items[targetIdx] = temp;
+      populateAdmin(); renderView(); autoSaveToCloud();
+    };
+    window.deleteSection = async function(idx) {
+      const res = await Swal.fire({ title: '確定刪除分類？', text: '將連帶刪除該分類下所有卡片。', icon: 'warning', showCancelButton: true });
+      if (res.isConfirmed) { appData.sections.splice(idx, 1); populateAdmin(); renderView(); autoSaveToCloud(); }
+    };
+    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
+      appData.sections[sIdx].items.splice(iIdx, 1);
+      populateAdmin(); renderView(); autoSaveToCloud();
+      showToast('項目已移除');
+    };
+    window.openCreateSectionModal = async function() {
+      const { value: name } = await Swal.fire({ title: '新增專屬分類', input: 'text', showCancelButton: true, inputValidator: (v) => !v ? '分類名稱不可為空' : null });
+      if (name) { appData.sections.push({ id: 'sec-' + Date.now(), title: name.trim(), items: [] }); populateAdmin(); renderView(); autoSaveToCloud(); }
+    };
 
-  // 2. 直寫 Supabase (建立主檔與第一張推薦卡)
-  try {
-    const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
-      method: "POST",
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
-        "Prefer": "return=representation"
-      },
-      body: JSON.stringify({
-        slug: slug,
-        brand_name: brand,
-        owner_email: email,
-        admin_pin: "8888",
-        theme: "cashmere-latte",
-        avatar_url: illustrationAvatars[0],
-        bio_text: `歡迎光臨 ${brand} 官方品牌頁\n點擊探索最新推薦`,
-        social_links: [
-          { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
-          { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
-        ]
-      })
-    });
-
-    const storeData = await storeRes.json();
-    if (storeData && storeData.length > 0) {
-      const newId = storeData[0].id;
-      await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-        method: "POST",
-        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify([{
-          store_id: newId,
-          section_title: "當月選物 ╳ 專屬特企",
-          title: "【新朋友專屬】點此領取品牌體驗禮遇",
-          subtitle: "輸入專屬折扣碼即享獨家折抵",
-          target_url: "https://heysibyl.com",
-          discount_code: "WELCOME",
-          badge_label: "限時",
-          img_size: "large-square",
-          img_pos: "top",
-          sort_order: 1
-        }])
+    async function handleAdminEntry() {
+      if (!isRealUser) { openAdminModal(); return; }
+      const { value: pin } = await Swal.fire({
+        title: '請輸入管理 PIN 碼', input: 'password', inputPlaceholder: '預設 8888',
+        showCancelButton: true, confirmButtonText: '登入後台', cancelButtonText: '取消'
       });
+      if (pin === appData.adminPin) {
+        if (pin === '8888') { await forceChangeDefaultPin(); } else { openAdminModal(); }
+      } else if (pin) { Swal.fire('密碼錯誤', '請確認管理 PIN 碼。', 'error'); }
     }
 
-    closeOnboardModal();
-    Swal.fire({
-      title: '🎉 開通成功！',
-      html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>開通信件已同步發送至：<br><b>${email}</b><br><br>預設管理密碼：<b style="color:#8C7058;font-size:18px;">8888</b>`,
-      icon: 'success',
-      confirmButtonText: '立即進入我的品牌頁'
-    }).then(() => {
-      window.location.href = `${window.location.pathname}?u=${slug}`;
-    });
+    async function forceChangeDefaultPin() {
+      const { value: newPin } = await Swal.fire({
+        title: '首次登入安全設定', text: '請自訂一組 4-6 位數新 PIN 碼：', input: 'password',
+        allowOutsideClick: false, confirmButtonText: '確認並進入後台',
+        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        autoSaveToCloud();
+        Swal.fire('設定成功！', '管理 PIN 碼已更新。', 'success');
+        openAdminModal();
+      }
+    }
 
-  } catch (err) {
-    Swal.fire({ title: '代號已被使用', text: '請更換其他網址代號重試', icon: 'warning' });
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa-solid fa-sparkles text-amber-300"></i> 立即免費開通專屬頁面';
-  }
-};
+    async function promptChangePin() {
+      const { value: newPin } = await Swal.fire({
+        title: '修改管理 PIN 碼', input: 'password', showCancelButton: true,
+        confirmButtonText: '儲存新密碼', cancelButtonText: '取消',
+        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        autoSaveToCloud();
+        Swal.fire('修改成功！', '管理 PIN 碼已變更。', 'success');
+      }
+    }
 
-    window.copyCode = function(c, e) { if (e) e.stopPropagation(); navigator.clipboard.writeText(c).then(() => showToast(`已複製優惠碼：${c}`)); };
+    // 查詢專屬網址
+    window.findMySlugPrompt = async function() {
+      const { value: email } = await Swal.fire({
+        title: '找回您的專屬網址', text: '請輸入開通時填寫的電子信箱：', input: 'email',
+        showCancelButton: true, confirmButtonText: '查詢網址', cancelButtonText: '取消'
+      });
+      if (email) {
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?owner_email=eq.${email.trim()}&select=slug,brand_name`, {
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+          });
+          const data = await res.json();
+          if (data && data.length > 0) {
+            const store = data[0];
+            Swal.fire({
+              title: '已找到您的品牌頁面！',
+              html: `品牌名稱：<b>${store.brand_name}</b><br><br>專屬網址：<br><b style="color:#8C7058;font-size:15px;">link.heysibyl.com/?u=${store.slug}</b>`,
+              icon: 'success', confirmButtonText: '立即前往'
+            }).then(() => { window.location.href = `https://link.heysibyl.com/?u=${store.slug}`; });
+          } else {
+            Swal.fire('查無紀錄', '找不到此信箱開通的頁面。', 'warning');
+          }
+        } catch(err) { Swal.fire('查詢失敗', '連線異常，請稍後重試。', 'error'); }
+      }
+    };
+
+    // 開通新專案
+    window.handleOnboardSubmit = async function(e) {
+      e.preventDefault();
+      const brand = document.getElementById('quickBrand').value.trim();
+      const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
+      const email = document.getElementById('quickEmail').value.trim();
+      const btn = document.getElementById('btnSubmitOnboard');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面...';
+
+      try {
+        const postBody = JSON.stringify({
+          action: "REGISTER_NEW_STORE",
+          payload: { brandName: brand, slug: slug, email: email, pin: "8888" }
+        });
+        fetch(GAS_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: postBody });
+      } catch (err) {}
+
+      try {
+        const metaPayload = JSON.stringify({
+          bio: `歡迎光臨 ${brand} 官方頁面\n點擊探索更多推薦`,
+          marquee: { enabled: false, text: '' },
+          carousel: { enabled: false, aspectRatio: 'landscape', position: 'below', images: [] },
+          lineLead: { enabled: false, url: '', title: '' }
+        });
+
+        const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
+          method: "POST",
+          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json", "Prefer": "return=representation" },
+          body: JSON.stringify({
+            slug: slug, brand_name: brand, owner_email: email, admin_pin: "8888",
+            theme: "cashmere-latte", avatar_url: illustrationAvatars[0], bio_text: metaPayload,
+            social_links: [
+              { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
+              { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
+            ]
+          })
+        });
+
+        const storeData = await storeRes.json();
+        if (storeData && storeData.length > 0) {
+          const newId = storeData[0].id;
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+            method: "POST",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify([{
+              store_id: newId, section_title: "精選推薦", title: "【新朋友專屬】點此領取品牌體驗禮遇",
+              subtitle: "輸入專屬折扣代碼即享獨家折抵", target_url: "https://heysibyl.com", discount_code: "WELCOME",
+              badge_label: "限時", img_size: "large-square", img_pos: "top", sort_order: 1
+            }])
+          });
+        }
+
+        closeOnboardModal();
+        Swal.fire({
+          title: '🎉 開通成功！',
+          html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼：<b style="color:#8C7058;font-size:18px;">8888</b>`,
+          icon: 'success', confirmButtonText: '立即進入我的品牌頁'
+        }).then(() => { window.location.href = `${window.location.pathname}?u=${slug}`; });
+      } catch (err) {
+        Swal.fire('代號已被使用', '請更換其他網址代號重試。', 'warning');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> 立即免費開通專屬品牌頁';
+      }
+    };
+
+    window.copyCode = function(c, e) {
+      if (e) e.stopPropagation();
+      navigator.clipboard.writeText(c).then(() => showToast(`已複製優惠碼：${c}`));
+    };
+
     function showToast(m) {
       const t = document.getElementById('toast');
       t.innerText = m;
       t.classList.remove('opacity-0');
       t.classList.add('opacity-100');
-      setTimeout(() => {
-        t.classList.remove('opacity-100');
-        t.classList.add('opacity-0');
-      }, 2000);
+      setTimeout(() => { t.classList.remove('opacity-100'); t.classList.add('opacity-0'); }, 2000);
     }
 
     initPage();
