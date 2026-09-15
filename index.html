@@ -66,7 +66,66 @@
     div:where(.swal2-container) button.swal2-cancel { background: #EAE1D5 !important; color: #5A4C40 !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; padding: 10px 20px !important; }
 
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 16s linear infinite; }
+    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 18s linear infinite; }
+
+    /* 莫蘭迪美學低飽和色系日曆 */
+    .cal-grid-box {
+      display: grid !important;
+      grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+      gap: 5px !important;
+      width: 100% !important;
+    }
+
+    .cal-cell {
+      min-height: 46px !important;
+      height: 46px !important;
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 10px !important;
+      font-size: 11px !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      transition: all 0.15s ease !important;
+      position: relative !important;
+      box-sizing: border-box !important;
+    }
+    .cal-cell:active {
+      transform: scale(0.94) !important;
+    }
+
+    /* 莫蘭迪・鼠尾草綠 (可預約) */
+    .cal-cell.status-available {
+      background-color: #EEF3F0 !important;
+      color: #375346 !important;
+      border: 1px solid #C4D6CC !important;
+      font-weight: 600 !important;
+    }
+
+    /* 莫蘭迪・煙燻褐粉 (已滿檔) */
+    .cal-cell.status-booked {
+      background-color: #F7EFEF !important;
+      color: #7D6164 !important;
+      border: 1px solid #DFCDD0 !important;
+      opacity: 0.85 !important;
+    }
+
+    /* 莫蘭迪・乾燥薑黃 (保留中) */
+    .cal-cell.status-pending {
+      background-color: #F8F5EC !important;
+      color: #7A693F !important;
+      border: 1px solid #DFD7C0 !important;
+      font-weight: 600 !important;
+    }
+
+    /* 莫蘭迪・燕麥淺灰 (未排班) */
+    .cal-cell.status-none {
+      background-color: rgba(255, 255, 255, 0.7) !important;
+      color: #8C827A !important;
+      border: 1px dashed #DDD5CD !important;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-between">
@@ -74,24 +133,26 @@
   <!-- 置頂跑馬燈公告 -->
   <div id="marqueeBanner" class="w-full bg-stone-900 text-white text-[11px] py-1.5 px-4 overflow-hidden relative z-30" style="display: none;">
     <div class="flex items-center gap-2 max-w-[480px] mx-auto overflow-hidden">
-      <span class="flex-shrink-0 font-bold px-1.5 py-0.5 rounded bg-amber-500 text-stone-950 text-[9px]">公告</span>
+      <span class="flex-shrink-0 font-bold px-1.5 py-0.5 rounded bg-amber-500 text-stone-950 text-[9px] flex items-center gap-1">
+        <i class="fa-solid fa-bullhorn text-[8px]"></i><span>公告</span>
+      </span>
       <div class="overflow-hidden whitespace-nowrap flex-grow">
-        <span id="marqueeText" class="animate-marquee inline-block"></span>
+        <span id="marqueeText" class="animate-marquee inline-block font-medium"></span>
       </div>
     </div>
   </div>
 
   <!-- 頂部導航列 -->
-  <header class="w-full max-w-[480px] px-5 pt-3 pb-2 flex items-center justify-between relative z-20">
-    <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 hover:bg-white backdrop-blur-md border border-white/50 shadow-xs transition active:scale-95 cursor-pointer">
+  <header class="sticky top-0 w-full max-w-[480px] px-5 pt-3 pb-2 flex items-center justify-between z-[999] bg-transparent pointer-events-auto">
+    <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-white/60 shadow-xs transition active:scale-95 cursor-pointer">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
       <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
     </a>
     <div class="flex items-center gap-2">
-      <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer">
+      <button type="button" onclick="openShareModal()" class="w-9 h-9 rounded-full bg-white/80 hover:bg-white border border-white/60 shadow-xs flex items-center justify-center text-stone-700 transition active:scale-95 cursor-pointer" title="分享頁面">
         <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
       </button>
-      <button type="button" onclick="handleAdminEntry()" class="h-9 px-3.5 rounded-full bg-stone-900 hover:bg-black text-white text-xs font-medium shadow-sm flex items-center gap-2 transition active:scale-95 cursor-pointer">
+      <button type="button" id="btnAdminTrigger" onclick="openAdminDirectly()" class="h-9 px-3.5 rounded-full bg-stone-900 hover:bg-black text-white text-xs font-medium shadow-md flex items-center gap-2 transition active:scale-95 cursor-pointer relative z-[1000]">
         <i class="fa-solid fa-sliders text-[11px]"></i>
         <span id="btnAdminLabel">設定後台</span>
       </button>
@@ -101,9 +162,9 @@
   <!-- 主體畫布 -->
   <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-3 pb-14 flex-grow flex flex-col items-center relative z-10">
 
-    <!-- 模組 A：品牌頭像與名片介紹 (已徹底移除鉛筆) -->
+    <!-- 模組 1：品牌頭像與名片介紹 -->
     <div id="profileModule" class="w-full flex flex-col items-center text-center mb-6 transition-all">
-      <div onclick="handleAdminEntry()" class="relative group cursor-pointer">
+      <div onclick="openAdminDirectly()" class="relative group cursor-pointer" title="點擊設定個人資訊">
         <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/90 via-white/40 to-white shadow-md">
           <img id="displayAvatar" src="" alt="頭像" class="w-full h-full rounded-full object-cover bg-[#E8DFD3]">
         </div>
@@ -113,25 +174,85 @@
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- 模組 B：品牌輪播牆 -->
-    <div id="carouselWrapper" class="w-full mb-6 relative overflow-hidden rounded-2xl select-none" style="display: none;">
-      <div id="carouselTrack" class="flex transition-transform duration-500 ease-out"></div>
-      <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10"></div>
+    <!-- 模組 2：品牌視覺輪播牆 (預設正方形 1:1) -->
+    <div id="carouselWrapper" class="w-full mb-6 relative select-none" style="display: none;">
+      <div class="px-1 mb-2 flex items-center justify-between">
+        <span class="text-[10px] font-bold tracking-wider uppercase opacity-75 flex items-center gap-1.5" style="color: var(--title-color);">
+          <i class="fa-solid fa-images text-[10px]"></i><span>品牌視覺輪播牆</span>
+        </span>
+        <span class="text-[9px] px-2 py-0.5 rounded-full bg-stone-200/80 text-stone-700 font-mono font-medium">
+          適合：攝影・新秘・電商作品集
+        </span>
+      </div>
+      <p class="px-1 -mt-1 mb-2.5 text-[10px] text-stone-500 leading-normal">
+        你可以這樣應用：橫式海報、正方形或 9:16 直式限動比例切換，展示近期新娘客照、婚紗大片或商品情境照。
+      </p>
+      <div class="relative overflow-hidden rounded-2xl shadow-xs border border-white/60">
+        <div id="carouselTrack" class="flex transition-transform duration-500 ease-out"></div>
+        <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10"></div>
+      </div>
     </div>
 
-    <!-- 模組 C：卡片分類清單 -->
+    <!-- 模組 3：檔期排班／空檔日曆 (莫蘭迪色系) -->
+    <div id="scheduleModule" class="w-full mb-6 p-4 rounded-2xl app-card transition-all" style="display: none;">
+      <div class="flex items-center justify-between mb-1.5">
+        <div class="flex items-center gap-1.5 font-bold text-xs" style="color: var(--title-color);">
+          <i class="fa-regular fa-calendar-check text-[#4C6F5E]"></i>
+          <span>即時檔期與預約空檔</span>
+        </div>
+        <span class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
+          新秘・婚禮主持・巡迴接案
+        </span>
+      </div>
+      <p class="text-[10px] text-stone-500 mb-2.5 leading-relaxed">
+        標註當日所在縣市，點選綠色空檔即可直接複製諮詢私訊模板，省去來回確認檔期的繁瑣。
+      </p>
+
+      <!-- 莫蘭迪低飽和圖例 -->
+      <div class="flex items-center justify-between py-2 border-t border-stone-200/50">
+        <div class="flex items-center gap-2.5 text-[9px] text-[#6E6359]">
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-[#5D8270]"></span>可預約
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-[#C2AA6B]"></span>保留中
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-[#B0898D]"></span>已滿檔
+          </span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button type="button" onclick="changeCalMonth(-1)" class="w-6 h-6 rounded-lg bg-white/80 border border-stone-200 text-[10px] flex items-center justify-center hover:bg-white text-stone-600 cursor-pointer">
+            <i class="fa-solid fa-chevron-left text-[8px]"></i>
+          </button>
+          <span id="calMonthTitle" class="text-[11px] font-semibold px-1 font-mono text-stone-800"></span>
+          <button type="button" onclick="changeCalMonth(1)" class="w-6 h-6 rounded-lg bg-white/80 border border-stone-200 text-[10px] flex items-center justify-center hover:bg-white text-stone-600 cursor-pointer">
+            <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-7 gap-1 text-center font-medium text-[9px] mb-1.5 text-stone-400">
+        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+      </div>
+      <div id="calendarGrid" class="grid grid-cols-7 gap-1 w-full min-h-[220px]"></div>
+
+      <p id="scheduleNoteText" class="mt-2.5 text-[10px] text-stone-500 leading-relaxed text-center font-light border-t pt-2 border-stone-200/50"></p>
+    </div>
+
+    <!-- 模組 4：卡片分類清單 -->
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
-    <!-- 模組 D：底部功能與頁尾 (強制 order: 99，保證 100% 固定在最下方！) -->
+    <!-- 模組 5：頁尾專屬區塊 -->
     <footer id="footerContainer" class="w-full mt-12 flex flex-col items-center space-y-4" style="order: 99 !important;">
       <div id="demoSwitchBar" style="display: none;" class="w-full text-center">
         <button type="button" onclick="switchToDemoMode()" class="px-4 py-2 rounded-full bg-white/80 hover:bg-white border border-stone-200 shadow-xs text-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 mx-auto transition active:scale-95 cursor-pointer">
-          <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i>
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-600 text-xs"></i>
           <span>查看完整官方示範</span>
         </button>
       </div>
 
-      <!-- 開通卡片 -->
+      <!-- 免費開通卡片 -->
       <div class="w-full p-5 rounded-3xl bg-white/75 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
         <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
           <i class="fa-solid fa-palette text-[9px]"></i>
@@ -142,23 +263,35 @@
           羊絨米、黑曜灰、晨曦霧綠與法式暮粉等六色系隨時切換！
         </p>
         <button type="button" onclick="openOnboardModal()" class="w-full py-2.5 rounded-2xl bg-stone-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i>
+          <i class="fa-solid fa-bolt text-amber-300 text-xs"></i>
           <span>立即免費開通專屬頁面</span>
         </button>
       </div>
 
-      <!-- 品牌金句介紹 -->
-      <div class="pt-2 flex flex-col items-center text-center max-w-[340px] mx-auto space-y-1.5">
+      <!-- 品牌介紹與對比標籤 -->
+      <div class="pt-2 flex flex-col items-center text-center max-w-[360px] mx-auto space-y-2">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-bold tracking-wide text-stone-700 hover:text-black transition">
           <span>Designed by Sibyl | 數位管家</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-40 group-hover:opacity-100 transition"></i>
         </a>
-        <p class="text-[11px] text-stone-500 leading-relaxed">
+        <div class="px-3.5 py-1.5 rounded-xl bg-stone-100/90 border border-stone-200/70 text-[10px] text-stone-600 font-mono space-y-0.5 shadow-2xs">
+          <div>目前版本：個人免費微頁</div>
+          <div class="text-stone-800 font-semibold">進階方案：美業預約系統・行政管家</div>
+        </div>
+        <p class="text-[11px] text-stone-500 leading-relaxed px-2">
           不只是品牌頁，更有眾多數位管家！超輕量月費即可擁有預約排程系統、行政管家與購物商城，免費享有無限升級服務
         </p>
       </div>
     </footer>
   </main>
+
+  <!-- 右下角懸浮按鈕 -->
+  <div class="fixed bottom-5 right-5 z-40">
+    <button type="button" onclick="openOnboardModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-stone-900/90 hover:bg-black text-white text-[11px] font-medium shadow-xl backdrop-blur-md border border-white/20 transition transform hover:scale-105 active:scale-95 cursor-pointer">
+      <i class="fa-solid fa-bolt text-amber-400 text-xs"></i>
+      <span>此由 Sibyl 數位管家驅動 ╳ 免費使用</span>
+    </button>
+  </div>
 
   <!-- LINE 導流留客彈窗 -->
   <div id="lineLeadModal" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center p-4">
@@ -181,7 +314,7 @@
   </div>
 
   <!-- 後台管理抽屜 -->
-  <div id="adminSheet" style="display: none;" class="fixed inset-0 z-50">
+  <div id="adminSheet" style="display: none;" class="fixed inset-0 z-[150]">
     <div onclick="closeAdminModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[90vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col overflow-hidden">
       <div class="pt-3 pb-3 px-6 border-b border-stone-100 flex flex-col items-center bg-stone-50">
@@ -192,13 +325,13 @@
               <i class="fa-solid fa-sliders text-stone-700"></i>
               <span>品牌管理後台</span>
             </h2>
-            <p class="text-[11px] text-stone-500">修改視覺主題、公告跑馬燈、輪播與卡片排版</p>
+            <p class="text-[11px] text-stone-500">主題色彩、檔期排班、輪播與卡片排版</p>
           </div>
           <div class="flex items-center gap-2">
             <button type="button" onclick="promptChangePin()" class="text-[11px] text-stone-600 hover:text-black font-semibold border px-2.5 py-1 rounded-lg bg-white cursor-pointer">
               <i class="fa-solid fa-key mr-1"></i>改密碼
             </button>
-            <button type="button" onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center cursor-pointer">✕</button>
+            <button type="button" onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
           </div>
         </div>
       </div>
@@ -206,7 +339,9 @@
       <div class="p-6 overflow-y-auto space-y-6 flex-grow text-xs text-stone-700">
         <!-- 主題切換 -->
         <div>
-          <label class="block font-bold text-stone-900 mb-2">🎨 視覺風格主題 (六款美學色系)</label>
+          <label class="block font-bold text-stone-900 mb-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-palette text-stone-600"></i><span>視覺風格主題 (六款美學色系)</span>
+          </label>
           <div class="grid grid-cols-2 gap-2.5">
             <button type="button" onclick="changeTheme('cashmere-latte')" class="flex items-center gap-2 p-2.5 rounded-xl border border-stone-200 bg-[#FAF6F0] text-stone-900 font-medium text-left hover:ring-2 hover:ring-stone-400">
               <span class="w-5 h-5 rounded-full bg-[#E8DFD3] border border-stone-300 flex-shrink-0"></span>
@@ -235,7 +370,62 @@
           </div>
         </div>
 
-        <!-- 跑馬燈公告 -->
+        <!-- 檔期排班／空檔展示模組設定 -->
+        <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
+              <i class="fa-regular fa-calendar-check text-emerald-600"></i>
+              <span>檔期排班／空檔展示模組</span>
+            </span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="inputScheduleEnabled" class="sr-only peer" onchange="toggleScheduleEnabled(this.checked)">
+              <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+            </label>
+          </div>
+          <p class="text-[11px] text-stone-500 leading-relaxed">
+            點擊下方日期即可設定預約狀態與所在城市（例：台北、台南），再次點擊可循環變更。
+          </p>
+
+          <div id="adminScheduleConfig" class="space-y-3 pt-1" style="display: none;">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-medium text-stone-500 mb-1">模組顯示位置</label>
+                <select id="selectScheduleOrder" onchange="changeScheduleOrder(this.value)" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs">
+                  <option value="above_carousel">輪播圖上方</option>
+                  <option value="below_carousel" selected>輪播圖下方 (推薦)</option>
+                  <option value="below_sections">卡片清單下方</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-stone-500 mb-1">快捷批次設定</label>
+                <div class="flex gap-1">
+                  <button type="button" onclick="batchSetWeekends()" class="w-full py-1.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-[10px] font-bold hover:bg-emerald-100 cursor-pointer">週末全開</button>
+                  <button type="button" onclick="batchClearMonth()" class="w-full py-1.5 rounded-lg bg-stone-100 border border-stone-300 text-stone-600 text-[10px] font-medium hover:bg-stone-200 cursor-pointer">清空當月</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 後台日曆容器 (實體結構確保 100% 顯現) -->
+            <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-2">
+              <div class="flex justify-between items-center px-1 font-bold text-xs text-stone-800">
+                <button type="button" onclick="changeAdminCalMonth(-1)" class="text-stone-400 hover:text-black p-1 cursor-pointer"><i class="fa-solid fa-chevron-left text-[9px]"></i></button>
+                <span id="adminCalMonthTitle" class="font-mono font-bold"></span>
+                <button type="button" onclick="changeAdminCalMonth(1)" class="text-stone-400 hover:text-black p-1 cursor-pointer"><i class="fa-solid fa-chevron-right text-[9px]"></i></button>
+              </div>
+              <div class="grid grid-cols-7 gap-1 text-center font-bold text-[9px] text-stone-400">
+                <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+              </div>
+              <div id="adminCalendarGrid" class="grid grid-cols-7 gap-1 w-full min-h-[220px]"></div>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-medium text-stone-500 mb-1">檔期說明或備註</label>
+              <input type="text" id="inputScheduleNote" placeholder="例：點選日期查看當日所在城市，可直接複製諮詢私訊！" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-1.5 text-xs" oninput="updateScheduleNote(this.value)">
+            </div>
+          </div>
+        </div>
+
+        <!-- 跑馬燈公告設定 -->
         <div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
           <div class="flex items-center justify-between">
             <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-bullhorn text-stone-600"></i><span>置頂跑馬燈公告</span></span>
@@ -245,11 +435,11 @@
             </label>
           </div>
           <div id="marqueeConfigBox" class="space-y-1.5 pt-1" style="display: none;">
-            <input type="text" id="inputMarqueeText" placeholder="例：📢 此為示範頁，滑到頁尾『立即免費開通專屬頁面』！" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateMarqueeText(this.value)">
+            <input type="text" id="inputMarqueeText" placeholder="例：此為示範頁，滑到頁尾『立即免費開通專屬頁面』！" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateMarqueeText(this.value)">
           </div>
         </div>
 
-        <!-- 輪播牆設定 -->
+        <!-- 品牌視覺輪播牆設定 (支援正方形) -->
         <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
           <div class="flex items-center justify-between">
             <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-images text-stone-600"></i><span>品牌視覺輪播牆</span></span>
@@ -263,8 +453,8 @@
               <div>
                 <label class="block text-[10px] font-medium text-stone-500 mb-1">畫幅比例</label>
                 <select id="selectCarouselAspect" onchange="changeCarouselAspect(this.value)" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs">
+                  <option value="square" selected>經典方形 (1:1)</option>
                   <option value="landscape">橫式海報 (16:9)</option>
-                  <option value="square">經典方形 (1:1)</option>
                   <option value="story">直式限動 (9:16)</option>
                 </select>
               </div>
@@ -289,28 +479,27 @@
           </div>
         </div>
 
-        <!-- 💬 LINE 導流留客彈窗設定 -->
-<div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
-  <div class="flex items-center justify-between">
-    <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-brands fa-line text-emerald-600 text-sm"></i><span>LINE 官方好友導流彈窗</span></span>
-    <label class="relative inline-flex items-center cursor-pointer">
-      <input type="checkbox" id="inputLineLeadEnabled" class="sr-only peer" onchange="toggleLineLeadEnabled(this.checked)">
-      <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
-    </label>
-  </div>
-  <!-- 💡 新增的小說明 -->
-  <p class="text-[11px] text-stone-500 leading-relaxed">
-    當訪客在前台點擊任意卡片時，將隨機彈出此視窗，引導訪客加入 LINE 官方帳號。
-  </p>
-  <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
-    <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
-    <input type="text" id="inputLineLeadTitle" placeholder="彈窗標題 (例：領取好友專屬體驗禮遇)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
-  </div>
-</div>
+        <!-- LINE 導流留客彈窗 -->
+        <div class="space-y-2.5 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-brands fa-line text-emerald-600 text-sm"></i><span>LINE 官方好友導流彈窗</span></span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="inputLineLeadEnabled" class="sr-only peer" onchange="toggleLineLeadEnabled(this.checked)">
+              <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
+            </label>
+          </div>
+          <p class="text-[11px] text-stone-500 leading-relaxed">
+            當訪客在前台點擊任意卡片時，將隨機彈出此視窗，引導訪客加入 LINE 官方帳號。
+          </p>
+          <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
+            <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
+            <input type="text" id="inputLineLeadTitle" placeholder="彈窗標題 (例：領取好友專屬體驗禮遇)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
+          </div>
+        </div>
 
-        <!-- 基本形象 -->
+        <!-- 基本形象設定 -->
         <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
-          <div class="font-bold text-stone-900 text-xs">👤 基本形象設定</div>
+          <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-user text-stone-600"></i><span>基本形象設定</span></div>
           <div class="flex items-center gap-4">
             <img id="adminAvatarThumb" src="" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow bg-[#E8DFD3]">
             <div class="flex-grow space-y-1">
@@ -334,7 +523,7 @@
         <!-- 社群入口 -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-stone-900">🔗 社群與官方入口</span>
+            <span class="font-bold text-stone-900 flex items-center gap-1.5"><i class="fa-solid fa-share-nodes text-stone-600"></i><span>社群與官方入口</span></span>
             <button type="button" onclick="addSocialLink()" class="text-[11px] text-stone-700 font-semibold cursor-pointer">+ 增加圖示</button>
           </div>
           <div id="adminSocialsList" class="space-y-2"></div>
@@ -343,13 +532,13 @@
         <!-- 分類與卡片項目 -->
         <div class="space-y-3">
           <div class="flex items-center justify-between border-t pt-4 border-stone-200">
-            <span class="font-bold text-stone-900">📦 分類與卡片項目</span>
+            <span class="font-bold text-stone-900 flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-stone-600"></i><span>分類與卡片項目</span></span>
             <div class="flex gap-2">
               <button type="button" onclick="openCreateSectionModal()" class="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 text-[11px] font-semibold border cursor-pointer">+ 新增分類</button>
               <button type="button" onclick="openItemModal(null, null)" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-black text-white text-[11px] font-medium shadow cursor-pointer">+ 新增卡片</button>
             </div>
           </div>
-          <div id="adminSectionsList" class="space-y-4"></div>
+          <div id="adminSectionsList" class="space-y-4 min-h-[120px]"></div>
         </div>
       </div>
 
@@ -360,13 +549,13 @@
     </div>
   </div>
 
-  <!-- 卡片編輯彈窗 -->
-  <div id="itemModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+  <!-- 卡片編輯彈窗 (支援大方形置頂) -->
+  <div id="itemModal" style="display: none;" class="fixed inset-0 z-[160] flex items-center justify-center p-4">
     <div onclick="closeItemModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 id="modalHeaderTitle" class="font-bold text-stone-900 text-sm">編輯卡片內容</h3>
-        <button type="button" onclick="closeItemModal()" class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center cursor-pointer">✕</button>
+        <button type="button" onclick="closeItemModal()" class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
       </div>
 
       <div class="space-y-3">
@@ -412,17 +601,17 @@
               <div>
                 <label class="block text-[10px] text-stone-500 mb-1">比例尺寸</label>
                 <select id="modalImgSize" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
-                  <option value="small">小 (方形 48px)</option>
-                  <option value="medium" selected>中 (標準長方 64px)</option>
-                  <option value="large-square">大 (正方形 300px)</option>
+                  <option value="large-square" selected>大 (正方形 300px)</option>
                   <option value="large">大 (滿版長海報)</option>
+                  <option value="medium">中 (標準長方 64px)</option>
+                  <option value="small">小 (方形 48px)</option>
                 </select>
               </div>
               <div>
                 <label class="block text-[10px] text-stone-500 mb-1">擺放位置</label>
                 <select id="modalImgPos" class="w-full border border-stone-200 rounded-xl px-2 py-1.5 text-xs bg-white">
-                  <option value="top">上方 (置頂推薦)</option>
-                  <option value="left" selected>左側</option>
+                  <option value="top" selected>上方 (置頂推薦)</option>
+                  <option value="left">左側</option>
                   <option value="right">右側</option>
                 </select>
               </div>
@@ -445,7 +634,7 @@
   </div>
 
   <!-- 免費開通抽屜 -->
-  <div id="onboardSheet" style="display: none;" class="fixed inset-0 z-50">
+  <div id="onboardSheet" style="display: none;" class="fixed inset-0 z-[150]">
     <div onclick="closeOnboardModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6">
       <div class="w-10 h-1 rounded-full bg-stone-300 mx-auto mb-4"></div>
@@ -470,19 +659,14 @@
           <input required type="email" id="quickEmail" placeholder="yourname@gmail.com" class="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs">
         </div>
         <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i><span>立即開通專屬品牌頁</span>
+          <i class="fa-solid fa-bolt text-amber-300"></i><span>立即開通專屬品牌頁</span>
         </button>
-        <div class="text-center pt-2">
-          <button type="button" onclick="findMySlugPrompt()" class="text-[11px] text-stone-400 hover:text-stone-800 underline cursor-pointer">
-            忘記專屬網址？輸入 Email 免費找回
-          </button>
-        </div>
       </form>
     </div>
   </div>
 
   <!-- 分享彈窗 -->
-  <div id="shareSheet" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div id="shareSheet" style="display: none;" class="fixed inset-0 z-[150] flex items-center justify-center p-4">
     <div onclick="closeShareModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="relative z-10 bg-white rounded-3xl p-6 max-w-xs w-full text-center space-y-4 shadow-2xl">
       <div class="w-40 h-40 bg-stone-100 mx-auto rounded-2xl flex items-center justify-center border border-stone-200 p-2">
@@ -507,6 +691,20 @@
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JnpaLZVnGkW9Jr967LeYuQ_d8bXwfnz";
 
+    // 全新版號：強制刷新過期快取，並啟動全功能預設開啟 (包含預設正方形輪播)
+    const DEMO_DATA_VERSION = 'v20260916_perfect_calendar_square_all_on';
+
+    // 0 秒全域直通開關
+    window.openAdminDirectly = function() {
+      if (typeof isRealUser !== 'undefined' && isRealUser) {
+        if (typeof handleAdminEntry === 'function') {
+          handleAdminEntry();
+          return;
+        }
+      }
+      openAdminModal();
+    };
+
     const illustrationAvatars = [
       'https://api.dicebear.com/7.x/lorelei/svg?seed=Chloe&backgroundColor=e8dfd3&accessories=earrings&head=variant02',
       'https://api.dicebear.com/7.x/lorelei/svg?seed=Amara&backgroundColor=f5efe6&accessories=glasses,earrings',
@@ -515,20 +713,20 @@
     ];
     let avatarIndex = 0;
 
-    // 全新原創示範資料：輪播 4 張圖 ＋ 全尺寸版型示範
+    // 前後台全功能預設開啟，輪播預設正方形 (square)
     const demoData = {
       theme: 'cashmere-latte',
-      brandName: 'STUDIO AURA ╳ 慢奢選品',
+      brandName: 'STUDIO AURA ╳ 慢奢美學',
       avatar: illustrationAvatars[0],
-      bio: '靜奢空間選品 ╳ 氣味感官工坊\n探索慢節奏生活美學，預約一對一軟裝與香氛諮詢',
+      bio: '新娘造型設計 ╳ 空間氣味工坊\n探索精緻優雅生活，點擊查看近期檔期或預約諮詢',
       adminPin: '8888',
       marquee: {
         enabled: true,
-        text: '📢 此為示範頁，滑到頁尾『立即免費開通專屬頁面』！'
+        text: '此為示範頁，滑到頁尾『立即免費開通專屬頁面』！'
       },
       carousel: {
         enabled: true,
-        aspectRatio: 'landscape',
+        aspectRatio: 'square', // ✅ 預設正方形
         position: 'below',
         images: [
           'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
@@ -537,10 +735,26 @@
           'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80'
         ]
       },
+      schedule: {
+        enabled: true, // ✅ 預設開啟
+        position: 'below_carousel',
+        note: '點選日期查看當日所在城市，可直接複製諮詢私訊！',
+        dates: {
+          '2026-10-03': { status: 'available', location: '台北' },
+          '2026-10-04': { status: 'available', location: '台北' },
+          '2026-10-10': { status: 'booked', location: '台中' },
+          '2026-10-11': { status: 'booked', location: '台中' },
+          '2026-10-17': { status: 'available', location: '台南' },
+          '2026-10-18': { status: 'pending', location: '台南' },
+          '2026-10-24': { status: 'available', location: '高雄' },
+          '2026-10-25': { status: 'booked', location: '台北' },
+          '2026-10-31': { status: 'available', location: '新竹' }
+        }
+      },
       lineLead: {
-        enabled: true,
+        enabled: true, // ✅ 預設開啟
         url: 'https://heysibyl.com',
-        title: '領取好友專屬體驗禮遇'
+        title: '領取新客預約體驗禮遇'
       },
       socials: [
         { icon: 'fa-brands fa-instagram', label: 'Instagram', url: 'https://instagram.com' },
@@ -551,78 +765,78 @@
       sections: [
         {
           id: 'sec-1',
-          title: 'SEASONAL SPECIAL ╳ 當季主打特企',
+          title: 'WEDDING & STYLING ╳ 造型與預約',
           items: [
             {
               id: 'item-101',
-              title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
-              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100',
-              img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
+              title: '【新娘造型定製】純淨光透妝感 ╳ 奢華禮服梳化',
+              subtitle: '一對一試妝諮詢，贈送手工精油保養安瓶（範例：大正方形置頂）',
+              img: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
               imgSize: 'large-square',
               imgPos: 'top',
               url: 'https://heysibyl.com',
-              discountCode: 'AURA100',
-              badge: '限時特惠',
-              countdownEnd: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
-              clicks: 78
+              discountCode: 'WEDDING2026',
+              badge: '本月主打',
+              countdownEnd: new Date(Date.now() + 86400000 * 5).toISOString().slice(0, 16),
+              clicks: 142
             },
             {
               id: 'item-102',
-              title: '法式亞麻生活抱枕組（手工梭織限量款）',
-              subtitle: '厚磅質樸手感，為起居空間注入溫潤暖意',
+              title: '全日海外婚紗隨行跟妝 ╳ 雙人攝影團隊',
+              subtitle: '完整團隊專屬支援，呈現電影感光影畫幅（範例：滿版長海報置頂）',
+              img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+              imgSize: 'large',
+              imgPos: 'top',
+              url: 'https://heysibyl.com',
+              discountCode: '',
+              badge: '名額有限',
+              countdownEnd: '',
+              clicks: 98
+            },
+            {
+              id: 'item-103',
+              title: '婚禮當日宴客梳化 ╳ 伴娘媽媽造型升級',
+              subtitle: '以高級自然光澤打造專屬氣質（範例：中長方置左）',
               img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
               imgSize: 'medium',
               imgPos: 'left',
               url: 'https://heysibyl.com',
               discountCode: '',
-              badge: '熱銷',
+              badge: '熱門推薦',
               countdownEnd: '',
-              clicks: 45
-            },
-            {
-              id: 'item-103',
-              title: '草本舒緩複方滾珠精油 (10ml 便攜瓶)',
-              subtitle: '隨身放鬆必備，淡雅甜橙與雪松草本調',
-              img: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=300&q=80',
-              imgSize: 'small',
-              imgPos: 'right',
-              url: 'https://heysibyl.com',
-              discountCode: 'MINI88',
-              badge: '隨行款',
-              countdownEnd: '',
-              clicks: 31
+              clicks: 89
             }
           ]
         },
         {
           id: 'sec-2',
-          title: 'SPACES & BOOKINGS ╳ 空間預約與諮詢',
+          title: 'SELECTED PRODUCTS ╳ 當季感官選品',
           items: [
             {
               id: 'item-201',
-              title: '秋季私廚感官餐桌（每週僅開放五席微醺晚宴）',
-              subtitle: '以在地當令旬味為靈感的 7 道私廚微醺晚宴，需提前預約',
-              img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
-              imgSize: 'large',
-              imgPos: 'top',
+              title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
+              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100（範例：小正方置右）',
+              img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
+              imgSize: 'small',
+              imgPos: 'right',
               url: 'https://heysibyl.com',
-              discountCode: '',
-              badge: '席位預約',
+              discountCode: 'AURA100',
+              badge: '限量',
               countdownEnd: '',
-              clicks: 112
+              clicks: 53
             },
             {
               id: 'item-202',
-              title: '一對一空間氣味與軟裝佈置定製方案',
-              subtitle: '由專屬顧問實地評估，量身打造專屬空間香氛美學',
+              title: '一對一空間氣味與個人風格定製諮詢',
+              subtitle: '由專屬顧問實地評估，調配起居空間專屬香氣（範例：純文字卡片）',
               img: '',
               imgSize: 'medium',
               imgPos: 'left',
               url: 'https://heysibyl.com',
-              discountCode: 'VIPCONSULT',
+              discountCode: 'CONSULTVIP',
               badge: '官方服務',
               countdownEnd: '',
-              clicks: 56
+              clicks: 37
             }
           ]
         }
@@ -635,127 +849,208 @@
     let currentSlug = null;
     let countdownInterval = null;
 
+    let currentCalDate = new Date(2026, 9, 1);
+    let adminCalDate = new Date(2026, 9, 1);
+
     function getStorageKey() {
       return currentSlug ? `sibyl_data_${currentSlug}` : 'sibyl_demo_data';
     }
 
-    // ✅ 加入版本號 DEMO_VERSION 強制刷新，徹底解決舊暫存蓋過新範例的問題
-const DEMO_DATA_VERSION = 'v20260911_new2';
-
-async function initPage() {
-  const p = new URLSearchParams(window.location.search);
-  const slug = p.get('u');
-  currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
-
-  if (currentSlug) {
-    // 真實用戶：優先讀取該用戶的本地快取，再讀取雲端
-    const localCache = localStorage.getItem(getStorageKey());
-    if (localCache) {
-      try {
-        appData = JSON.parse(localCache);
-        renderView();
-      } catch (e) {}
-    }
-    await loadStoreFromSupabase(currentSlug);
-  } else {
-    // 官方示範模式：比對版本號，若版本不同則強制套用全新 demoData
-    isRealUser = false;
-    const cachedVer = localStorage.getItem('sibyl_demo_ver');
-    const localCache = localStorage.getItem('sibyl_demo_data');
-
-    if (cachedVer === DEMO_DATA_VERSION && localCache) {
-      try {
-        appData = JSON.parse(localCache);
-      } catch (e) {
-        appData = JSON.parse(JSON.stringify(demoData));
+    window.handleAdminEntry = async function() {
+      if (!isRealUser) {
+        openAdminModal();
+        return;
       }
-    } else {
-      // 強制寫入最新示範資料
-      appData = JSON.parse(JSON.stringify(demoData));
-      localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
-      localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
+      const { value: pin } = await Swal.fire({
+        title: '請輸入管理 PIN 碼',
+        input: 'password',
+        inputPlaceholder: '預設 8888',
+        showCancelButton: true,
+        confirmButtonText: '登入後台',
+        cancelButtonText: '取消'
+      });
+      if (pin === appData.adminPin) {
+        if (pin === '8888') {
+          await forceChangeDefaultPin();
+        } else {
+          openAdminModal();
+        }
+      } else if (pin) {
+        Swal.fire('密碼錯誤', '請確認管理 PIN 碼。', 'error');
+      }
+    };
+
+    async function forceChangeDefaultPin() {
+      const { value: newPin } = await Swal.fire({
+        title: '首次登入安全設定',
+        text: '請自訂一組 4-6 位數新 PIN 碼：',
+        input: 'password',
+        allowOutsideClick: false,
+        confirmButtonText: '確認並進入後台',
+        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        autoSaveToCloud();
+        Swal.fire('設定成功！', '管理 PIN 碼已更新。', 'success');
+        openAdminModal();
+      }
     }
 
-    document.getElementById('demoSwitchBar').style.display = 'none';
-    document.getElementById('btnAdminLabel').innerText = '示範設定後台';
-    renderView();
-  }
-}
+    window.promptChangePin = async function() {
+      const { value: newPin } = await Swal.fire({
+        title: '修改管理 PIN 碼',
+        input: 'password',
+        showCancelButton: true,
+        confirmButtonText: '儲存新密碼',
+        cancelButtonText: '取消',
+        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        autoSaveToCloud();
+        Swal.fire('修改成功！', '管理 PIN 碼已變更。', 'success');
+      }
+    };
+
+    window.openAdminModal = function() {
+      const sheet = document.getElementById('adminSheet');
+      if (sheet) sheet.style.display = 'block';
+      populateAdmin();
+      
+      // 雙重防延遲重繪
+      setTimeout(() => { renderAdminCalendar(); }, 60);
+      setTimeout(() => { renderAdminCalendar(); }, 200);
+    };
+
+    window.closeAdminModal = function() {
+      document.getElementById('adminSheet').style.display = 'none';
+    };
+    window.openOnboardModal = function() {
+      document.getElementById('onboardSheet').style.display = 'block';
+    };
+    window.closeOnboardModal = function() {
+      document.getElementById('onboardSheet').style.display = 'none';
+    };
+    window.openShareModal = function() {
+      document.getElementById('shareSheet').style.display = 'flex';
+    };
+    window.closeShareModal = function() {
+      document.getElementById('shareSheet').style.display = 'none';
+    };
+
+    async function initPage() {
+      const p = new URLSearchParams(window.location.search);
+      const slug = p.get('u');
+      currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
+
+      if (currentSlug) {
+        const localCache = localStorage.getItem(getStorageKey());
+        if (localCache) {
+          try {
+            appData = JSON.parse(localCache);
+            renderView();
+          } catch (e) {}
+        }
+        await loadStoreFromSupabase(currentSlug);
+      } else {
+        isRealUser = false;
+        const cachedVer = localStorage.getItem('sibyl_demo_ver');
+        const localCache = localStorage.getItem('sibyl_demo_data');
+
+        if (cachedVer !== DEMO_DATA_VERSION || !localCache) {
+          appData = JSON.parse(JSON.stringify(demoData));
+          localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
+          localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
+        } else {
+          try {
+            appData = JSON.parse(localCache);
+          } catch (e) {
+            appData = JSON.parse(JSON.stringify(demoData));
+          }
+        }
+
+        document.getElementById('demoSwitchBar').style.display = 'none';
+        document.getElementById('btnAdminLabel').innerText = '示範設定後台';
+        renderView();
+      }
+    }
 
     async function loadStoreFromSupabase(slug) {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)`, {
-      headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    const rows = await res.json();
-    if (rows && rows.length > 0) {
-      const s = rows[0];
-      isRealUser = true;
-      currentStoreDbId = s.id;
-      appData.theme = s.theme || 'cashmere-latte';
-      appData.brandName = s.brand_name || slug;
-      appData.avatar = s.avatar_url || illustrationAvatars[0];
-      appData.adminPin = s.admin_pin || '8888';
-      appData.socials = s.social_links || [];
-
       try {
-        const parsedMeta = JSON.parse(s.bio_text);
-        appData.bio = parsedMeta.bio || '';
-        if (parsedMeta.marquee) appData.marquee = parsedMeta.marquee;
-        if (parsedMeta.carousel) appData.carousel = parsedMeta.carousel;
-        if (parsedMeta.lineLead) appData.lineLead = parsedMeta.lineLead;
-      } catch(e) {
-        appData.bio = s.bio_text || '';
-      }
-
-      if (s.bio_items && s.bio_items.length > 0) {
-        const map = {};
-        const seenIds = new Set(); // ✅ 避免重複卡片重組
-
-        s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
-          if (it.id && seenIds.has(it.id)) return; // 若重複則跳過
-          if (it.id) seenIds.add(it.id);
-
-          const secTitle = it.section_title || '精選推薦';
-          if (!map[secTitle]) {
-            map[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
-          }
-          map[secTitle].items.push({
-            id: it.id,
-            title: it.title,
-            subtitle: it.subtitle || '',
-            img: it.thumbnail_url || '',
-            imgSize: it.img_size || 'medium',
-            imgPos: it.img_pos || 'left',
-            url: it.target_url || '#',
-            discountCode: it.discount_code || '',
-            badge: it.badge_label || '',
-            countdownEnd: it.countdown_end || '',
-            clicks: it.click_count || 0
-          });
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)`, {
+          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
         });
-        appData.sections = Object.values(map);
-      }
+        const rows = await res.json();
+        if (rows && rows.length > 0) {
+          const s = rows[0];
+          isRealUser = true;
+          currentStoreDbId = s.id;
+          appData.theme = s.theme || 'cashmere-latte';
+          appData.brandName = s.brand_name || slug;
+          appData.avatar = s.avatar_url || illustrationAvatars[0];
+          appData.adminPin = s.admin_pin || '8888';
+          appData.socials = s.social_links || [];
 
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-      document.getElementById('demoSwitchBar').style.display = 'block';
-      document.getElementById('btnAdminLabel').innerText = '管理後台';
-      document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
-      document.title = `${appData.brandName} | 品牌名片`;
-      renderView();
-    } else {
-      switchToDemoMode();
+          try {
+            const parsedMeta = JSON.parse(s.bio_text);
+            appData.bio = parsedMeta.bio || '';
+            if (parsedMeta.marquee) appData.marquee = parsedMeta.marquee;
+            if (parsedMeta.carousel) appData.carousel = parsedMeta.carousel;
+            if (parsedMeta.lineLead) appData.lineLead = parsedMeta.lineLead;
+            if (parsedMeta.schedule) appData.schedule = parsedMeta.schedule;
+          } catch(e) {
+            appData.bio = s.bio_text || '';
+          }
+
+          if (s.bio_items && s.bio_items.length > 0) {
+            const map = {};
+            const seenIds = new Set();
+
+            s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
+              if (it.id && seenIds.has(it.id)) return;
+              if (it.id) seenIds.add(it.id);
+
+              const secTitle = it.section_title || '精選推薦';
+              if (!map[secTitle]) {
+                map[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
+              }
+              map[secTitle].items.push({
+                id: it.id,
+                title: it.title,
+                subtitle: it.subtitle || '',
+                img: it.thumbnail_url || '',
+                imgSize: it.img_size || 'large-square',
+                imgPos: it.img_pos || 'top',
+                url: it.target_url || '#',
+                discountCode: it.discount_code || '',
+                badge: it.badge_label || '',
+                countdownEnd: it.countdown_end || '',
+                clicks: it.click_count || 0
+              });
+            });
+            appData.sections = Object.values(map);
+          }
+
+          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+          document.getElementById('demoSwitchBar').style.display = 'block';
+          document.getElementById('btnAdminLabel').innerText = '管理後台';
+          document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
+          document.title = `${appData.brandName} | 品牌名片`;
+          renderView();
+        } else {
+          switchToDemoMode();
+        }
+      } catch (e) {
+        renderView();
+      }
     }
-  } catch (e) {
-    renderView();
-  }
-}
 
     window.switchToDemoMode = function() {
-  localStorage.removeItem('sibyl_demo_data');
-  localStorage.removeItem('sibyl_demo_ver');
-  window.location.href = window.location.pathname;
-};
+      localStorage.removeItem('sibyl_demo_data');
+      localStorage.removeItem('sibyl_demo_ver');
+      window.location.href = window.location.pathname;
+    };
 
     function renderView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
@@ -775,7 +1070,7 @@ async function initPage() {
         marEl.style.display = 'none';
       }
 
-      // 社群列表
+      // 社群圖示
       const socBox = document.getElementById('displaySocials');
       socBox.innerHTML = '';
       (appData.socials || []).forEach(s => {
@@ -787,17 +1082,44 @@ async function initPage() {
         socBox.appendChild(a);
       });
 
-      // 渲染卡片分類
+      // 渲染前台卡片分類
       const secBox = document.getElementById('sectionsContainer');
       secBox.innerHTML = '';
+
+      const appTipsMap = {
+        'sec-1': {
+          tag: '適合：團購主・電商選物・品牌檔期',
+          guide: '你可以這樣應用：限時開團時，設定倒數時鐘營造截單急迫感，卡片放上一鍵複製折扣碼，粉絲點擊直接前往蝦皮、團購表單或自架官網，轉換率大幅提升！'
+        },
+        'sec-2': {
+          tag: '適合：自媒體創作者・接案顧問・自由工作者',
+          guide: '你可以這樣應用：用無圖片的純文字精簡卡片條列業配合作信箱、個人 Podcast/YouTube 最新集數、贊助連結，或一對一付費諮詢表單，整齊俐落不雜亂。'
+        }
+      };
+
       (appData.sections || []).forEach((sec, sIdx) => {
         const wrap = document.createElement('div');
         wrap.className = 'w-full space-y-3';
+        
+        const tip = appTipsMap[sec.id] || {
+          tag: '適合：個人品牌・多連結管理',
+          guide: '你可以這樣應用：自由建立多個專屬分類，支援大圖置頂、左右配圖或純文字版型，拖曳即可自由排序。'
+        };
+
         wrap.innerHTML = `
-          <div class="flex items-center gap-3 px-1 my-3">
-            <div class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent-color);"></div>
-            <h2 class="text-xs font-bold tracking-widest uppercase opacity-80" style="color: var(--title-color);">${sec.title}</h2>
-            <div class="flex-grow h-[1px] opacity-15" style="background-color: var(--title-color);"></div>
+          <div class="px-1 my-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent-color);"></div>
+                <h2 class="text-xs font-bold tracking-widest uppercase opacity-85" style="color: var(--title-color);">${sec.title}</h2>
+              </div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full bg-stone-200/80 text-stone-700 font-mono font-medium">
+                ${tip.tag}
+              </span>
+            </div>
+            <p class="text-[10px] text-stone-500 leading-normal pl-3.5 border-l border-stone-300/60 mt-1 mb-2">
+              ${tip.guide}
+            </p>
           </div>
         `;
 
@@ -818,11 +1140,11 @@ async function initPage() {
           };
           const sizeClass = sizeClassMap[item.imgSize] || 'w-16 h-16';
           const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
-          const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs">${item.discountCode}</button>` : '';
+          const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs"><i class="fa-regular fa-copy text-[9px]"></i><span>${item.discountCode}</span></button>` : '';
 
           const countdownHtml = item.countdownEnd ? `
-            <div class="mt-2 py-1 px-2 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono" data-countdown="${item.countdownEnd}">
-              <span><i class="fa-solid fa-clock mr-1 text-amber-600"></i>活動倒數</span>
+            <div class="mt-2 py-1 px-2.5 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono" data-countdown="${item.countdownEnd}">
+              <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-amber-600"></i><span>活動倒數</span></span>
               <span class="countdown-timer font-bold tracking-wider">計算中...</span>
             </div>
           ` : '';
@@ -836,7 +1158,7 @@ async function initPage() {
               <div class="p-4 space-y-1">
                 ${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light leading-relaxed">${item.subtitle}</div>
                 ${countdownHtml}
-                <div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60">探索詳情 ➔</span>${codeBtn}</div>
+                <div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60 flex items-center gap-1"><span>探索詳情</span><i class="fa-solid fa-arrow-right text-[8px]"></i></span>${codeBtn}</div>
               </div>
             `;
           } else if (item.img && item.imgPos === 'right') {
@@ -880,13 +1202,14 @@ async function initPage() {
       });
 
       renderCarousel();
+      renderScheduleModule();
       startCountdownTimers();
     }
 
-    // 點擊計數追蹤與 LINE 彈窗留客
     function handleCardClickTrack(sIdx, iIdx, targetUrl) {
       if (appData.sections[sIdx] && appData.sections[sIdx].items[iIdx]) {
         appData.sections[sIdx].items[iIdx].clicks = (appData.sections[sIdx].items[iIdx].clicks || 0) + 1;
+        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
         autoSaveToCloud();
       }
 
@@ -907,37 +1230,495 @@ async function initPage() {
       document.getElementById('btnLineLeadAction').href = lead.url || '#';
       document.getElementById('btnLineLeadAction').onclick = () => {
         closeLineLeadModal();
-        setTimeout(() => { window.open(targetUrl, '_blank'); }, 500);
+        setTimeout(() => { window.open(targetUrl, '_blank'); }, 400);
       };
       modal.style.display = 'flex';
     }
     window.closeLineLeadModal = function() { document.getElementById('lineLeadModal').style.display = 'none'; };
 
-    // 倒數計時計算
-    function startCountdownTimers() {
-      if (countdownInterval) clearInterval(countdownInterval);
-      function update() {
-        document.querySelectorAll('[data-countdown]').forEach(el => {
-          const end = new Date(el.getAttribute('data-countdown')).getTime();
-          const now = Date.now();
-          const diff = end - now;
-          const timerEl = el.querySelector('.countdown-timer');
-          if (diff <= 0) {
-            timerEl.innerText = '活動已截止';
-          } else {
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const m = Math.floor((diff / 1000 / 60) % 60);
-            const s = Math.floor((diff / 1000) % 60);
-            timerEl.innerText = `${d > 0 ? d + '天 ' : ''}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    // 檔期排班日曆前台渲染 (明確尺寸保證不塌陷)
+    function renderScheduleModule() {
+      const s = appData.schedule;
+      const mod = document.getElementById('scheduleModule');
+      if (!s || !s.enabled) {
+        if (mod) mod.style.display = 'none';
+        return;
+      }
+      if (mod) mod.style.display = 'block';
+
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      const titleEl = document.getElementById('calMonthTitle');
+      if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
+      
+      const noteEl = document.getElementById('scheduleNoteText');
+      if (noteEl) noteEl.innerText = s.note || '點選有空檔的日期，可直接複製預約文字私訊我們！';
+
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      grid.className = 'cal-grid-box';
+      grid.innerHTML = '';
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= totalDays; d++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
+        let status = 'none';
+        let location = '';
+
+        if (item) {
+          if (typeof item === 'object') {
+            status = item.status || 'none';
+            location = item.location || '';
+          } else if (typeof item === 'string') {
+            status = item;
+          }
+        }
+
+        const cell = document.createElement('div');
+        cell.className = `cal-cell status-${status}`;
+
+        let locBadge = '';
+        if (location) {
+          locBadge = `<span style="font-size: 8px; line-height: 1; padding: 1.5px 3px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${location}</span>`;
+        }
+
+        cell.innerHTML = `<span style="font-size: 12px; font-weight: 600; line-height: 1;">${d}</span>${locBadge}`;
+
+        if (status === 'available') {
+          cell.onclick = () => handleScheduleDateClick(dateKey, false);
+        } else if (status === 'pending') {
+          cell.onclick = () => handleScheduleDateClick(dateKey, true);
+        }
+        grid.appendChild(cell);
+      }
+    }
+    window.changeCalMonth = function(dir) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + dir);
+      renderScheduleModule();
+    };
+
+    function handleScheduleDateClick(dateKey, isPending = false) {
+      const item = (appData.schedule && appData.schedule.dates) ? appData.schedule.dates[dateKey] : null;
+      const loc = (item && typeof item === 'object' && item.location) ? `【${item.location}場次】` : '';
+      const statusText = isPending ? '尚在保留中' : '目前顯示有檔期';
+      const msg = `您好！我在品牌頁看到 ${dateKey} ${loc}${statusText}，想向您諮詢服務細節！\n（來自 Sibyl 品牌預約頁）`;
+
+      navigator.clipboard.writeText(msg).then(() => {
+        Swal.fire({
+          title: `已複製 ${dateKey} ${loc}諮詢！`,
+          html: `<div style="text-align:left;background:#f5efe6;padding:12px;border-radius:12px;font-size:12px;color:#4A3F35;line-height:1.6;font-family:monospace;margin:10px 0;">${msg.replace(/\n/g, '<br>')}</div><p style="font-size:11px;color:#7A6C62;">內容已複製至剪貼簿，是否立即前往官方私訊洽詢？</p>`,
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonText: '前往私訊預約',
+          cancelButtonText: '稍後手動貼上'
+        }).then((res) => {
+          if (res.isConfirmed) {
+            const line = (appData.socials || []).find(it => it.icon && it.icon.includes('line'));
+            if (line && line.url) {
+              window.open(line.url, '_blank');
+            } else if (appData.socials && appData.socials.length > 0) {
+              window.open(appData.socials[0].url, '_blank');
+            } else {
+              showToast('已複製！請開啟 LINE 或 IG 直接貼上發送');
+            }
           }
         });
-      }
-      update();
-      countdownInterval = setInterval(update, 1000);
+      });
     }
 
-    // 輪播模組核心邏輯
+    // 後台管理資料填充
+    function populateAdmin() {
+      document.getElementById('inputBrandName').value = appData.brandName;
+      document.getElementById('inputBrandBio').value = appData.bio;
+      document.getElementById('adminAvatarThumb').src = appData.avatar;
+
+      // 跑馬燈
+      if (!appData.marquee) appData.marquee = { enabled: true, text: '' };
+      document.getElementById('inputMarqueeEnabled').checked = appData.marquee.enabled;
+      document.getElementById('inputMarqueeText').value = appData.marquee.text || '';
+      document.getElementById('marqueeConfigBox').style.display = appData.marquee.enabled ? 'block' : 'none';
+
+      // LINE 導流
+      if (!appData.lineLead) appData.lineLead = { enabled: true, url: '', title: '' };
+      document.getElementById('inputLineLeadEnabled').checked = appData.lineLead.enabled;
+      document.getElementById('inputLineLeadUrl').value = appData.lineLead.url || '';
+      document.getElementById('inputLineLeadTitle').value = appData.lineLead.title || '';
+      document.getElementById('lineLeadConfigBox').style.display = appData.lineLead.enabled ? 'block' : 'none';
+
+      // 社群列表
+      const socBox = document.getElementById('adminSocialsList');
+      socBox.innerHTML = '';
+      (appData.socials || []).forEach((s, idx) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-2 bg-white p-2 rounded-xl border';
+        row.innerHTML = `
+          <select onchange="appData.socials[${idx}].icon = this.value; renderView(); autoSaveToCloud();" class="text-xs border rounded-lg px-2 py-1">
+            <option value="fa-brands fa-instagram" ${s.icon.includes('instagram') ? 'selected' : ''}>Instagram</option>
+            <option value="fa-brands fa-threads" ${s.icon.includes('threads') ? 'selected' : ''}>Threads</option>
+            <option value="fa-brands fa-line" ${s.icon.includes('line') ? 'selected' : ''}>LINE</option>
+            <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
+          </select>
+          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView(); autoSaveToCloud();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
+          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView(); autoSaveToCloud();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
+        `;
+        socBox.appendChild(row);
+      });
+
+      // 後台分類與卡片清單
+      const adminSecBox = document.getElementById('adminSectionsList');
+      adminSecBox.innerHTML = '';
+      (appData.sections || []).forEach((sec, sIdx) => {
+        const box = document.createElement('div');
+        box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
+        box.innerHTML = `
+          <div class="flex justify-between items-center gap-2">
+            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView(); autoSaveToCloud();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[9px]"></i></button>
+              <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[9px]"></i></button>
+              <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium ml-1 cursor-pointer">刪除分類</button>
+            </div>
+          </div>
+          <div id="admin-items-box-${sIdx}" class="space-y-1.5"></div>
+          <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold cursor-pointer hover:bg-stone-50">+ 此分類新增卡片</button>
+        `;
+        adminSecBox.appendChild(box);
+
+        const itemsContainer = box.querySelector(`#admin-items-box-${sIdx}`);
+        (sec.items || []).forEach((it, iIdx) => {
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center p-2 rounded-xl bg-white border text-xs';
+          row.innerHTML = `
+            <div class="truncate mr-2 font-bold flex items-center gap-1.5">
+              <span class="truncate">${it.title}</span>
+              <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[9px] font-mono flex-shrink-0 shadow-2xs" title="累積點擊次數">
+                <i class="fa-solid fa-chart-simple mr-0.5 text-[8px]"></i>${it.clicks || 0}
+              </span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[8px]"></i></button>
+              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[8px]"></i></button>
+              <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200 font-medium">編輯</button>
+              <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer" title="刪除"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+            </div>
+          `;
+          itemsContainer.appendChild(row);
+        });
+      });
+
+      populateCarouselAdmin();
+      populateScheduleAdmin();
+    }
+
+    // 輪播管理後台渲染
+    function populateCarouselAdmin() {
+      if (!appData.carousel) {
+        appData.carousel = { enabled: true, aspectRatio: 'square', position: 'below', images: [] };
+      }
+      const c = appData.carousel;
+      const enBox = document.getElementById('inputCarouselEnabled');
+      if (enBox) enBox.checked = Boolean(c.enabled);
+      
+      const aspectSel = document.getElementById('selectCarouselAspect');
+      if (aspectSel) aspectSel.value = c.aspectRatio || 'square';
+
+      const orderSel = document.getElementById('selectCarouselOrder');
+      if (orderSel) orderSel.value = c.position || 'below';
+
+      const cfgBox = document.getElementById('adminCarouselConfig');
+      if (cfgBox) cfgBox.style.display = c.enabled ? 'block' : 'none';
+
+      const countEl = document.getElementById('carouselCount');
+      if (countEl) countEl.innerText = (c.images || []).length;
+
+      const thumbList = document.getElementById('adminCarouselThumbList');
+      if (thumbList) {
+        thumbList.innerHTML = '';
+        (c.images || []).forEach((imgUrl, idx) => {
+          const item = document.createElement('div');
+          item.className = 'relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border border-stone-300 group';
+          item.innerHTML = `
+            <img src="${imgUrl}" class="w-full h-full object-cover">
+            <button type="button" onclick="removeCarouselImage(${idx})" class="absolute top-1 right-1 w-4 h-4 rounded-full bg-black/70 text-white flex items-center justify-center text-[9px] hover:bg-rose-600">✕</button>
+          `;
+          thumbList.appendChild(item);
+        });
+      }
+    }
+
+    // ====================================================
+    // 檔期排班日曆模組核心修復 (保證 100% 顯現與互動)
+    // ====================================================
+
+    // 初始化與安全校驗
+    if (!appData.schedule) {
+      appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
+    }
+    if (!appData.schedule.dates || typeof appData.schedule.dates !== 'object') {
+      appData.schedule.dates = {};
+    }
+
+    // 1. 後台日曆初始配置
+    function populateScheduleAdmin() {
+      if (!appData.schedule) {
+        appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
+      }
+      if (!appData.schedule.dates) appData.schedule.dates = {};
+
+      const s = appData.schedule;
+      const enBox = document.getElementById('inputScheduleEnabled');
+      if (enBox) enBox.checked = Boolean(s.enabled);
+
+      const ordSel = document.getElementById('selectScheduleOrder');
+      if (ordSel) ordSel.value = s.position || 'below_carousel';
+
+      const noteInput = document.getElementById('inputScheduleNote');
+      if (noteInput) noteInput.value = s.note || '';
+
+      const cfgBox = document.getElementById('adminScheduleConfig');
+      if (cfgBox) cfgBox.style.display = s.enabled ? 'block' : 'none';
+
+      // 觸發渲染
+      renderAdminCalendar();
+    }
+
+    // 2. 後台日曆格子渲染（加入即時保證機制）
+    function renderAdminCalendar() {
+      const grid = document.getElementById('adminCalendarGrid');
+      if (!grid) return;
+
+      if (!appData.schedule) appData.schedule = { enabled: true, dates: {} };
+      if (!appData.schedule.dates) appData.schedule.dates = {};
+      const s = appData.schedule;
+
+      const year = adminCalDate.getFullYear();
+      const month = adminCalDate.getMonth();
+
+      const titleEl = document.getElementById('adminCalMonthTitle');
+      if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
+
+      grid.className = 'cal-grid-box';
+      grid.innerHTML = '';
+
+      const firstDayIndex = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= totalDays; d++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const item = s.dates[dateKey];
+        let status = 'none';
+        let location = '';
+
+        if (item) {
+          if (typeof item === 'object') {
+            status = item.status || 'none';
+            location = item.location || '';
+          } else if (typeof item === 'string') {
+            status = item;
+          }
+        }
+
+        const cell = document.createElement('div');
+        cell.className = `cal-cell status-${status}`;
+        
+        let subText = '';
+        if (location) {
+          subText = `<span style="font-size: 8.5px; line-height: 1; padding: 1px 3px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${location}</span>`;
+        } else if (status === 'available') {
+          subText = `<span style="font-size: 8px; line-height: 1; opacity: 0.75; margin-top: 2px;">可預約</span>`;
+        } else if (status === 'booked') {
+          subText = `<span style="font-size: 8px; line-height: 1; opacity: 0.75; margin-top: 2px;">已滿</span>`;
+        } else if (status === 'pending') {
+          subText = `<span style="font-size: 8px; line-height: 1; opacity: 0.75; margin-top: 2px;">保留</span>`;
+        } else {
+          subText = `<span style="font-size: 8px; line-height: 1; opacity: 0.3; margin-top: 2px;">未排</span>`;
+        }
+
+        cell.innerHTML = `
+          <span style="font-size: 12px; font-weight: 600; line-height: 1.1;">${d}</span>
+          ${subText}
+        `;
+
+        cell.onclick = (e) => {
+          e.stopPropagation();
+          cycleAdminDateStatus(dateKey);
+        };
+
+        grid.appendChild(cell);
+      }
+    }
+
+    // 3. 點擊格子切換狀態與輸入地區彈窗
+    // 點擊格子：以標準下拉選單自由切換狀態與輸入地區
+    async function cycleAdminDateStatus(dateKey) {
+      if (!appData.schedule.dates) appData.schedule.dates = {};
+      const current = appData.schedule.dates[dateKey];
+      const currentStatus = typeof current === 'object' ? (current.status || 'none') : (current || 'none');
+      const currentLoc = typeof current === 'object' ? (current.location || '') : '';
+
+      const { value: formValues } = await Swal.fire({
+        title: `設定 ${dateKey} 檔期狀態`,
+        html: `
+          <div style="text-align: left; padding: 4px 0;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #375346; margin-bottom: 6px;">
+              <i class="fa-regular fa-calendar-check text-[11px]"></i>
+              <span>預約狀態</span>
+            </label>
+            <select id="swal-status-select" style="
+              width: 100%;
+              height: 42px;
+              border: 1px solid #DFD1C0;
+              border-radius: 12px;
+              background-color: #FFFFFF;
+              color: #2C241E;
+              font-size: 12px;
+              font-weight: 500;
+              padding: 0 12px;
+              outline: none;
+              margin-bottom: 14px;
+              display: block;
+              cursor: pointer;
+            ">
+              <option value="available" ${currentStatus === 'available' ? 'selected' : ''}>可預約（鼠尾草綠）</option>
+              <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>保留中（乾燥薑黃）</option>
+              <option value="booked" ${currentStatus === 'booked' ? 'selected' : ''}>已滿檔（煙燻粉褐）</option>
+              <option value="none" ${currentStatus === 'none' ? 'selected' : ''}>未排班／清除狀態</option>
+            </select>
+
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #375346; margin-bottom: 6px;">
+              <i class="fa-solid fa-location-dot text-[11px]"></i>
+              <span>所在地區／服務城市 (選填)</span>
+            </label>
+            <input id="swal-loc-input" type="text" placeholder="例：台北、台中、高雄、台南" value="${currentLoc}" style="
+              width: 100%;
+              height: 42px;
+              border: 1px solid #DFD1C0;
+              border-radius: 12px;
+              background-color: #FFFFFF;
+              color: #2C241E;
+              font-size: 12px;
+              padding: 0 12px;
+              box-sizing: border-box;
+              outline: none;
+              display: block;
+            ">
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: '儲存設定',
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          const statusEl = document.getElementById('swal-status-select');
+          const locEl = document.getElementById('swal-loc-input');
+          return {
+            status: statusEl ? statusEl.value : 'none',
+            location: locEl ? locEl.value.trim() : ''
+          };
+        }
+      });
+
+      if (formValues) {
+        if (formValues.status === 'none') {
+          delete appData.schedule.dates[dateKey];
+          showToast(`已清除 ${dateKey} 檔期`);
+        } else {
+          appData.schedule.dates[dateKey] = {
+            status: formValues.status,
+            location: formValues.location
+          };
+          const statusTextMap = {
+            'available': '可預約',
+            'pending': '保留中',
+            'booked': '已滿檔'
+          };
+          showToast(`已儲存：${dateKey}【${statusTextMap[formValues.status]}】`);
+        }
+
+        renderAdminCalendar();
+        renderScheduleModule();
+        autoSaveToCloud();
+      }
+    }
+    window.changeAdminCalMonth = function(dir) {
+      adminCalDate.setMonth(adminCalDate.getMonth() + dir);
+      renderAdminCalendar();
+    };
+
+    window.batchSetWeekends = function() {
+      if (!appData.schedule.dates) appData.schedule.dates = {};
+      const year = adminCalDate.getFullYear();
+      const month = adminCalDate.getMonth();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let d = 1; d <= totalDays; d++) {
+        const dayOfWeek = new Date(year, month, d).getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          const current = appData.schedule.dates[dateKey];
+          const curLoc = typeof current === 'object' ? (current.location || '') : '';
+          appData.schedule.dates[dateKey] = { status: 'available', location: curLoc };
+        }
+      }
+      renderAdminCalendar();
+      renderScheduleModule();
+      autoSaveToCloud();
+      showToast('當月週末已全設為可預約！');
+    };
+
+    window.batchClearMonth = function() {
+      if (!appData.schedule.dates) return;
+      const year = adminCalDate.getFullYear();
+      const month = adminCalDate.getMonth();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let d = 1; d <= totalDays; d++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        delete appData.schedule.dates[dateKey];
+      }
+      renderAdminCalendar();
+      renderScheduleModule();
+      autoSaveToCloud();
+      showToast('當月排程已清空');
+    };
+
+    window.toggleScheduleEnabled = function(en) {
+      if (!appData.schedule) appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
+      appData.schedule.enabled = en;
+      document.getElementById('adminScheduleConfig').style.display = en ? 'block' : 'none';
+      if (en) {
+        setTimeout(renderAdminCalendar, 50);
+      }
+      renderView();
+      autoSaveToCloud();
+    };
+    window.changeScheduleOrder = function(val) {
+      appData.schedule.position = val;
+      renderView();
+      autoSaveToCloud();
+    };
+    window.updateScheduleNote = function(txt) {
+      appData.schedule.note = txt.trim();
+      renderView();
+      autoSaveToCloud();
+    };
+
+    // 輪播模組前台核心邏輯 (正方形支援)
     let carouselTimer = null;
     let currentSlide = 0;
     let touchStartX = 0;
@@ -946,7 +1727,6 @@ async function initPage() {
     function renderCarousel() {
       const c = appData.carousel;
       const wrap = document.getElementById('carouselWrapper');
-      const prof = document.getElementById('profileModule');
       const track = document.getElementById('carouselTrack');
       const dots = document.getElementById('carouselDots');
       if (carouselTimer) clearInterval(carouselTimer);
@@ -957,23 +1737,13 @@ async function initPage() {
       }
       wrap.style.display = 'block';
 
-      // 嚴格控制 order，避免頁尾被推到頂部
-      if (c.position === 'above') {
-        wrap.style.order = '1';
-        prof.style.order = '2';
-        document.getElementById('sectionsContainer').style.order = '3';
-      } else {
-        prof.style.order = '1';
-        wrap.style.order = '2';
-        document.getElementById('sectionsContainer').style.order = '3';
-      }
-
+      // 預設正方形支援
       const aspectClassMap = {
+        'square': 'aspect-square w-full max-w-[380px] mx-auto',
         'landscape': 'aspect-video w-full',
-        'square': 'aspect-square w-full',
         'story': 'aspect-[9/16] w-full max-w-[340px] mx-auto'
       };
-      wrap.className = `w-full mb-6 relative overflow-hidden rounded-2xl select-none shadow-xs border border-white/60 ${aspectClassMap[c.aspectRatio] || 'aspect-video w-full'}`;
+      wrap.className = `w-full mb-6 relative select-none ${aspectClassMap[c.aspectRatio || 'square']}`;
 
       track.innerHTML = '';
       c.images.forEach(imgUrl => {
@@ -1024,147 +1794,29 @@ async function initPage() {
       });
     }
 
-    // ----------------- 後台管理聯動與初始化 -----------------
-    function populateAdmin() {
-      document.getElementById('inputBrandName').value = appData.brandName;
-      document.getElementById('inputBrandBio').value = appData.bio;
-      document.getElementById('adminAvatarThumb').src = appData.avatar;
-
-      // 跑馬燈
-      if (!appData.marquee) appData.marquee = { enabled: false, text: '' };
-      document.getElementById('inputMarqueeEnabled').checked = appData.marquee.enabled;
-      document.getElementById('inputMarqueeText').value = appData.marquee.text || '';
-      document.getElementById('marqueeConfigBox').style.display = appData.marquee.enabled ? 'block' : 'none';
-
-      // LINE 導流
-      if (!appData.lineLead) appData.lineLead = { enabled: false, url: '', title: '' };
-      document.getElementById('inputLineLeadEnabled').checked = appData.lineLead.enabled;
-      document.getElementById('inputLineLeadUrl').value = appData.lineLead.url || '';
-      document.getElementById('inputLineLeadTitle').value = appData.lineLead.title || '';
-      document.getElementById('lineLeadConfigBox').style.display = appData.lineLead.enabled ? 'block' : 'none';
-
-      // 社群列表
-      const socBox = document.getElementById('adminSocialsList');
-      socBox.innerHTML = '';
-      appData.socials.forEach((s, idx) => {
-        const row = document.createElement('div');
-        row.className = 'flex items-center gap-2 bg-white p-2 rounded-xl border';
-        row.innerHTML = `
-          <select onchange="appData.socials[${idx}].icon = this.value; renderView(); autoSaveToCloud();" class="text-xs border rounded-lg px-2 py-1">
-            <option value="fa-brands fa-instagram" ${s.icon.includes('instagram') ? 'selected' : ''}>IG</option>
-            <option value="fa-brands fa-threads" ${s.icon.includes('threads') ? 'selected' : ''}>Threads</option>
-            <option value="fa-brands fa-line" ${s.icon.includes('line') ? 'selected' : ''}>LINE</option>
-            <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
-          </select>
-          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView(); autoSaveToCloud();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
-          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView(); autoSaveToCloud();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer">✕</button>
-        `;
-        socBox.appendChild(row);
-      });
-
-      // 分類與卡片項目 (含點擊量顯示 Tracker)
-      const secBox = document.getElementById('adminSectionsList');
-      secBox.innerHTML = '';
-      appData.sections.forEach((sec, sIdx) => {
-        const box = document.createElement('div');
-        box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
-        box.innerHTML = `
-          <div class="flex justify-between items-center gap-2">
-            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView(); autoSaveToCloud();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
-            <div class="flex items-center gap-1 flex-shrink-0">
-              <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer">↑</button>
-              <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer">↓</button>
-              <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium ml-1 cursor-pointer">刪除分類</button>
-            </div>
-          </div>
-          <div id="items-box-${sIdx}" class="space-y-1.5"></div>
-          <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold cursor-pointer hover:bg-stone-50">+ 此分類新增卡片</button>
-        `;
-        secBox.appendChild(box);
-        const container = box.querySelector(`#items-box-${sIdx}`);
-        (sec.items || []).forEach((it, iIdx) => {
-          const row = document.createElement('div');
-          row.className = 'flex justify-between items-center p-2 rounded-xl bg-white border text-xs';
-          row.innerHTML = `
-            <div class="truncate mr-2 font-bold flex items-center gap-2">
-              <span class="truncate">${it.title}</span>
-              <span class="px-1.5 py-0.5 rounded bg-stone-100 text-stone-500 text-[9px] font-mono flex-shrink-0" title="累積點擊數"><i class="fa-solid fa-chart-simple text-[8px] mr-0.5"></i>${it.clicks || 0}</span>
-            </div>
-            <div class="flex items-center gap-1">
-              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer">↑</button>
-              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer">↓</button>
-              <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200 font-medium">編輯</button>
-              <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer" title="刪除">✕</button>
-            </div>
-          `;
-          container.appendChild(row);
+    function startCountdownTimers() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      function update() {
+        document.querySelectorAll('[data-countdown]').forEach(el => {
+          const end = new Date(el.getAttribute('data-countdown')).getTime();
+          const now = Date.now();
+          const diff = end - now;
+          const timerEl = el.querySelector('.countdown-timer');
+          if (diff <= 0) {
+            timerEl.innerText = '活動已截止';
+          } else {
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / 1000 / 60) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            timerEl.innerText = `${d > 0 ? d + '天 ' : ''}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+          }
         });
-      });
-
-      populateCarouselAdmin();
-    }
-
-    // 輪播後台配置渲染
-    function populateCarouselAdmin() {
-      if (!appData.carousel) {
-        appData.carousel = { enabled: false, aspectRatio: 'landscape', position: 'below', images: [] };
       }
-      const c = appData.carousel;
-      document.getElementById('inputCarouselEnabled').checked = Boolean(c.enabled);
-      document.getElementById('selectCarouselAspect').value = c.aspectRatio || 'landscape';
-      document.getElementById('selectCarouselOrder').value = c.position || 'below';
-      document.getElementById('adminCarouselConfig').style.display = c.enabled ? 'block' : 'none';
-      document.getElementById('carouselCount').innerText = (c.images || []).length;
-
-      const list = document.getElementById('adminCarouselThumbList');
-      list.innerHTML = '';
-      (c.images || []).forEach((img, idx) => {
-        const item = document.createElement('div');
-        item.className = 'relative w-16 h-16 rounded-xl overflow-hidden border border-stone-300 flex-shrink-0 bg-stone-100 flex flex-col justify-between p-1';
-        item.style.backgroundImage = `url(${img})`;
-        item.style.backgroundSize = 'cover';
-        item.style.backgroundPosition = 'center';
-        item.innerHTML = `
-          <div class="flex justify-between items-center z-10">
-            <span class="text-[9px] bg-black/60 text-white rounded px-1">${idx + 1}</span>
-            <button type="button" onclick="removeCarouselImage(${idx})" class="w-4 h-4 rounded-full bg-rose-600 text-white text-[9px] flex items-center justify-center cursor-pointer shadow">✕</button>
-          </div>
-          <div class="flex justify-between gap-1 z-10 bg-black/40 p-0.5 rounded-lg">
-            <button type="button" onclick="reorderCarouselImage(${idx}, -1)" class="text-white text-[10px] px-1 hover:text-amber-300 cursor-pointer">◀</button>
-            <button type="button" onclick="reorderCarouselImage(${idx}, 1)" class="text-white text-[10px] px-1 hover:text-amber-300 cursor-pointer">▶</button>
-          </div>
-        `;
-        list.appendChild(item);
-      });
+      update();
+      countdownInterval = setInterval(update, 1000);
     }
 
-    // 跑馬燈開關
-    window.toggleMarqueeEnabled = function(en) {
-      appData.marquee.enabled = en;
-      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
-      renderView();
-      autoSaveToCloud();
-    };
-    window.updateMarqueeText = function(txt) {
-      appData.marquee.text = txt.trim();
-      renderView();
-      autoSaveToCloud();
-    };
-
-    // LINE 導流開關
-    window.toggleLineLeadEnabled = function(en) {
-      appData.lineLead.enabled = en;
-      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
-      renderView();
-      autoSaveToCloud();
-    };
-    window.updateLineLeadConfig = function() {
-      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
-      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
-      autoSaveToCloud();
-    };
-
-    // 輪播開關與排版
     window.toggleCarouselEnabled = function(enabled) {
       appData.carousel.enabled = enabled;
       document.getElementById('adminCarouselConfig').style.display = enabled ? 'block' : 'none';
@@ -1181,17 +1833,6 @@ async function initPage() {
       renderView();
       autoSaveToCloud();
     };
-    window.reorderCarouselImage = function(idx, dir) {
-      const target = idx + dir;
-      const imgs = appData.carousel.images;
-      if (target < 0 || target >= imgs.length) return;
-      const temp = imgs[idx];
-      imgs[idx] = imgs[target];
-      imgs[target] = temp;
-      populateCarouselAdmin();
-      renderView();
-      autoSaveToCloud();
-    };
     window.removeCarouselImage = function(idx) {
       appData.carousel.images.splice(idx, 1);
       populateCarouselAdmin();
@@ -1199,7 +1840,6 @@ async function initPage() {
       autoSaveToCloud();
     };
 
-    // Canvas 圖片壓縮機制 (100% 杜絕高解析 AI 圖卡死)
     window.handleCarouselUpload = function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -1232,7 +1872,7 @@ async function initPage() {
           populateCarouselAdmin();
           renderView();
           autoSaveToCloud();
-          showToast('輪播圖已加入並自動備份！');
+          showToast('輪播圖已加入！');
         };
         img.src = event.target.result;
       };
@@ -1283,7 +1923,6 @@ async function initPage() {
       reader.readAsDataURL(file);
     };
 
-    // 項目編輯彈窗
     let editingPointer = { sIdx: null, iIdx: null };
     window.openItemModal = function(sIdx, iIdx) {
       editingPointer = { sIdx, iIdx };
@@ -1309,8 +1948,8 @@ async function initPage() {
         document.getElementById('modalBadge').value = it.badge || '';
         document.getElementById('modalCountdownEnd').value = it.countdownEnd || '';
         document.getElementById('modalPreviewImg').src = it.img || '';
-        document.getElementById('modalImgSize').value = it.imgSize || 'medium';
-        document.getElementById('modalImgPos').value = it.imgPos || 'left';
+        document.getElementById('modalImgSize').value = it.imgSize || 'large-square';
+        document.getElementById('modalImgPos').value = it.imgPos || 'top';
       } else {
         document.getElementById('modalTitle').value = '';
         document.getElementById('modalSubtitle').value = '';
@@ -1347,7 +1986,7 @@ async function initPage() {
       const currentImg = (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.endsWith('/')) ? imgEl.src : '';
 
       const itObj = {
-        id: 'item-' + Date.now(),
+        id: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) ? appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].id : ('item-' + Date.now()),
         title: t,
         subtitle: document.getElementById('modalSubtitle').value.trim(),
         url: document.getElementById('modalUrl').value.trim() || '#',
@@ -1374,88 +2013,83 @@ async function initPage() {
       populateAdmin();
       renderView();
       autoSaveToCloud();
-      showToast('卡片已就緒並同步備份！');
+      showToast('卡片已就緒！');
     };
 
-    // ✅ 加入儲存鎖與防手震定時器，徹底杜絕重複請求
-let saveTimer = null;
-let isSavingLock = false;
+    let saveTimer = null;
+    let isSavingLock = false;
 
-async function autoSaveToCloud() {
-  // 1. 本地快取立即寫入，保證不掉資料
-  localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+    async function autoSaveToCloud() {
+      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
 
-  // 2. 防手震：500 毫秒內連續觸發只會執行最後一次
-  if (saveTimer) clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-    if (!isRealUser || !currentStoreDbId) return;
-    if (isSavingLock) return; // 若上一筆還在進行中，暫停重入
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(async () => {
+        if (!isRealUser || !currentStoreDbId) return;
+        if (isSavingLock) return;
 
-    isSavingLock = true;
-    try {
-      const metaPayload = JSON.stringify({
-        bio: appData.bio,
-        marquee: appData.marquee,
-        carousel: appData.carousel,
-        lineLead: appData.lineLead
-      });
-
-      // 步驟 A：更新店家主檔
-      await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-        method: "PATCH",
-        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          brand_name: appData.brandName,
-          bio_text: metaPayload,
-          theme: appData.theme,
-          avatar_url: appData.avatar,
-          social_links: appData.socials,
-          admin_pin: appData.adminPin
-        })
-      });
-
-      // 步驟 B：整理待寫入的卡片陣列
-      const itemsToInsert = [];
-      let sortIdx = 0;
-      for (const sec of appData.sections) {
-        for (const it of (sec.items || [])) {
-          itemsToInsert.push({
-            store_id: currentStoreDbId,
-            section_title: sec.title,
-            title: it.title,
-            subtitle: it.subtitle || '',
-            thumbnail_url: it.img || '',
-            img_size: it.imgSize || 'medium',
-            img_pos: it.imgPos || 'left',
-            target_url: it.url || '#',
-            discount_code: it.discountCode || '',
-            badge_label: it.badge || '',
-            sort_order: sortIdx++
+        isSavingLock = true;
+        try {
+          const metaPayload = JSON.stringify({
+            bio: appData.bio,
+            marquee: appData.marquee,
+            carousel: appData.carousel,
+            lineLead: appData.lineLead,
+            schedule: appData.schedule
           });
+
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
+            method: "PATCH",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              brand_name: appData.brandName,
+              bio_text: metaPayload,
+              theme: appData.theme,
+              avatar_url: appData.avatar,
+              social_links: appData.socials,
+              admin_pin: appData.adminPin
+            })
+          });
+
+          const itemsToInsert = [];
+          let sortIdx = 0;
+          for (const sec of appData.sections) {
+            for (const it of (sec.items || [])) {
+              itemsToInsert.push({
+                store_id: currentStoreDbId,
+                section_title: sec.title,
+                title: it.title,
+                subtitle: it.subtitle || '',
+                thumbnail_url: it.img || '',
+                img_size: it.imgSize || 'large-square',
+                img_pos: it.imgPos || 'top',
+                target_url: it.url || '#',
+                discount_code: it.discountCode || '',
+                badge_label: it.badge || '',
+                sort_order: sortIdx++,
+                click_count: it.clicks || 0
+              });
+            }
+          }
+
+          const delRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+            method: "DELETE",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+          });
+
+          if (delRes.ok && itemsToInsert.length > 0) {
+            await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+              method: "POST",
+              headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify(itemsToInsert)
+            });
+          }
+        } catch(err) {
+          console.warn("雲端同步異常:", err);
+        } finally {
+          isSavingLock = false;
         }
-      }
-
-      // 步驟 C：先確實清空原商店舊卡片
-      const delRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-        method: "DELETE",
-        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-      });
-
-      // 步驟 D：確認清空完成後，才單次批次寫入新卡片
-      if (delRes.ok && itemsToInsert.length > 0) {
-        await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-          method: "POST",
-          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-          body: JSON.stringify(itemsToInsert)
-        });
-      }
-    } catch (err) {
-      console.warn("雲端同步異常:", err);
-    } finally {
-      isSavingLock = false; // 解鎖
+      }, 500);
     }
-  }, 500);
-}
 
     window.saveAdminAndClose = async function() {
       const btn = document.getElementById('btnSaveAdmin');
@@ -1465,16 +2099,8 @@ async function autoSaveToCloud() {
       btn.disabled = false;
       btn.innerText = '儲存並同步發布';
       closeAdminModal();
-      showToast('✨ 設定已成功儲存並同步發布！');
+      showToast('設定已成功儲存並同步發布！');
     };
-
-    // 彈窗開關控制
-    window.openAdminModal = function() { populateAdmin(); document.getElementById('adminSheet').style.display = 'block'; };
-    window.closeAdminModal = function() { document.getElementById('adminSheet').style.display = 'none'; };
-    window.openOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'block'; };
-    window.closeOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'none'; };
-    window.openShareModal = function() { document.getElementById('shareSheet').style.display = 'flex'; };
-    window.closeShareModal = function() { document.getElementById('shareSheet').style.display = 'none'; };
 
     window.copyShareUrl = function() {
       navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
@@ -1516,71 +2142,26 @@ async function autoSaveToCloud() {
       if (name) { appData.sections.push({ id: 'sec-' + Date.now(), title: name.trim(), items: [] }); populateAdmin(); renderView(); autoSaveToCloud(); }
     };
 
-    async function handleAdminEntry() {
-      if (!isRealUser) { openAdminModal(); return; }
-      const { value: pin } = await Swal.fire({
-        title: '請輸入管理 PIN 碼', input: 'password', inputPlaceholder: '預設 8888',
-        showCancelButton: true, confirmButtonText: '登入後台', cancelButtonText: '取消'
-      });
-      if (pin === appData.adminPin) {
-        if (pin === '8888') { await forceChangeDefaultPin(); } else { openAdminModal(); }
-      } else if (pin) { Swal.fire('密碼錯誤', '請確認管理 PIN 碼。', 'error'); }
-    }
-
-    async function forceChangeDefaultPin() {
-      const { value: newPin } = await Swal.fire({
-        title: '首次登入安全設定', text: '請自訂一組 4-6 位數新 PIN 碼：', input: 'password',
-        allowOutsideClick: false, confirmButtonText: '確認並進入後台',
-        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
-      });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        autoSaveToCloud();
-        Swal.fire('設定成功！', '管理 PIN 碼已更新。', 'success');
-        openAdminModal();
-      }
-    }
-
-    async function promptChangePin() {
-      const { value: newPin } = await Swal.fire({
-        title: '修改管理 PIN 碼', input: 'password', showCancelButton: true,
-        confirmButtonText: '儲存新密碼', cancelButtonText: '取消',
-        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
-      });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        autoSaveToCloud();
-        Swal.fire('修改成功！', '管理 PIN 碼已變更。', 'success');
-      }
-    }
-
-    // 查詢專屬網址
-    window.findMySlugPrompt = async function() {
-      const { value: email } = await Swal.fire({
-        title: '找回您的專屬網址', text: '請輸入開通時填寫的電子信箱：', input: 'email',
-        showCancelButton: true, confirmButtonText: '查詢網址', cancelButtonText: '取消'
-      });
-      if (email) {
-        try {
-          const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?owner_email=eq.${email.trim()}&select=slug,brand_name`, {
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-          });
-          const data = await res.json();
-          if (data && data.length > 0) {
-            const store = data[0];
-            Swal.fire({
-              title: '已找到您的品牌頁面！',
-              html: `品牌名稱：<b>${store.brand_name}</b><br><br>專屬網址：<br><b style="color:#8C7058;font-size:15px;">link.heysibyl.com/?u=${store.slug}</b>`,
-              icon: 'success', confirmButtonText: '立即前往'
-            }).then(() => { window.location.href = `https://link.heysibyl.com/?u=${store.slug}`; });
-          } else {
-            Swal.fire('查無紀錄', '找不到此信箱開通的頁面。', 'warning');
-          }
-        } catch(err) { Swal.fire('查詢失敗', '連線異常，請稍後重試。', 'error'); }
-      }
+    window.toggleMarqueeEnabled = function(en) {
+      appData.marquee.enabled = en;
+      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
+      renderView(); autoSaveToCloud();
+    };
+    window.updateMarqueeText = function(txt) {
+      appData.marquee.text = txt.trim();
+      renderView(); autoSaveToCloud();
+    };
+    window.toggleLineLeadEnabled = function(en) {
+      appData.lineLead.enabled = en;
+      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
+      autoSaveToCloud();
+    };
+    window.updateLineLeadConfig = function() {
+      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
+      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
+      autoSaveToCloud();
     };
 
-    // 開通新專案
     window.handleOnboardSubmit = async function(e) {
       e.preventDefault();
       const brand = document.getElementById('quickBrand').value.trim();
@@ -1589,7 +2170,7 @@ async function autoSaveToCloud() {
       const btn = document.getElementById('btnSubmitOnboard');
 
       btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 正在建立頁面...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 正在建立頁面...';
 
       try {
         const postBody = JSON.stringify({
@@ -1602,9 +2183,10 @@ async function autoSaveToCloud() {
       try {
         const metaPayload = JSON.stringify({
           bio: `歡迎光臨 ${brand} 官方頁面\n點擊探索更多推薦`,
-          marquee: { enabled: false, text: '' },
-          carousel: { enabled: false, aspectRatio: 'landscape', position: 'below', images: [] },
-          lineLead: { enabled: false, url: '', title: '' }
+          marquee: { enabled: true, text: '' },
+          carousel: { enabled: true, aspectRatio: 'square', position: 'below', images: [] },
+          schedule: { enabled: true, position: 'below_carousel', note: '', dates: {} },
+          lineLead: { enabled: true, url: '', title: '' }
         });
 
         const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
@@ -1629,14 +2211,14 @@ async function autoSaveToCloud() {
             body: JSON.stringify([{
               store_id: newId, section_title: "精選推薦", title: "【新朋友專屬】點此領取品牌體驗禮遇",
               subtitle: "輸入專屬折扣代碼即享獨家折抵", target_url: "https://heysibyl.com", discount_code: "WELCOME",
-              badge_label: "限時", img_size: "large-square", img_pos: "top", sort_order: 1
+              badge_label: "限時", img_size: "large-square", img_pos: "top", sort_order: 1, click_count: 0
             }])
           });
         }
 
         closeOnboardModal();
         Swal.fire({
-          title: '🎉 開通成功！',
+          title: '開通成功！',
           html: `您的專屬首頁網址為：<br><b class="text-stone-900">https://link.heysibyl.com/?u=${slug}</b><br><br>預設管理密碼：<b style="color:#8C7058;font-size:18px;">8888</b>`,
           icon: 'success', confirmButtonText: '立即進入我的品牌頁'
         }).then(() => { window.location.href = `${window.location.pathname}?u=${slug}`; });
@@ -1644,7 +2226,7 @@ async function autoSaveToCloud() {
         Swal.fire('代號已被使用', '請更換其他網址代號重試。', 'warning');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> 立即免費開通專屬品牌頁';
+        btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1"></i> 立即免費開通專屬品牌頁';
       }
     };
 
@@ -1662,6 +2244,16 @@ async function autoSaveToCloud() {
     }
 
     initPage();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const triggerBtn = document.getElementById('btnAdminTrigger');
+      if (triggerBtn) {
+        triggerBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          window.openAdminDirectly();
+        });
+      }
+    });
   </script>
 </body>
 </html>
