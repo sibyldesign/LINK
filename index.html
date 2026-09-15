@@ -66,16 +66,15 @@
     div:where(.swal2-container) button.swal2-cancel { background: #EAE1D5 !important; color: #5A4C40 !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; padding: 10px 20px !important; }
 
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 18s linear infinite; }
+    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 16s linear infinite; }
 
-    /* 莫蘭迪低飽和色系月曆 */
+    /* 莫蘭迪低飽和日曆樣式 */
     .cal-grid-box {
       display: grid !important;
       grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
       gap: 5px !important;
       width: 100% !important;
     }
-
     .cal-cell {
       min-height: 46px !important;
       height: 46px !important;
@@ -92,33 +91,11 @@
       position: relative !important;
       box-sizing: border-box !important;
     }
-    .cal-cell:active {
-      transform: scale(0.94) !important;
-    }
-
-    .cal-cell.status-available {
-      background-color: #EEF3F0 !important;
-      color: #375346 !important;
-      border: 1px solid #C4D6CC !important;
-      font-weight: 600 !important;
-    }
-    .cal-cell.status-booked {
-      background-color: #F7EFEF !important;
-      color: #7D6164 !important;
-      border: 1px solid #DFCDD0 !important;
-      opacity: 0.85 !important;
-    }
-    .cal-cell.status-pending {
-      background-color: #F8F5EC !important;
-      color: #7A693F !important;
-      border: 1px solid #DFD7C0 !important;
-      font-weight: 600 !important;
-    }
-    .cal-cell.status-none {
-      background-color: rgba(255, 255, 255, 0.7) !important;
-      color: #8C827A !important;
-      border: 1px dashed #DDD5CD !important;
-    }
+    .cal-cell:active { transform: scale(0.94) !important; }
+    .cal-cell.status-available { background-color: #EEF3F0 !important; color: #375346 !important; border: 1px solid #C4D6CC !important; font-weight: 600 !important; }
+    .cal-cell.status-booked { background-color: #F7EFEF !important; color: #7D6164 !important; border: 1px solid #DFCDD0 !important; opacity: 0.85 !important; }
+    .cal-cell.status-pending { background-color: #F8F5EC !important; color: #7A693F !important; border: 1px solid #DFD7C0 !important; font-weight: 600 !important; }
+    .cal-cell.status-none { background-color: rgba(255, 255, 255, 0.75) !important; color: #8C827A !important; border: 1px dashed #DDD5CD !important; }
   </style>
 </head>
 <body class="flex flex-col items-center justify-between">
@@ -126,17 +103,15 @@
   <!-- 置頂跑馬燈公告 -->
   <div id="marqueeBanner" class="w-full bg-stone-900 text-white text-[11px] py-1.5 px-4 overflow-hidden relative z-30" style="display: none;">
     <div class="flex items-center gap-2 max-w-[480px] mx-auto overflow-hidden">
-      <span class="flex-shrink-0 font-bold px-1.5 py-0.5 rounded bg-amber-500 text-stone-950 text-[9px] flex items-center gap-1">
-        <i class="fa-solid fa-bullhorn text-[8px]"></i><span>公告</span>
-      </span>
+      <span class="flex-shrink-0 font-bold px-1.5 py-0.5 rounded bg-amber-500 text-stone-950 text-[9px]">公告</span>
       <div class="overflow-hidden whitespace-nowrap flex-grow">
         <span id="marqueeText" class="animate-marquee inline-block font-medium"></span>
       </div>
     </div>
   </div>
 
-  <!-- 頂部導航列 -->
-  <header class="w-full max-w-[480px] px-5 pt-4 pb-3 flex items-center justify-between relative z-30 bg-transparent">
+  <!-- 頂部導航列 (修正黏住問題，確保層次分離) -->
+  <header class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between relative z-30 bg-transparent">
     <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-white/60 shadow-xs transition active:scale-95 cursor-pointer">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
       <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
@@ -152,9 +127,71 @@
     </div>
   </header>
 
-  <!-- 主體畫布 -->
-  <!-- 主體畫布 (加入 space-y-6 確保各模組徹底分離) -->
-  <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-2 pb-16 flex-grow flex flex-col items-center relative z-10 space-y-6">
+  <!-- 主體畫布 (加入 space-y-6 確保各模組不打架) -->
+  <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-1 pb-16 flex-grow flex flex-col items-center relative z-10 space-y-6">
+
+    <!-- 示範模式專屬：高轉換引導與痛點解析卡片 (僅在示範模式出現) -->
+    <div id="demoGuideBanner" class="w-full relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#3C322A] to-[#1C1815] shadow-xl border border-stone-800 transition-all mb-4">
+      <!-- 裝飾性光暈背景 -->
+      <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10 p-5 space-y-4">
+        <!-- 頂部標籤與微指引 -->
+        <div class="flex items-center justify-between">
+          <span class="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[9px] font-bold tracking-widest uppercase flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            官方展示體驗版
+          </span>
+          <div class="flex items-center gap-1 text-[10px] text-amber-100/70 font-medium cursor-pointer" onclick="openAdminDirectly()">
+            <span>點擊右上角立即體驗</span>
+            <i class="fa-solid fa-arrow-up-right animate-bounce text-amber-400"></i>
+          </div>
+        </div>
+
+        <!-- 核心價值主張 -->
+        <div class="space-y-1">
+          <h3 class="text-[17px] font-extrabold text-amber-50 leading-tight tracking-wide">
+            為什麼你需要<span class="text-amber-400">專屬品牌連結頁</span>？
+          </h3>
+          <p class="text-[11px] text-amber-100/60 leading-relaxed font-light">
+            拒絕模板感！30秒內建立極簡奢華的數位門面，徹底解決社群行銷的轉單痛點
+          </p>
+        </div>
+
+        <!-- 痛點解析條列 (視覺化膠囊) -->
+        <div class="space-y-2.5 pt-1">
+          <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
+            <div class="w-6 h-6 rounded-full bg-rose-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i class="fa-solid fa-link text-rose-300 text-[10px]"></i>
+            </div>
+            <div class="flex-grow">
+              <div class="text-[11px] font-bold text-amber-50">社群平台只能放一個連結？</div>
+              <div class="text-[10px] text-amber-100/60 mt-0.5 leading-snug">IG、Threads、LINE 首頁一次整合所有核心入口，流量不漏接</div>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i class="fa-solid fa-calendar-check text-emerald-300 text-[10px]"></i>
+            </div>
+            <div class="flex-grow">
+              <div class="text-[11px] font-bold text-amber-50">私訊回覆檔期問到心累？</div>
+              <div class="text-[10px] text-amber-100/60 mt-0.5 leading-snug">內建即時排班月曆，顧客點選空檔直接複製預約模板，加速成交</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
+            <div class="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i class="fa-solid fa-hourglass-half text-amber-300 text-[10px]"></i>
+            </div>
+            <div class="flex-grow">
+              <div class="text-[11px] font-bold text-amber-50">開團選物或限時優惠太零散？</div>
+              <div class="text-[10px] text-amber-100/60 mt-0.5 leading-snug">支援大版面海報置頂、一鍵複製專屬折扣碼與限時截單倒數鐘</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 模組 1：品牌頭像與名片介紹 -->
     <div id="profileModule" class="w-full flex flex-col items-center text-center transition-all">
@@ -168,53 +205,50 @@
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- 模組 2：品牌視覺輪播牆 (獨立外距，底層動態模糊，框內置中自適應) -->
-    <div id="carouselWrapper" class="w-full my-4 relative select-none" style="display: none;">
+    <!-- 模組 2：品牌視覺輪播牆 (置中自適應 + 動態毛玻璃背景) -->
+    <div id="carouselWrapper" class="w-full my-2 relative select-none" style="display: none;">
       <div id="carouselHeaderBox" class="px-1 mb-2 flex items-center justify-between">
-        <span class="text-[10px] font-bold tracking-wider uppercase opacity-75 flex items-center gap-1.5" style="color: var(--title-color);">
+        <span class="text-[10px] font-bold tracking-wider uppercase opacity-80 flex items-center gap-1.5" style="color: var(--title-color);">
           <i class="fa-solid fa-images text-[10px]"></i><span>品牌視覺輪播牆</span>
         </span>
-        <span id="demoCarouselTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
-          攝影・新秘・作品集
+        <span id="demoCarouselTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#E2D9CE] text-[#4A3F35] font-medium tracking-wide">
+          適合：攝影師・新秘・作品集展示
         </span>
       </div>
-      <p id="demoCarouselGuide" class="px-1 -mt-1 mb-2.5 text-[10px] text-stone-500 leading-normal">
-        你可以這樣應用：橫式海報、正方形或 9:16 直式限動比例切換，展示近期新娘客照、婚紗大片或商品情境照。
-      </p>
-      <!-- 輪播本體外框 -->
+      <div id="demoCarouselGuideBox" class="px-3 py-2 rounded-xl bg-white/60 border border-white/80 shadow-2xs mb-2.5">
+        <p class="text-[10.5px] text-[#645E59] leading-relaxed">
+          <b>你可以這樣應用：</b>正方形（1:1）、橫式海報或直式限動切換，展示近期新娘客照、婚紗大片或精選商品情境。
+        </p>
+      </div>
       <div class="relative overflow-hidden rounded-2xl shadow-sm border border-white/80 bg-stone-900/10 backdrop-blur-md max-w-[420px] w-full mx-auto">
         <div id="carouselTrack" class="flex transition-transform duration-500 ease-out"></div>
         <div id="carouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20"></div>
       </div>
     </div>
 
-    <!-- 模組 3：檔期排班／空檔日曆 (安全外邊距，絕不遮擋輪播圖) -->
-    <div id="scheduleModule" class="w-full my-4 p-4 rounded-2xl app-card transition-all" style="display: none;">
+    <!-- 模組 3：檔期排班／空檔日曆 (莫蘭迪色系) -->
+    <div id="scheduleModule" class="w-full my-2 p-4 rounded-2xl app-card transition-all" style="display: none;">
       <div class="flex items-center justify-between mb-1.5">
         <div class="flex items-center gap-1.5 font-bold text-xs" style="color: var(--title-color);">
           <i class="fa-regular fa-calendar-check text-[#4C6F5E]"></i>
           <span>即時檔期與預約空檔</span>
         </div>
-        <span id="demoScheduleTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
-          新秘・婚禮主持・巡迴接案
+        <span id="demoScheduleTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#E2D9CE] text-[#4A3F35] font-medium tracking-wide">
+          適合：新秘・婚禮主持・巡迴接案
         </span>
       </div>
-      <p id="demoScheduleGuide" class="text-[10px] text-stone-500 mb-2.5 leading-relaxed">
-        你可以這樣應用：標註當日所在縣市（例：台北、台南），客戶點選綠色空檔即自動複製私訊模板，省去來回問檔期的繁瑣。
-      </p>
+      <div id="demoScheduleGuideBox" class="px-3 py-2 rounded-xl bg-white/60 border border-white/80 shadow-2xs mb-2.5">
+        <p class="text-[10.5px] text-[#645E59] leading-relaxed">
+          <b>你可以這樣應用：</b>標註當日所在縣市（例：台北、台南），客戶點選綠色空檔即自動複製諮詢模板，省去來回私訊問時間。
+        </p>
+      </div>
 
-      <!-- 莫蘭迪低飽和圖例 -->
+      <!-- 圖例 -->
       <div class="flex items-center justify-between py-2 border-t border-stone-200/50">
-        <div class="flex items-center gap-2.5 text-[9px] text-[#6E6359]">
-          <span class="flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-[#5D8270]"></span>可預約
-          </span>
-          <span class="flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-[#C2AA6B]"></span>保留中
-          </span>
-          <span class="flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-[#B0898D]"></span>已滿檔
-          </span>
+        <div class="flex items-center gap-2.5 text-[9px] text-[#645E59]">
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#5D8270]"></span>可預約</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#C2AA6B]"></span>保留中</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#B0898D]"></span>已滿檔</span>
         </div>
         <div class="flex items-center gap-1">
           <button type="button" onclick="changeCalMonth(-1)" class="w-6 h-6 rounded-lg bg-white/80 border border-stone-200 text-[10px] flex items-center justify-center hover:bg-white text-stone-600 cursor-pointer">
@@ -232,14 +266,14 @@
       </div>
       <div id="calendarGrid" class="grid grid-cols-7 gap-1 w-full min-h-[220px]"></div>
 
-      <p id="scheduleNoteText" class="mt-2.5 text-[10px] text-stone-500 leading-relaxed text-center font-light border-t pt-2 border-stone-200/50"></p>
+      <p id="scheduleNoteText" class="mt-2.5 text-[10.5px] text-[#645E59] leading-relaxed text-center font-light border-t pt-2 border-stone-200/50"></p>
     </div>
 
     <!-- 模組 4：卡片分類清單 -->
     <div id="sectionsContainer" class="w-full space-y-6"></div>
 
     <!-- 模組 5：頁尾專屬區塊 -->
-    <footer id="footerContainer" class="w-full mt-12 flex flex-col items-center space-y-4" style="order: 99 !important;">
+    <footer id="footerContainer" class="w-full mt-10 flex flex-col items-center space-y-4" style="order: 99 !important;">
       <div id="demoSwitchBar" style="display: none;" class="w-full text-center">
         <button type="button" onclick="switchToDemoMode()" class="px-4 py-2 rounded-full bg-white/80 hover:bg-white border border-stone-200 shadow-xs text-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 mx-auto transition active:scale-95 cursor-pointer">
           <i class="fa-solid fa-wand-magic-sparkles text-amber-600 text-xs"></i>
@@ -248,13 +282,13 @@
       </div>
 
       <!-- 免費開通卡片 -->
-      <div class="w-full p-5 rounded-3xl bg-white/75 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
+      <div class="w-full p-5 rounded-3xl bg-white/80 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
         <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
           <i class="fa-solid fa-palette text-[9px]"></i>
           <span>免費開通 ╳ 自由換色</span>
         </div>
         <h3 class="text-sm font-bold text-stone-900">想要擁有專屬美學品牌連結頁？</h3>
-        <p class="text-[11px] text-stone-600 leading-relaxed max-w-[280px]">
+        <p class="text-[11px] text-[#645E59] leading-relaxed max-w-[280px]">
           羊絨米、黑曜灰、晨曦霧綠與法式暮粉等六色系隨時切換！
         </p>
         <button type="button" onclick="openOnboardModal()" class="w-full py-2.5 rounded-2xl bg-stone-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
@@ -272,7 +306,7 @@
           <div>目前版本：免費個人連結頁</div>
           <div class="text-stone-800 font-semibold">進階方案：美業預約系統・行政管家</div>
         </div>
-        <p class="text-[11px] text-stone-500 leading-relaxed px-2">
+        <p class="text-[11px] text-[#645E59] leading-relaxed px-2">
           不只是品牌頁，更有眾多數位管家！超輕量月費即可擁有預約排程系統、行政管家與購物商城，免費享有無限升級服務
         </p>
       </div>
@@ -288,7 +322,7 @@
       </div>
       <div>
         <h4 id="leadModalTitle" class="font-bold text-stone-900 text-sm">領取好友專屬禮遇</h4>
-        <p id="leadModalDesc" class="text-xs text-stone-600 mt-1 leading-relaxed">加入 LINE 官方好友，即享專屬福利！</p>
+        <p id="leadModalDesc" class="text-xs text-[#645E59] mt-1 leading-relaxed">加入 LINE 官方好友，即享專屬福利！</p>
       </div>
       <div class="flex flex-col gap-2">
         <a id="btnLineLeadAction" href="#" target="_blank" class="w-full py-2.5 rounded-xl bg-[#06C755] hover:bg-[#05b34c] text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5">
@@ -299,9 +333,9 @@
     </div>
   </div>
 
-  <!-- 後台管理抽屜 -->
+  <!-- 後台管理抽屜 (z-[200]) -->
   <div id="adminSheet" style="display: none;" class="fixed inset-0 z-[200]">
-    <div onclick="closeAdminModal()" class="absolute inset-0 bg-black/60 backdrop-blur-xs"></div>
+    <div onclick="closeAdminModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto h-[90vh] bg-white rounded-t-[32px] shadow-2xl flex flex-col overflow-hidden">
       <div class="pt-3 pb-3 px-6 border-b border-stone-100 flex flex-col items-center bg-stone-50">
         <div class="w-10 h-1 rounded-full bg-stone-300 mb-3"></div>
@@ -368,7 +402,7 @@
               <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
             </label>
           </div>
-          <p class="text-[11px] text-stone-500 leading-relaxed">
+          <p class="text-[11px] text-[#645E59] leading-relaxed">
             點擊下方日期即可設定預約狀態與所在城市（例：台北、台南），再次點擊可循環變更。
           </p>
 
@@ -391,7 +425,7 @@
               </div>
             </div>
 
-            <!-- 後台日曆容器 (實體結構確保 100% 顯現) -->
+            <!-- 後台日曆容器 -->
             <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-2">
               <div class="flex justify-between items-center px-1 font-bold text-xs text-stone-800">
                 <button type="button" onclick="changeAdminCalMonth(-1)" class="text-stone-400 hover:text-black p-1 cursor-pointer"><i class="fa-solid fa-chevron-left text-[9px]"></i></button>
@@ -425,7 +459,7 @@
           </div>
         </div>
 
-        <!-- 品牌視覺輪播牆設定 (支援正方形) -->
+        <!-- 品牌視覺輪播牆設定 -->
         <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
           <div class="flex items-center justify-between">
             <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-images text-stone-600"></i><span>品牌視覺輪播牆</span></span>
@@ -474,7 +508,7 @@
               <div class="w-9 h-5 bg-stone-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-stone-900"></div>
             </label>
           </div>
-          <p class="text-[11px] text-stone-500 leading-relaxed">
+          <p class="text-[11px] text-[#645E59] leading-relaxed">
             當訪客在前台點擊任意卡片時，將隨機彈出此視窗，引導訪客加入 LINE 官方帳號。
           </p>
           <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
@@ -526,6 +560,28 @@
           </div>
           <div id="adminSectionsList" class="space-y-4 min-h-[120px]"></div>
         </div>
+
+        <!-- ⭐ 許願功能池 (直傳 super.html 資料庫) -->
+        <div class="p-4 rounded-2xl bg-gradient-to-br from-[#FAF6F0] to-[#EFE7DC] border border-[#DFD1C0] space-y-3 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-700"></i>
+              <span>數位管家功能許願池</span>
+            </span>
+            <span class="text-[9px] px-2 py-0.5 rounded-full bg-white/80 text-stone-600 font-medium">直達開發團隊</span>
+          </div>
+          <p class="text-[10.5px] text-[#645E59] leading-relaxed">
+            希望新增什麼實用功能、排版樣式或系統串接？直接寫下您的想法，我們將在每週版本更新中排程開發！
+          </p>
+          <div class="space-y-2">
+            <textarea id="inputFeedbackWish" rows="2" placeholder="例：希望卡片可以設定外連影片、或希望有自訂字體功能..." class="w-full bg-white border border-[#DFD1C0] rounded-xl px-3 py-2 text-xs text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400"></textarea>
+            <button type="button" onclick="submitWishToSuper()" class="w-full py-2 rounded-xl bg-stone-900 hover:bg-black text-white text-[11px] font-semibold transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+              <i class="fa-solid fa-paper-plane text-[10px]"></i>
+              <span>送出功能願望</span>
+            </button>
+          </div>
+        </div>
+
       </div>
 
       <div class="px-6 py-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between">
@@ -535,8 +591,8 @@
     </div>
   </div>
 
-  <!-- 卡片編輯彈窗 (支援大方形置頂) -->
-  <div id="itemModal" style="display: none;" class="fixed inset-0 z-[160] flex items-center justify-center p-4">
+  <!-- ⭐ 關鍵修復：卡片編輯彈窗升至 z-[300] (確保永遠高於後台抽屜 z-[200]) -->
+  <div id="itemModal" style="display: none;" class="fixed inset-0 z-[300] flex items-center justify-center p-4">
     <div onclick="closeItemModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
       <div class="flex items-center justify-between border-b pb-3">
@@ -625,8 +681,8 @@
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6">
       <div class="w-10 h-1 rounded-full bg-stone-300 mx-auto mb-4"></div>
       <div class="text-center mb-5">
-        <h3 class="text-base font-bold text-stone-900">免費開通專屬品牌微頁</h3>
-        <p class="text-xs text-stone-500 mt-1">無需綁卡，30秒擁有高質感數位名片</p>
+        <h3 class="text-base font-bold text-stone-900">免費開通專屬品牌連結頁</h3>
+        <p class="text-xs text-[#645E59] mt-1">無需綁卡，30秒擁有高質感數位名片</p>
       </div>
       <form onsubmit="handleOnboardSubmit(event)" class="space-y-3.5 text-xs text-stone-700">
         <div>
@@ -647,10 +703,12 @@
         <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
           <i class="fa-solid fa-bolt text-amber-300"></i><span>立即開通專屬品牌頁</span>
         </button>
+
         <div class="text-center pt-2">
           <button type="button" onclick="findMySlugPrompt()" class="text-[11px] text-stone-400 hover:text-stone-800 underline cursor-pointer">
             忘記專屬網址？輸入 Email 免費找回
           </button>
+        </div>
       </form>
     </div>
   </div>
@@ -673,16 +731,17 @@
     </div>
   </div>
 
-  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-[200]">
+  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-[400]">
     操作完成
   </div>
+
   <script>
     const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxJlhG1eDEwuyjiJedTtvND-iwIzGXA3sfc_iN_Pq-15LIKWwlHGDX5tFRVdlOzfanONA/exec";
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JnpaLZVnGkW9Jr967LeYuQ_d8bXwfnz";
 
-    // 全新版號：刷新過期快取，並預設開啟莫蘭迪與正方形功能
-    const DEMO_DATA_VERSION = 'v20260916_pure_brand_clean_v3';
+    // 全新版號：強制刷新過期快取
+    const DEMO_DATA_VERSION = 'v20260916_perfect_restored_full_v1';
 
     window.openAdminDirectly = function() {
       if (typeof isRealUser !== 'undefined' && isRealUser) {
@@ -704,13 +763,13 @@
 
     const demoData = {
       theme: 'cashmere-latte',
-      brandName: 'STUDIO AURA ╳ 慢奢美學',
+      brandName: 'STUDIO AURA ╳ 慢奢選品',
       avatar: illustrationAvatars[0],
-      bio: '新娘造型設計 ╳ 空間氣味工坊\n探索精緻優雅生活，點擊查看近期檔期或預約諮詢',
+      bio: '靜奢空間選品 ╳ 氣味感官工坊\n探索慢節奏生活美學，點擊查看近期檔期或預約諮詢',
       adminPin: '8888',
       marquee: {
         enabled: true,
-        text: '此為示範頁，滑到頁尾『立即免費開通專屬頁面』！'
+        text: '📢 此為示範頁，滑到頁尾『立即免費開通專屬頁面』！'
       },
       carousel: {
         enabled: true,
@@ -742,7 +801,7 @@
       lineLead: {
         enabled: true,
         url: 'https://heysibyl.com',
-        title: '領取新客預約體驗禮遇'
+        title: '領取好友專屬體驗禮遇'
       },
       socials: [
         { icon: 'fa-brands fa-instagram', label: 'Instagram', url: 'https://instagram.com' },
@@ -758,20 +817,20 @@
             {
               id: 'item-101',
               title: '【新娘造型定製】純淨光透妝感 ╳ 奢華禮服梳化',
-              subtitle: '一對一試妝諮詢，贈送手工精油保養安瓶',
+              subtitle: '一對一試妝諮詢，贈送手工精油保養安瓶（版型示範：大正方形・上方置頂）',
               img: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
               imgSize: 'large-square',
               imgPos: 'top',
               url: 'https://heysibyl.com',
               discountCode: 'WEDDING2026',
               badge: '本月主打',
-              countdownEnd: new Date(Date.now() + 86400000 * 5).toISOString().slice(0, 16),
+              countdownEnd: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
               clicks: 142
             },
             {
               id: 'item-102',
               title: '全日海外婚紗隨行跟妝 ╳ 雙人攝影團隊',
-              subtitle: '完整團隊專屬支援，呈現電影感光影畫幅',
+              subtitle: '完整團隊專屬支援，呈現電影感光影畫幅（版型示範：滿版長海報・上方置頂）',
               img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
               imgSize: 'large',
               imgPos: 'top',
@@ -784,7 +843,7 @@
             {
               id: 'item-103',
               title: '婚禮當日宴客梳化 ╳ 伴娘媽媽造型升級',
-              subtitle: '以高級自然光澤打造專屬氣質',
+              subtitle: '以高級自然光澤打造專屬氣質（版型示範：標準中長方・左側配圖）',
               img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
               imgSize: 'medium',
               imgPos: 'left',
@@ -803,7 +862,7 @@
             {
               id: 'item-201',
               title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
-              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100',
+              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100（版型示範：小方形・右側配圖）',
               img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
               imgSize: 'small',
               imgPos: 'right',
@@ -815,13 +874,26 @@
             },
             {
               id: 'item-202',
+              title: '草本舒緩複方滾珠精油 (10ml 便攜瓶)',
+              subtitle: '隨身放鬆必備，淡雅甜橙與雪松調（版型示範：小方形・左側配圖）',
+              img: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=300&q=80',
+              imgSize: 'small',
+              imgPos: 'left',
+              url: 'https://heysibyl.com',
+              discountCode: 'MINI88',
+              badge: '隨行款',
+              countdownEnd: '',
+              clicks: 41
+            },
+            {
+              id: 'item-203',
               title: '一對一空間氣味與個人風格定製諮詢',
-              subtitle: '由專屬顧問實地評估，調配個人起居空間專屬香氣',
+              subtitle: '由專屬顧問實地評估，調配個人起居空間專屬香氣（版型示範：純文字無圖・精簡排版）',
               img: '',
               imgSize: 'medium',
               imgPos: 'left',
               url: 'https://heysibyl.com',
-              discountCode: 'CONSULTVIP',
+              discountCode: 'VIPCONSULT',
               badge: '官方服務',
               countdownEnd: '',
               clicks: 37
@@ -1056,7 +1128,7 @@
         marEl.style.display = 'none';
       }
 
-      // 社群圖示
+      // 社群列表
       const socBox = document.getElementById('displaySocials');
       socBox.innerHTML = '';
       (appData.socials || []).forEach(s => {
@@ -1068,35 +1140,38 @@
         socBox.appendChild(a);
       });
 
-      // 輪播與日曆上方的「適合：XX」與「你可以這樣應用」：僅在示範模式出現，業主模式直接隱藏
+      // 嚴格控制教學文案：真實使用者模式隱藏所有提示
+      const demoGuideBanner = document.getElementById('demoGuideBanner');
       const demoCarouselTag = document.getElementById('demoCarouselTag');
-      const demoCarouselGuide = document.getElementById('demoCarouselGuide');
+      const demoCarouselGuideBox = document.getElementById('demoCarouselGuideBox');
       const demoScheduleTag = document.getElementById('demoScheduleTag');
-      const demoScheduleGuide = document.getElementById('demoScheduleGuide');
+      const demoScheduleGuideBox = document.getElementById('demoScheduleGuideBox');
 
       if (isRealUser) {
+        if (demoGuideBanner) demoGuideBanner.style.display = 'none';
         if (demoCarouselTag) demoCarouselTag.style.display = 'none';
-        if (demoCarouselGuide) demoCarouselGuide.style.display = 'none';
+        if (demoCarouselGuideBox) demoCarouselGuideBox.style.display = 'none';
         if (demoScheduleTag) demoScheduleTag.style.display = 'none';
-        if (demoScheduleGuide) demoScheduleGuide.style.display = 'none';
+        if (demoScheduleGuideBox) demoScheduleGuideBox.style.display = 'none';
       } else {
+        if (demoGuideBanner) demoGuideBanner.style.display = 'block';
         if (demoCarouselTag) demoCarouselTag.style.display = 'inline-block';
-        if (demoCarouselGuide) demoCarouselGuide.style.display = 'block';
+        if (demoCarouselGuideBox) demoCarouselGuideBox.style.display = 'block';
         if (demoScheduleTag) demoScheduleTag.style.display = 'inline-block';
-        if (demoScheduleGuide) demoScheduleGuide.style.display = 'block';
+        if (demoScheduleGuideBox) demoScheduleGuideBox.style.display = 'block';
       }
 
-      // 渲染前台卡片分類
+      // 渲染卡片分類
       const secBox = document.getElementById('sectionsContainer');
       secBox.innerHTML = '';
 
       const appTipsMap = {
         'sec-1': {
-          tag: '團購選物・品牌檔期',
+          tag: '適合：團購選物・品牌檔期',
           guide: '你可以這樣應用：限時開團時，設定倒數時鐘營造截單急迫感，卡片放上一鍵複製折扣碼，粉絲點擊直接前往蝦皮、團購表單或自架官網，轉換率大幅提升！'
         },
         'sec-2': {
-          tag: '創作者・接案顧問',
+          tag: '適合：創作者・接案顧問',
           guide: '你可以這樣應用：用無圖片的純文字精簡卡片條列業配合作信箱、個人 Podcast/YouTube 最新集數、贊助連結，或一對一付費諮詢表單，整齊俐落不雜亂。'
         }
       };
@@ -1106,21 +1181,22 @@
         wrap.className = 'w-full space-y-3';
         
         const tip = appTipsMap[sec.id] || {
-          tag: '個人品牌・多連結管理',
+          tag: '適合：個人品牌・多連結管理',
           guide: '你可以這樣應用：自由建立多個專屬分類，支援大圖置頂、左右配圖或純文字版型，拖曳即可自由排序。'
         };
 
-        // 僅在示範模式下渲染教學說明；業主正式頁面只留下乾淨的分類標題
         const demoHeaderTips = !isRealUser ? `
-          <span class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
+          <span class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#E2D9CE] text-[#4A3F35] font-medium tracking-wide">
             ${tip.tag}
           </span>
         ` : '';
 
         const demoBodyGuide = !isRealUser ? `
-          <p class="text-[10px] text-stone-500 leading-normal pl-3.5 border-l border-stone-300/60 mt-1 mb-2">
-            ${tip.guide}
-          </p>
+          <div class="px-3 py-2 rounded-xl bg-white/60 border border-white/80 shadow-2xs mt-1 mb-2">
+            <p class="text-[10.5px] text-[#645E59] leading-relaxed">
+              <b>你可以這樣應用：</b>${tip.guide.replace('你可以這樣應用：', '')}
+            </p>
+          </div>
         ` : '';
 
         wrap.innerHTML = `
@@ -1145,13 +1221,6 @@
             }
           };
 
-          const sizeClassMap = {
-            'small': 'w-12 h-12',
-            'medium': 'w-16 h-16',
-            'large-square': 'w-full max-w-[320px] aspect-square mx-auto',
-            'large': 'w-full h-40'
-          };
-          const sizeClass = sizeClassMap[item.imgSize] || 'w-16 h-16';
           const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
           const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs"><i class="fa-regular fa-copy text-[9px]"></i><span>${item.discountCode}</span></button>` : '';
 
@@ -1162,6 +1231,14 @@
             </div>
           ` : '';
 
+          const sideSizeClass = {
+            'small': 'w-12 h-12',
+            'medium': 'w-16 h-16',
+            'large-square': 'w-24 h-24',
+            'large': 'w-24 h-24'
+          }[item.imgSize || 'medium'];
+
+          // 1. 上方置頂排版 (Top)
           if (item.img && item.imgPos === 'top') {
             const isSquare = item.imgSize === 'large-square';
             const imgContainerClass = isSquare ? 'w-full p-4 pb-0 flex justify-center bg-stone-50/50' : 'w-full h-40 overflow-hidden bg-stone-100';
@@ -1169,40 +1246,41 @@
             card.innerHTML = `
               <div class="${imgContainerClass}"><img src="${item.img}" class="${imgInsideClass}"></div>
               <div class="p-4 space-y-1">
-                ${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light leading-relaxed">${item.subtitle}</div>
+                ${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light leading-relaxed text-[#645E59]">${item.subtitle}</div>
                 ${countdownHtml}
                 <div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60 flex items-center gap-1"><span>探索詳情</span><i class="fa-solid fa-arrow-right text-[8px]"></i></span>${codeBtn}</div>
               </div>
             `;
+          // 2. 右側圖排版 (Right)
           } else if (item.img && item.imgPos === 'right') {
-            const sideClass = (item.imgSize === 'large' || item.imgSize === 'large-square') ? 'w-24 h-24' : sizeClass;
             card.innerHTML = `
               <div class="p-3.5 flex justify-between items-center gap-3">
-                <div class="min-w-0 space-y-0.5">
-                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate">${item.subtitle}</div>
+                <div class="min-w-0 space-y-0.5 flex-grow">
+                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate text-[#645E59]">${item.subtitle}</div>
                   ${countdownHtml}
                   ${codeBtn ? `<div class="pt-1">${codeBtn}</div>` : ''}
                 </div>
-                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div>
               </div>
             `;
+          // 3. 左側圖排版 (Left - 預設)
           } else if (item.img) {
-            const sideClass = (item.imgSize === 'large' || item.imgSize === 'large-square') ? 'w-24 h-24' : sizeClass;
             card.innerHTML = `
               <div class="p-3.5 flex items-center gap-3.5">
-                <div class="${sideClass} rounded-xl overflow-hidden flex-shrink-0"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div>
                 <div class="flex-grow min-w-0">
-                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div>
+                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2 text-[#645E59]">${item.subtitle}</div>
                   ${countdownHtml}
                 </div>
                 ${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
               </div>
             `;
+          // 4. 純文字卡片 (無圖)
           } else {
             card.innerHTML = `
               <div class="p-4 flex flex-col justify-between gap-1">
                 <div class="flex items-center justify-between gap-3">
-                  <div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2">${item.subtitle}</div></div>
+                  <div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2 text-[#645E59]">${item.subtitle}</div></div>
                   <div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
                 </div>
                 ${countdownHtml}
@@ -1249,7 +1327,6 @@
     }
     window.closeLineLeadModal = function() { document.getElementById('lineLeadModal').style.display = 'none'; };
 
-    // 檔期排班日曆前台渲染 (莫蘭迪風格)
     function renderScheduleModule() {
       const s = appData.schedule;
       const mod = document.getElementById('scheduleModule');
@@ -1502,7 +1579,6 @@
       renderAdminCalendar();
     }
 
-    // 後台管理日曆格子渲染 (莫蘭迪色系，無 Emoji)
     function renderAdminCalendar() {
       const grid = document.getElementById('adminCalendarGrid');
       if (!grid) return;
@@ -1574,7 +1650,6 @@
       }
     }
 
-    // 質感彈窗：無 Emoji 莫蘭迪狀態切換與所在城市輸入
     async function cycleAdminDateStatus(dateKey) {
       if (!appData.schedule.dates) appData.schedule.dates = {};
       const current = appData.schedule.dates[dateKey];
@@ -1734,7 +1809,6 @@
     let touchStartX = 0;
     let touchEndX = 0;
 
-    // 輪播模組：自適應置中 + 雙層背景動態模糊渲染
     function renderCarousel() {
       const c = appData.carousel;
       const wrap = document.getElementById('carouselWrapper');
@@ -1748,13 +1822,12 @@
       }
       wrap.style.display = 'block';
 
-      // 嚴格比例定義，並確保最大寬度與自適應置中
       const aspectClassMap = {
         'square': 'aspect-square max-w-[380px] w-full mx-auto',
         'landscape': 'aspect-video max-w-[420px] w-full mx-auto',
         'story': 'aspect-[9/16] max-w-[320px] w-full mx-auto'
       };
-      
+
       const innerBox = wrap.querySelector('.relative.overflow-hidden');
       if (innerBox) {
         innerBox.className = `relative overflow-hidden rounded-2xl shadow-sm border border-white/80 bg-stone-900/10 backdrop-blur-md ${aspectClassMap[c.aspectRatio || 'square']}`;
@@ -1763,12 +1836,7 @@
       track.innerHTML = '';
       c.images.forEach(imgUrl => {
         const slide = document.createElement('div');
-        // slide 容器加入相對定位與 overflow-hidden
         slide.className = 'w-full h-full flex-shrink-0 relative overflow-hidden flex items-center justify-center bg-stone-900/5';
-        
-        // 核心：雙層架構
-        // 1. 底層：放大、高斯模糊作為毛玻璃氛圍背景
-        // 2. 頂層：object-contain 完整原圖居中展示，不裁切
         slide.innerHTML = `
           <div class="absolute inset-0 w-full h-full bg-cover bg-center scale-125 blur-xl opacity-40 brightness-95 pointer-events-none" style="background-image: url('${imgUrl}');"></div>
           <img src="${imgUrl}" class="relative z-10 max-w-full max-h-full w-auto h-auto object-contain pointer-events-none drop-shadow-sm">
@@ -2185,7 +2253,7 @@
       autoSaveToCloud();
     };
 
-    // ✅ 找回專屬網址核心邏輯
+    // 找回專屬網址
     window.findMySlugPrompt = async function() {
       const { value: email } = await Swal.fire({
         title: '找回您的專屬網址',
@@ -2201,13 +2269,9 @@
       if (email) {
         try {
           const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?owner_email=eq.${email.trim()}&select=slug,brand_name`, {
-            headers: { 
-              "apikey": SUPABASE_ANON_KEY, 
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}` 
-            }
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
           });
           const data = await res.json();
-
           if (data && data.length > 0) {
             const store = data[0];
             Swal.fire({
@@ -2219,14 +2283,68 @@
               window.location.href = `https://link.heysibyl.com/?u=${store.slug}`; 
             });
           } else {
-            Swal.fire('查無紀錄', '找不到此信箱開通的頁面，請確認是否輸入正確。', 'warning');
+            Swal.fire('查無紀錄', '找不到此信箱開通的頁面。', 'warning');
           }
-        } catch(err) {
-          Swal.fire('查詢失敗', '連線異常，請稍後重試。', 'error');
-        }
+        } catch(err) { Swal.fire('查詢失敗', '連線異常，請稍後重試。', 'error'); }
       }
     };
-    
+
+    // ⭐ 送出願望直傳後台 (比照美業系統規格)
+    window.submitWishToSuper = async function() {
+      const wishText = document.getElementById('inputFeedbackWish').value.trim();
+      if (!wishText) {
+        Swal.fire('請填寫願望內容', '告訴我們您希望擴充或優化的功能！', 'info');
+        return;
+      }
+
+      showToast('正在傳送您的願望...');
+
+      const payload = {
+        action: "FEATURE_WISH",
+        payload: {
+          brandName: appData.brandName,
+          slug: currentSlug || 'demo',
+          wish: wishText,
+          theme: appData.theme,
+          submittedAt: new Date().toISOString()
+        }
+      };
+
+      try {
+        fetch(GAS_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {}
+
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/system_feedbacks`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            store_slug: currentSlug || 'demo',
+            brand_name: appData.brandName,
+            feedback_type: 'feature_wish',
+            content: wishText
+          })
+        });
+      } catch (err) {}
+
+      document.getElementById('inputFeedbackWish').value = '';
+      Swal.fire({
+        title: '✨ 願望已成功送達！',
+        html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">感謝您的寶貴反饋！數位管家團隊每週都會檢視許願清單並排程升級。若有重大功能上線，將第一時間為您開通！</p>',
+        icon: 'success',
+        confirmButtonText: '太棒了'
+      });
+    };
+
     window.handleOnboardSubmit = async function(e) {
       e.preventDefault();
       const brand = document.getElementById('quickBrand').value.trim();
