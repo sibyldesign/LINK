@@ -68,7 +68,7 @@
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 18s linear infinite; }
 
-    /* 莫蘭迪美學低飽和色系日曆 */
+    /* 莫蘭迪低飽和色系月曆 */
     .cal-grid-box {
       display: grid !important;
       grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
@@ -96,31 +96,24 @@
       transform: scale(0.94) !important;
     }
 
-    /* 莫蘭迪・鼠尾草綠 (可預約) */
     .cal-cell.status-available {
       background-color: #EEF3F0 !important;
       color: #375346 !important;
       border: 1px solid #C4D6CC !important;
       font-weight: 600 !important;
     }
-
-    /* 莫蘭迪・煙燻褐粉 (已滿檔) */
     .cal-cell.status-booked {
       background-color: #F7EFEF !important;
       color: #7D6164 !important;
       border: 1px solid #DFCDD0 !important;
       opacity: 0.85 !important;
     }
-
-    /* 莫蘭迪・乾燥薑黃 (保留中) */
     .cal-cell.status-pending {
       background-color: #F8F5EC !important;
       color: #7A693F !important;
       border: 1px solid #DFD7C0 !important;
       font-weight: 600 !important;
     }
-
-    /* 莫蘭迪・燕麥淺灰 (未排班) */
     .cal-cell.status-none {
       background-color: rgba(255, 255, 255, 0.7) !important;
       color: #8C827A !important;
@@ -174,17 +167,17 @@
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- 模組 2：品牌視覺輪播牆 (預設正方形 1:1) -->
+    <!-- 模組 2：品牌視覺輪播牆 -->
     <div id="carouselWrapper" class="w-full mb-6 relative select-none" style="display: none;">
-      <div class="px-1 mb-2 flex items-center justify-between">
+      <div id="carouselHeaderBox" class="px-1 mb-2 flex items-center justify-between">
         <span class="text-[10px] font-bold tracking-wider uppercase opacity-75 flex items-center gap-1.5" style="color: var(--title-color);">
           <i class="fa-solid fa-images text-[10px]"></i><span>品牌視覺輪播牆</span>
         </span>
-        <span class="text-[9px] px-2 py-0.5 rounded-full bg-stone-200/80 text-stone-700 font-mono font-medium">
-          適合：攝影・新秘・電商作品集
+        <span id="demoCarouselTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
+          攝影・新秘・作品集
         </span>
       </div>
-      <p class="px-1 -mt-1 mb-2.5 text-[10px] text-stone-500 leading-normal">
+      <p id="demoCarouselGuide" class="px-1 -mt-1 mb-2.5 text-[10px] text-stone-500 leading-normal">
         你可以這樣應用：橫式海報、正方形或 9:16 直式限動比例切換，展示近期新娘客照、婚紗大片或商品情境照。
       </p>
       <div class="relative overflow-hidden rounded-2xl shadow-xs border border-white/60">
@@ -200,12 +193,12 @@
           <i class="fa-regular fa-calendar-check text-[#4C6F5E]"></i>
           <span>即時檔期與預約空檔</span>
         </div>
-        <span class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
+        <span id="demoScheduleTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
           新秘・婚禮主持・巡迴接案
         </span>
       </div>
-      <p class="text-[10px] text-stone-500 mb-2.5 leading-relaxed">
-        標註當日所在縣市，點選綠色空檔即可直接複製諮詢私訊模板，省去來回確認檔期的繁瑣。
+      <p id="demoScheduleGuide" class="text-[10px] text-stone-500 mb-2.5 leading-relaxed">
+        你可以這樣應用：標註當日所在縣市（例：台北、台南），客戶點選綠色空檔即自動複製私訊模板，省去來回問檔期的繁瑣。
       </p>
 
       <!-- 莫蘭迪低飽和圖例 -->
@@ -268,7 +261,6 @@
         </button>
       </div>
 
-      <!-- 品牌介紹與對比標籤 -->
       <div class="pt-2 flex flex-col items-center text-center max-w-[360px] mx-auto space-y-2">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-bold tracking-wide text-stone-700 hover:text-black transition">
           <span>Designed by Sibyl | 數位管家</span>
@@ -284,14 +276,6 @@
       </div>
     </footer>
   </main>
-
-  <!-- 右下角懸浮按鈕 -->
-  <div class="fixed bottom-5 right-5 z-40">
-    <button type="button" onclick="openOnboardModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-stone-900/90 hover:bg-black text-white text-[11px] font-medium shadow-xl backdrop-blur-md border border-white/20 transition transform hover:scale-105 active:scale-95 cursor-pointer">
-      <i class="fa-solid fa-bolt text-amber-400 text-xs"></i>
-      <span>此由 Sibyl 數位管家驅動 ╳ 免費使用</span>
-    </button>
-  </div>
 
   <!-- LINE 導流留客彈窗 -->
   <div id="lineLeadModal" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center p-4">
@@ -661,6 +645,10 @@
         <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
           <i class="fa-solid fa-bolt text-amber-300"></i><span>立即開通專屬品牌頁</span>
         </button>
+        <div class="text-center pt-2">
+          <button type="button" onclick="findMySlugPrompt()" class="text-[11px] text-stone-400 hover:text-stone-800 underline cursor-pointer">
+            忘記專屬網址？輸入 Email 免費找回
+          </button>
       </form>
     </div>
   </div>
@@ -691,10 +679,9 @@
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JnpaLZVnGkW9Jr967LeYuQ_d8bXwfnz";
 
-    // 全新版號：強制刷新過期快取，並啟動全功能預設開啟 (包含預設正方形輪播)
-    const DEMO_DATA_VERSION = 'v20260916_perfect_calendar_square_all_on';
+    // 全新版號：刷新過期快取，並預設開啟莫蘭迪與正方形功能
+    const DEMO_DATA_VERSION = 'v20260916_pure_brand_clean_v3';
 
-    // 0 秒全域直通開關
     window.openAdminDirectly = function() {
       if (typeof isRealUser !== 'undefined' && isRealUser) {
         if (typeof handleAdminEntry === 'function') {
@@ -713,7 +700,6 @@
     ];
     let avatarIndex = 0;
 
-    // 前後台全功能預設開啟，輪播預設正方形 (square)
     const demoData = {
       theme: 'cashmere-latte',
       brandName: 'STUDIO AURA ╳ 慢奢美學',
@@ -726,7 +712,7 @@
       },
       carousel: {
         enabled: true,
-        aspectRatio: 'square', // ✅ 預設正方形
+        aspectRatio: 'square', // 預設正方形
         position: 'below',
         images: [
           'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
@@ -736,7 +722,7 @@
         ]
       },
       schedule: {
-        enabled: true, // ✅ 預設開啟
+        enabled: true,
         position: 'below_carousel',
         note: '點選日期查看當日所在城市，可直接複製諮詢私訊！',
         dates: {
@@ -752,7 +738,7 @@
         }
       },
       lineLead: {
-        enabled: true, // ✅ 預設開啟
+        enabled: true,
         url: 'https://heysibyl.com',
         title: '領取新客預約體驗禮遇'
       },
@@ -770,7 +756,7 @@
             {
               id: 'item-101',
               title: '【新娘造型定製】純淨光透妝感 ╳ 奢華禮服梳化',
-              subtitle: '一對一試妝諮詢，贈送手工精油保養安瓶（範例：大正方形置頂）',
+              subtitle: '一對一試妝諮詢，贈送手工精油保養安瓶',
               img: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
               imgSize: 'large-square',
               imgPos: 'top',
@@ -783,7 +769,7 @@
             {
               id: 'item-102',
               title: '全日海外婚紗隨行跟妝 ╳ 雙人攝影團隊',
-              subtitle: '完整團隊專屬支援，呈現電影感光影畫幅（範例：滿版長海報置頂）',
+              subtitle: '完整團隊專屬支援，呈現電影感光影畫幅',
               img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
               imgSize: 'large',
               imgPos: 'top',
@@ -796,7 +782,7 @@
             {
               id: 'item-103',
               title: '婚禮當日宴客梳化 ╳ 伴娘媽媽造型升級',
-              subtitle: '以高級自然光澤打造專屬氣質（範例：中長方置左）',
+              subtitle: '以高級自然光澤打造專屬氣質',
               img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
               imgSize: 'medium',
               imgPos: 'left',
@@ -815,7 +801,7 @@
             {
               id: 'item-201',
               title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
-              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100（範例：小正方置右）',
+              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100',
               img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
               imgSize: 'small',
               imgPos: 'right',
@@ -828,7 +814,7 @@
             {
               id: 'item-202',
               title: '一對一空間氣味與個人風格定製諮詢',
-              subtitle: '由專屬顧問實地評估，調配起居空間專屬香氣（範例：純文字卡片）',
+              subtitle: '由專屬顧問實地評估，調配個人起居空間專屬香氣',
               img: '',
               imgSize: 'medium',
               imgPos: 'left',
@@ -917,10 +903,8 @@
       const sheet = document.getElementById('adminSheet');
       if (sheet) sheet.style.display = 'block';
       populateAdmin();
-      
-      // 雙重防延遲重繪
-      setTimeout(() => { renderAdminCalendar(); }, 60);
-      setTimeout(() => { renderAdminCalendar(); }, 200);
+      setTimeout(() => { renderAdminCalendar(); }, 50);
+      setTimeout(() => { renderAdminCalendar(); }, 150);
     };
 
     window.closeAdminModal = function() {
@@ -1082,17 +1066,35 @@
         socBox.appendChild(a);
       });
 
+      // 輪播與日曆上方的「適合：XX」與「你可以這樣應用」：僅在示範模式出現，業主模式直接隱藏
+      const demoCarouselTag = document.getElementById('demoCarouselTag');
+      const demoCarouselGuide = document.getElementById('demoCarouselGuide');
+      const demoScheduleTag = document.getElementById('demoScheduleTag');
+      const demoScheduleGuide = document.getElementById('demoScheduleGuide');
+
+      if (isRealUser) {
+        if (demoCarouselTag) demoCarouselTag.style.display = 'none';
+        if (demoCarouselGuide) demoCarouselGuide.style.display = 'none';
+        if (demoScheduleTag) demoScheduleTag.style.display = 'none';
+        if (demoScheduleGuide) demoScheduleGuide.style.display = 'none';
+      } else {
+        if (demoCarouselTag) demoCarouselTag.style.display = 'inline-block';
+        if (demoCarouselGuide) demoCarouselGuide.style.display = 'block';
+        if (demoScheduleTag) demoScheduleTag.style.display = 'inline-block';
+        if (demoScheduleGuide) demoScheduleGuide.style.display = 'block';
+      }
+
       // 渲染前台卡片分類
       const secBox = document.getElementById('sectionsContainer');
       secBox.innerHTML = '';
 
       const appTipsMap = {
         'sec-1': {
-          tag: '適合：團購主・電商選物・品牌檔期',
+          tag: '團購選物・品牌檔期',
           guide: '你可以這樣應用：限時開團時，設定倒數時鐘營造截單急迫感，卡片放上一鍵複製折扣碼，粉絲點擊直接前往蝦皮、團購表單或自架官網，轉換率大幅提升！'
         },
         'sec-2': {
-          tag: '適合：自媒體創作者・接案顧問・自由工作者',
+          tag: '創作者・接案顧問',
           guide: '你可以這樣應用：用無圖片的純文字精簡卡片條列業配合作信箱、個人 Podcast/YouTube 最新集數、贊助連結，或一對一付費諮詢表單，整齊俐落不雜亂。'
         }
       };
@@ -1102,9 +1104,22 @@
         wrap.className = 'w-full space-y-3';
         
         const tip = appTipsMap[sec.id] || {
-          tag: '適合：個人品牌・多連結管理',
+          tag: '個人品牌・多連結管理',
           guide: '你可以這樣應用：自由建立多個專屬分類，支援大圖置頂、左右配圖或純文字版型，拖曳即可自由排序。'
         };
+
+        // 僅在示範模式下渲染教學說明；業主正式頁面只留下乾淨的分類標題
+        const demoHeaderTips = !isRealUser ? `
+          <span class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#EAE3D9] text-[#5A4C40] font-medium tracking-wide">
+            ${tip.tag}
+          </span>
+        ` : '';
+
+        const demoBodyGuide = !isRealUser ? `
+          <p class="text-[10px] text-stone-500 leading-normal pl-3.5 border-l border-stone-300/60 mt-1 mb-2">
+            ${tip.guide}
+          </p>
+        ` : '';
 
         wrap.innerHTML = `
           <div class="px-1 my-3">
@@ -1113,13 +1128,9 @@
                 <div class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent-color);"></div>
                 <h2 class="text-xs font-bold tracking-widest uppercase opacity-85" style="color: var(--title-color);">${sec.title}</h2>
               </div>
-              <span class="text-[9px] px-2 py-0.5 rounded-full bg-stone-200/80 text-stone-700 font-mono font-medium">
-                ${tip.tag}
-              </span>
+              ${demoHeaderTips}
             </div>
-            <p class="text-[10px] text-stone-500 leading-normal pl-3.5 border-l border-stone-300/60 mt-1 mb-2">
-              ${tip.guide}
-            </p>
+            ${demoBodyGuide}
           </div>
         `;
 
@@ -1236,7 +1247,7 @@
     }
     window.closeLineLeadModal = function() { document.getElementById('lineLeadModal').style.display = 'none'; };
 
-    // 檔期排班日曆前台渲染 (明確尺寸保證不塌陷)
+    // 檔期排班日曆前台渲染 (莫蘭迪風格)
     function renderScheduleModule() {
       const s = appData.schedule;
       const mod = document.getElementById('scheduleModule');
@@ -1245,6 +1256,25 @@
         return;
       }
       if (mod) mod.style.display = 'block';
+
+      const profEl = document.getElementById('profileModule');
+      const carEl = document.getElementById('carouselWrapper');
+      const secEl = document.getElementById('sectionsContainer');
+
+      if (profEl) profEl.style.order = '1';
+      if (s.position === 'above_carousel') {
+        if (mod) mod.style.order = '2';
+        if (carEl) carEl.style.order = '3';
+        if (secEl) secEl.style.order = '4';
+      } else if (s.position === 'below_sections') {
+        if (carEl) carEl.style.order = '2';
+        if (secEl) secEl.style.order = '3';
+        if (mod) mod.style.order = '4';
+      } else {
+        if (carEl) carEl.style.order = '2';
+        if (mod) mod.style.order = '3';
+        if (secEl) secEl.style.order = '4';
+      }
 
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
@@ -1301,6 +1331,7 @@
         grid.appendChild(cell);
       }
     }
+
     window.changeCalMonth = function(dir) {
       currentCalDate.setMonth(currentCalDate.getMonth() + dir);
       renderScheduleModule();
@@ -1335,26 +1366,22 @@
       });
     }
 
-    // 後台管理資料填充
     function populateAdmin() {
       document.getElementById('inputBrandName').value = appData.brandName;
       document.getElementById('inputBrandBio').value = appData.bio;
       document.getElementById('adminAvatarThumb').src = appData.avatar;
 
-      // 跑馬燈
       if (!appData.marquee) appData.marquee = { enabled: true, text: '' };
       document.getElementById('inputMarqueeEnabled').checked = appData.marquee.enabled;
       document.getElementById('inputMarqueeText').value = appData.marquee.text || '';
       document.getElementById('marqueeConfigBox').style.display = appData.marquee.enabled ? 'block' : 'none';
 
-      // LINE 導流
       if (!appData.lineLead) appData.lineLead = { enabled: true, url: '', title: '' };
       document.getElementById('inputLineLeadEnabled').checked = appData.lineLead.enabled;
       document.getElementById('inputLineLeadUrl').value = appData.lineLead.url || '';
       document.getElementById('inputLineLeadTitle').value = appData.lineLead.title || '';
       document.getElementById('lineLeadConfigBox').style.display = appData.lineLead.enabled ? 'block' : 'none';
 
-      // 社群列表
       const socBox = document.getElementById('adminSocialsList');
       socBox.innerHTML = '';
       (appData.socials || []).forEach((s, idx) => {
@@ -1373,7 +1400,6 @@
         socBox.appendChild(row);
       });
 
-      // 後台分類與卡片清單
       const adminSecBox = document.getElementById('adminSectionsList');
       adminSecBox.innerHTML = '';
       (appData.sections || []).forEach((sec, sIdx) => {
@@ -1419,7 +1445,6 @@
       populateScheduleAdmin();
     }
 
-    // 輪播管理後台渲染
     function populateCarouselAdmin() {
       if (!appData.carousel) {
         appData.carousel = { enabled: true, aspectRatio: 'square', position: 'below', images: [] };
@@ -1455,43 +1480,27 @@
       }
     }
 
-    // ====================================================
-    // 檔期排班日曆模組核心修復 (保證 100% 顯現與互動)
-    // ====================================================
-
-    // 初始化與安全校驗
-    if (!appData.schedule) {
-      appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
-    }
-    if (!appData.schedule.dates || typeof appData.schedule.dates !== 'object') {
-      appData.schedule.dates = {};
-    }
-
-    // 1. 後台日曆初始配置
     function populateScheduleAdmin() {
       if (!appData.schedule) {
         appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
       }
-      if (!appData.schedule.dates) appData.schedule.dates = {};
-
       const s = appData.schedule;
       const enBox = document.getElementById('inputScheduleEnabled');
       if (enBox) enBox.checked = Boolean(s.enabled);
-
+      
       const ordSel = document.getElementById('selectScheduleOrder');
       if (ordSel) ordSel.value = s.position || 'below_carousel';
-
+      
       const noteInput = document.getElementById('inputScheduleNote');
       if (noteInput) noteInput.value = s.note || '';
-
+      
       const cfgBox = document.getElementById('adminScheduleConfig');
       if (cfgBox) cfgBox.style.display = s.enabled ? 'block' : 'none';
 
-      // 觸發渲染
       renderAdminCalendar();
     }
 
-    // 2. 後台日曆格子渲染（加入即時保證機制）
+    // 後台管理日曆格子渲染 (莫蘭迪色系，無 Emoji)
     function renderAdminCalendar() {
       const grid = document.getElementById('adminCalendarGrid');
       if (!grid) return;
@@ -1563,8 +1572,7 @@
       }
     }
 
-    // 3. 點擊格子切換狀態與輸入地區彈窗
-    // 點擊格子：以標準下拉選單自由切換狀態與輸入地區
+    // 質感彈窗：無 Emoji 莫蘭迪狀態切換與所在城市輸入
     async function cycleAdminDateStatus(dateKey) {
       if (!appData.schedule.dates) appData.schedule.dates = {};
       const current = appData.schedule.dates[dateKey];
@@ -1655,6 +1663,7 @@
         autoSaveToCloud();
       }
     }
+
     window.changeAdminCalMonth = function(dir) {
       adminCalDate.setMonth(adminCalDate.getMonth() + dir);
       renderAdminCalendar();
@@ -1718,7 +1727,6 @@
       autoSaveToCloud();
     };
 
-    // 輪播模組前台核心邏輯 (正方形支援)
     let carouselTimer = null;
     let currentSlide = 0;
     let touchStartX = 0;
@@ -2162,6 +2170,48 @@
       autoSaveToCloud();
     };
 
+    // ✅ 找回專屬網址核心邏輯
+    window.findMySlugPrompt = async function() {
+      const { value: email } = await Swal.fire({
+        title: '找回您的專屬網址',
+        text: '請輸入開通時填寫的電子信箱：',
+        input: 'email',
+        inputPlaceholder: 'yourname@gmail.com',
+        showCancelButton: true,
+        confirmButtonText: '查詢網址',
+        cancelButtonText: '取消',
+        inputValidator: (v) => (!v || !v.trim()) ? '請填寫電子信箱！' : null
+      });
+
+      if (email) {
+        try {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?owner_email=eq.${email.trim()}&select=slug,brand_name`, {
+            headers: { 
+              "apikey": SUPABASE_ANON_KEY, 
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}` 
+            }
+          });
+          const data = await res.json();
+
+          if (data && data.length > 0) {
+            const store = data[0];
+            Swal.fire({
+              title: '已找到您的品牌頁面！',
+              html: `品牌名稱：<b>${store.brand_name}</b><br><br>專屬網址：<br><b style="color:#8C7058;font-size:15px;">link.heysibyl.com/?u=${store.slug}</b>`,
+              icon: 'success',
+              confirmButtonText: '立即前往'
+            }).then(() => { 
+              window.location.href = `https://link.heysibyl.com/?u=${store.slug}`; 
+            });
+          } else {
+            Swal.fire('查無紀錄', '找不到此信箱開通的頁面，請確認是否輸入正確。', 'warning');
+          }
+        } catch(err) {
+          Swal.fire('查詢失敗', '連線異常，請稍後重試。', 'error');
+        }
+      }
+    };
+    
     window.handleOnboardSubmit = async function(e) {
       e.preventDefault();
       const brand = document.getElementById('quickBrand').value.trim();
