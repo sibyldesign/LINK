@@ -683,66 +683,73 @@ async function initPage() {
 }
 
     async function loadStoreFromSupabase(slug) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)`, {
+      headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const rows = await res.json();
+    if (rows && rows.length > 0) {
+      const s = rows[0];
+      isRealUser = true;
+      currentStoreDbId = s.id;
+      appData.theme = s.theme || 'cashmere-latte';
+      appData.brandName = s.brand_name || slug;
+      appData.avatar = s.avatar_url || illustrationAvatars[0];
+      appData.adminPin = s.admin_pin || '8888';
+      appData.socials = s.social_links || [];
+
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)`, {
-          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-        });
-        const rows = await res.json();
-        if (rows && rows.length > 0) {
-          const s = rows[0];
-          isRealUser = true;
-          currentStoreDbId = s.id;
-          appData.theme = s.theme || 'cashmere-latte';
-          appData.brandName = s.brand_name || slug;
-          appData.avatar = s.avatar_url || illustrationAvatars[0];
-          appData.adminPin = s.admin_pin || '8888';
-          appData.socials = s.social_links || [];
-
-          try {
-            const parsedMeta = JSON.parse(s.bio_text);
-            appData.bio = parsedMeta.bio || '';
-            if (parsedMeta.marquee) appData.marquee = parsedMeta.marquee;
-            if (parsedMeta.carousel) appData.carousel = parsedMeta.carousel;
-            if (parsedMeta.lineLead) appData.lineLead = parsedMeta.lineLead;
-          } catch(e) {
-            appData.bio = s.bio_text || '';
-          }
-
-          if (s.bio_items && s.bio_items.length > 0) {
-            const map = {};
-            s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
-              const sec = it.section_title || '精選推薦';
-              if (!map[sec]) map[sec] = { id: 'sec-' + Math.random(), title: sec, items: [] };
-              map[sec].items.push({
-                id: it.id,
-                title: it.title,
-                subtitle: it.subtitle || '',
-                img: it.thumbnail_url || '',
-                imgSize: it.img_size || 'medium',
-                imgPos: it.img_pos || 'left',
-                url: it.target_url || '#',
-                discountCode: it.discount_code || '',
-                badge: it.badge_label || '',
-                countdownEnd: it.countdown_end || '',
-                clicks: it.click_count || 0
-              });
-            });
-            appData.sections = Object.values(map);
-          }
-
-          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-          document.getElementById('demoSwitchBar').style.display = 'block';
-          document.getElementById('btnAdminLabel').innerText = '管理後台';
-          document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
-          document.title = `${appData.brandName} | 品牌名片`;
-          renderView();
-        } else {
-          switchToDemoMode();
-        }
-      } catch (e) {
-        renderView();
+        const parsedMeta = JSON.parse(s.bio_text);
+        appData.bio = parsedMeta.bio || '';
+        if (parsedMeta.marquee) appData.marquee = parsedMeta.marquee;
+        if (parsedMeta.carousel) appData.carousel = parsedMeta.carousel;
+        if (parsedMeta.lineLead) appData.lineLead = parsedMeta.lineLead;
+      } catch(e) {
+        appData.bio = s.bio_text || '';
       }
+
+      if (s.bio_items && s.bio_items.length > 0) {
+        const map = {};
+        const seenIds = new Set(); // ✅ 避免重複卡片重組
+
+        s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
+          if (it.id && seenIds.has(it.id)) return; // 若重複則跳過
+          if (it.id) seenIds.add(it.id);
+
+          const secTitle = it.section_title || '精選推薦';
+          if (!map[secTitle]) {
+            map[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
+          }
+          map[secTitle].items.push({
+            id: it.id,
+            title: it.title,
+            subtitle: it.subtitle || '',
+            img: it.thumbnail_url || '',
+            imgSize: it.img_size || 'medium',
+            imgPos: it.img_pos || 'left',
+            url: it.target_url || '#',
+            discountCode: it.discount_code || '',
+            badge: it.badge_label || '',
+            countdownEnd: it.countdown_end || '',
+            clicks: it.click_count || 0
+          });
+        });
+        appData.sections = Object.values(map);
+      }
+
+      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+      document.getElementById('demoSwitchBar').style.display = 'block';
+      document.getElementById('btnAdminLabel').innerText = '管理後台';
+      document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
+      document.title = `${appData.brandName} | 品牌名片`;
+      renderView();
+    } else {
+      switchToDemoMode();
     }
+  } catch (e) {
+    renderView();
+  }
+}
 
     window.switchToDemoMode = function() {
   localStorage.removeItem('sibyl_demo_data');
@@ -1370,68 +1377,85 @@ async function initPage() {
       showToast('卡片已就緒並同步備份！');
     };
 
-    // 背景自動靜默同步寫入
-    async function autoSaveToCloud() {
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-      if (isRealUser && currentStoreDbId) {
-        try {
-          const metaPayload = JSON.stringify({
-            bio: appData.bio,
-            marquee: appData.marquee,
-            carousel: appData.carousel,
-            lineLead: appData.lineLead
+    // ✅ 加入儲存鎖與防手震定時器，徹底杜絕重複請求
+let saveTimer = null;
+let isSavingLock = false;
+
+async function autoSaveToCloud() {
+  // 1. 本地快取立即寫入，保證不掉資料
+  localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+
+  // 2. 防手震：500 毫秒內連續觸發只會執行最後一次
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    if (!isRealUser || !currentStoreDbId) return;
+    if (isSavingLock) return; // 若上一筆還在進行中，暫停重入
+
+    isSavingLock = true;
+    try {
+      const metaPayload = JSON.stringify({
+        bio: appData.bio,
+        marquee: appData.marquee,
+        carousel: appData.carousel,
+        lineLead: appData.lineLead
+      });
+
+      // 步驟 A：更新店家主檔
+      await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
+        method: "PATCH",
+        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          brand_name: appData.brandName,
+          bio_text: metaPayload,
+          theme: appData.theme,
+          avatar_url: appData.avatar,
+          social_links: appData.socials,
+          admin_pin: appData.adminPin
+        })
+      });
+
+      // 步驟 B：整理待寫入的卡片陣列
+      const itemsToInsert = [];
+      let sortIdx = 0;
+      for (const sec of appData.sections) {
+        for (const it of (sec.items || [])) {
+          itemsToInsert.push({
+            store_id: currentStoreDbId,
+            section_title: sec.title,
+            title: it.title,
+            subtitle: it.subtitle || '',
+            thumbnail_url: it.img || '',
+            img_size: it.imgSize || 'medium',
+            img_pos: it.imgPos || 'left',
+            target_url: it.url || '#',
+            discount_code: it.discountCode || '',
+            badge_label: it.badge || '',
+            sort_order: sortIdx++
           });
-
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              brand_name: appData.brandName,
-              bio_text: metaPayload,
-              theme: appData.theme,
-              avatar_url: appData.avatar,
-              social_links: appData.socials,
-              admin_pin: appData.adminPin
-            })
-          });
-
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-            method: "DELETE",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-          });
-
-          const itemsToInsert = [];
-          let sortIdx = 0;
-          for (const sec of appData.sections) {
-            for (const it of (sec.items || [])) {
-              itemsToInsert.push({
-                store_id: currentStoreDbId,
-                section_title: sec.title,
-                title: it.title,
-                subtitle: it.subtitle || '',
-                thumbnail_url: it.img || '',
-                img_size: it.imgSize || 'medium',
-                img_pos: it.imgPos || 'left',
-                target_url: it.url || '#',
-                discount_code: it.discountCode || '',
-                badge_label: it.badge || '',
-                sort_order: sortIdx++
-              });
-            }
-          }
-
-          if (itemsToInsert.length > 0) {
-            await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-              method: "POST",
-              headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-              body: JSON.stringify(itemsToInsert)
-            });
-          }
-        } catch(err) {
-          console.warn("雲端同步異常:", err);
         }
       }
+
+      // 步驟 C：先確實清空原商店舊卡片
+      const delRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+        method: "DELETE",
+        headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+
+      // 步驟 D：確認清空完成後，才單次批次寫入新卡片
+      if (delRes.ok && itemsToInsert.length > 0) {
+        await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+          method: "POST",
+          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify(itemsToInsert)
+        });
+      }
+    } catch (err) {
+      console.warn("雲端同步異常:", err);
+    } finally {
+      isSavingLock = false; // 解鎖
     }
+  }, 500);
+}
 
     window.saveAdminAndClose = async function() {
       const btn = document.getElementById('btnSaveAdmin');
