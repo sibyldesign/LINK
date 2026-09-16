@@ -929,9 +929,28 @@
       setTimeout(() => { renderAdminCalendar(); }, 50);
     };
 
-    window.closeAdminModal = function() {
-      document.getElementById('adminSheet').style.display = 'none';
-    };
+    // 關閉後台視窗（含強效防呆攔截）
+window.closeAdminModal = async function() {
+  if (hasUnsavedChanges) {
+    const res = await Swal.fire({
+      title: '您有尚未發布的修改！',
+      text: '若直接關閉，手機與顧客前台將看不到剛才的更新。',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '立即儲存並發布',
+      cancelButtonText: '放棄本次修改',
+      confirmButtonColor: '#2C241E',
+      cancelButtonColor: '#78716c'
+    });
+
+    if (res.isConfirmed) {
+      await saveAdminAndClose();
+      return;
+    }
+  }
+  document.getElementById('adminSheet').style.display = 'none';
+  hasUnsavedChanges = false;
+};
 
     window.openOnboardModal = function() {
       document.getElementById('onboardSheet').style.display = 'block';
@@ -993,27 +1012,28 @@
 
     async function loadStoreFromSupabase(slug) {
   try {
-    // 加上時間戳防止任何快取
-    const storeUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`;
+    // 移除容易引起 REST API 格式問題的自訂 query 參數，改用正規 Header 防止快取
+    const storeUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug.trim().toLowerCase())}&select=*`;
     const res = await fetch(storeUrl, {
+      method: 'GET',
       headers: {
         "apikey": SUPABASE_ANON_KEY,
         "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Cache-Control": "no-cache, no-store, must-revalidate"
+        "Cache-Control": "no-cache"
       }
     });
 
     if (!res.ok) {
-      throw new Error(`讀取主檔失敗: HTTP ${res.status}`);
+      const errDetail = await res.text();
+      throw new Error(`HTTP ${res.status}: ${errDetail}`);
     }
 
     const rows = await res.json();
     if (!rows || rows.length === 0) {
       Swal.fire({
         title: '找不到此專屬頁面',
-        text: `資料庫查無網址代號「${slug}」，請確認是否已開通。`,
-        icon: 'warning',
-        confirmButtonText: '確定'
+        text: `資料庫查無網址代號「${slug}」，請確認網址是否正確。`,
+        icon: 'warning'
       });
       return;
     }
@@ -1027,7 +1047,6 @@
     appData.adminPin = s.admin_pin || '8888';
     appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
 
-    // 解析 bio_text JSON
     try {
       const meta = JSON.parse(s.bio_text);
       appData.bio = meta.bio || '';
@@ -1039,13 +1058,14 @@
       appData.bio = s.bio_text || '';
     }
 
-    // 抓取卡片項目
-    const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`;
+    // 讀取卡片
+    const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*`;
     const itemsRes = await fetch(itemsUrl, {
+      method: 'GET',
       headers: {
         "apikey": SUPABASE_ANON_KEY,
         "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Cache-Control": "no-cache, no-store, must-revalidate"
+        "Cache-Control": "no-cache"
       }
     });
 
@@ -1075,14 +1095,13 @@
         });
         appData.sections = Object.values(secMap);
       } else {
-        appData.sections = []; // 如果資料庫內無卡片，保持清空，不亂套 demo 卡片
+        appData.sections = [];
       }
     }
 
-    // 儲存至本地作為離線備援
     localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-    
-    // 前台介面設定
+    hasUnsavedChanges = false; // 重設未儲存旗標
+
     const switchBar = document.getElementById('demoSwitchBar');
     if (switchBar) switchBar.style.display = 'block';
     const adminLabel = document.getElementById('btnAdminLabel');
@@ -1093,15 +1112,14 @@
 
     renderView();
   } catch (err) {
-    console.error("雲端載入失敗:", err);
+    console.error("雲端載入失敗原因:", err);
     Swal.fire({
       title: '連線異常',
-      text: '無法從雲端資料庫取得您的名片資料，請檢查網路連線。',
+      html: `<p style="font-size:12px;color:#7A6C62;">無法從雲端資料庫取得名片資料。<br><span style="color:#b91c1c;">錯誤細節：${err.message}</span></p>`,
       icon: 'error'
     });
   }
 }
-
     function renderView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
       document.getElementById('displayName').innerText = appData.brandName;
@@ -1989,41 +2007,61 @@
       document.getElementById('imgLayoutRow').style.display = 'none';
     };
 
-    window.saveItemData = function() {
-      const t = document.getElementById('modalTitle').value.trim();
-      if (!t) return showToast('請填寫主題名稱');
-      const targetSec = parseInt(document.getElementById('modalSectionSelect').value) || 0;
-      const imgEl = document.getElementById('modalPreviewImg');
-      const currentImg = (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.endsWith('/')) ? imgEl.src : '';
-      const itObj = {
-        id: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) ? appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].id : ('item-' + Date.now()),
-        title: t,
-        subtitle: document.getElementById('modalSubtitle').value.trim(),
-        url: document.getElementById('modalUrl').value.trim() || '#',
-        discountCode: document.getElementById('modalCode').value.trim(),
-        badge: document.getElementById('modalBadge').value.trim(),
-        countdownEnd: document.getElementById('modalCountdownEnd').value,
-        img: currentImg,
-        imgSize: document.getElementById('modalImgSize').value,
-        imgPos: document.getElementById('modalImgPos').value,
-        clicks: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) ? (appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].clicks || 0) : 0
-      };
-      if (editingPointer.sIdx !== null && editingPointer.iIdx !== null) {
-        if (editingPointer.sIdx !== targetSec) {
-          appData.sections[editingPointer.sIdx].items.splice(editingPointer.iIdx, 1);
-          appData.sections[targetSec].items.push(itObj);
-        } else {
-          appData.sections[editingPointer.sIdx].items[editingPointer.iIdx] = itObj;
-        }
-      } else {
-        appData.sections[targetSec].items.unshift(itObj);
-      }
-      closeItemModal();
-      populateAdmin();
-      renderView();
-      autoSaveToCloud();
-      showToast('卡片已就緒！');
-    };
+    let hasUnsavedChanges = false;
+
+// 標記異動
+function markDirty() {
+  hasUnsavedChanges = true;
+  const btn = document.getElementById('btnSaveAdmin');
+  if (btn) {
+    btn.classList.add('animate-pulse');
+    btn.innerText = '● 儲存並同步發布 (未儲存)';
+  }
+}
+
+// 卡片儲存完成時，直接標記異動並觸發同步
+window.saveItemData = function() {
+  const t = document.getElementById('modalTitle').value.trim();
+  if (!t) return showToast('請填寫主題名稱');
+  const targetSec = parseInt(document.getElementById('modalSectionSelect').value) || 0;
+  const imgEl = document.getElementById('modalPreviewImg');
+  const currentImg = (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.endsWith('/')) ? imgEl.src : '';
+  
+  const itObj = {
+    id: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) 
+          ? appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].id 
+          : ('item-' + Date.now()),
+    title: t,
+    subtitle: document.getElementById('modalSubtitle').value.trim(),
+    url: document.getElementById('modalUrl').value.trim() || '#',
+    discountCode: document.getElementById('modalCode').value.trim(),
+    badge: document.getElementById('modalBadge').value.trim(),
+    countdownEnd: document.getElementById('modalCountdownEnd').value,
+    img: currentImg,
+    imgSize: document.getElementById('modalImgSize').value,
+    imgPos: document.getElementById('modalImgPos').value,
+    clicks: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) 
+              ? (appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].clicks || 0) 
+              : 0
+  };
+
+  if (editingPointer.sIdx !== null && editingPointer.iIdx !== null) {
+    if (editingPointer.sIdx !== targetSec) {
+      appData.sections[editingPointer.sIdx].items.splice(editingPointer.iIdx, 1);
+      appData.sections[targetSec].items.push(itObj);
+    } else {
+      appData.sections[editingPointer.sIdx].items[editingPointer.iIdx] = itObj;
+    }
+  } else {
+    appData.sections[targetSec].items.unshift(itObj);
+  }
+
+  closeItemModal();
+  populateAdmin();
+  renderView();
+  markDirty();
+  showToast('卡片已就緒，請務必點擊下方「儲存並同步發布」！');
+};
 
     async function autoSaveToCloud() {
   localStorage.setItem(getStorageKey(), JSON.stringify(appData));
@@ -2131,16 +2169,21 @@
   }, 400);
 }
 
-    window.saveAdminAndClose = async function() {
-      const btn = document.getElementById('btnSaveAdmin');
-      btn.disabled = true;
-      btn.innerText = '儲存發布中...';
-      await autoSaveToCloud();
-      btn.disabled = false;
-      btn.innerText = '儲存並同步發布';
-      closeAdminModal();
-      showToast('設定已成功儲存並同步發布！');
-    };
+    // 發布成功後重設狀態
+window.saveAdminAndClose = async function() {
+  const btn = document.getElementById('btnSaveAdmin');
+  btn.disabled = true;
+  btn.innerText = '正在寫入雲端節點...';
+  
+  await autoSaveToCloud();
+  
+  btn.disabled = false;
+  btn.classList.remove('animate-pulse');
+  btn.innerText = '儲存並同步發布';
+  hasUnsavedChanges = false;
+  document.getElementById('adminSheet').style.display = 'none';
+  showToast('設定已成功儲存並同步發布！');
+};
 
     window.copyShareUrl = function() {
       navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
