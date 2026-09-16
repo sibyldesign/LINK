@@ -1022,7 +1022,7 @@
 
       if (currentSlug) {
         // 【真實使用者模式】：絕不優先拿舊快取蓋掉畫面，直接強制向雲端抓最新資料！
-        await loadStoreFromSupabase(currentSlug);
+        await (currentSlug);
       } else {
         // 【官方示範模式】
         isRealUser = false;
@@ -1049,20 +1049,23 @@
 
     async function loadStoreFromSupabase(slug) {
       try {
-        // 關鍵核心：加入時間戳記 ?t=... 與 Cache-Control: no-cache
-        // 100% 強制手機/電腦瀏覽器每次都跟 Supabase 要最新資料，絕不吃本機快取！
-        const noCacheUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)&_t=${Date.now()}`;
+        // 標準 Supabase REST 查詢，確保過濾器 slug 正常比對
+        const targetUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*,bio_items(*)`;
         
-        const res = await fetch(noCacheUrl, {
+        const res = await fetch(targetUrl, {
           headers: {
             "apikey": SUPABASE_ANON_KEY,
             "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            "Pragma": "no-cache"
+            "Cache-Control": "no-cache"
           }
         });
 
+        if (!res.ok) {
+          throw new Error(`Supabase HTTP ${res.status}`);
+        }
+
         const rows = await res.json();
+
         if (rows && rows.length > 0) {
           const s = rows[0];
           isRealUser = true;
@@ -1073,7 +1076,7 @@
           appData.adminPin = s.admin_pin || '8888';
           appData.socials = s.social_links || [];
 
-          // 解析中繼資料 (跑馬燈、輪播、導流彈窗、排程)
+          // 解析中繼資料
           try {
             const parsedMeta = JSON.parse(s.bio_text);
             appData.bio = parsedMeta.bio || '';
@@ -1085,7 +1088,7 @@
             appData.bio = s.bio_text || '';
           }
 
-          // 解析卡片項目 (以雲端資料庫為主，依 sort_order 嚴格排序)
+          // 解析卡片項目
           if (s.bio_items && s.bio_items.length > 0) {
             const map = {};
             s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
@@ -1110,7 +1113,7 @@
             appData.sections = [];
           }
 
-          // 抓到雲端最新版本後，才把本機快取更新為最新（僅作為離線備份用）
+          // 備份最新內容到本地快取
           localStorage.setItem(getStorageKey(), JSON.stringify(appData));
 
           document.getElementById('demoSwitchBar').style.display = 'block';
@@ -1119,14 +1122,35 @@
           document.title = `${appData.brandName} | 品牌名片`;
           renderView();
         } else {
-          switchToDemoMode();
+          // ⚠️ 查無此代號時，友善提示使用者，絕不靜默跳轉踢回首頁
+          console.warn(`[Supabase] 找不到代號為 ${slug} 的店鋪`);
+          isRealUser = false;
+          // 若本機有快取則優先顯示快取，避免空白
+          const localFallback = localStorage.getItem(getStorageKey());
+          if (localFallback) {
+            try {
+              appData = JSON.parse(localFallback);
+              renderView();
+              return;
+            } catch(e) {}
+          }
+          Swal.fire({
+            title: '找不到此品牌頁面',
+            text: `網址代號「${slug}」尚未開通或已被移除。`,
+            icon: 'info',
+            confirmButtonText: '回到官方首頁'
+          }).then(() => {
+            window.location.href = window.location.pathname;
+          });
         }
       } catch (e) {
-        console.warn("雲端讀取例外，僅在完全斷網時才退回本機快取:", e);
+        console.warn("雲端讀取異常，啟動本機快取備援:", e);
+        // 斷網或連線不穩時，嚴格保留在當前頁面，用本地快取渲染
         const fallback = localStorage.getItem(getStorageKey());
         if (fallback) {
           try {
             appData = JSON.parse(fallback);
+            isRealUser = true;
             renderView();
           } catch(err) {}
         }
@@ -1134,6 +1158,7 @@
     }
 
     window.switchToDemoMode = function() {
+      // 只有在明確點擊「查看完整官方示範」按鈕時，才清除網址參數回示範頁
       localStorage.removeItem('sibyl_demo_data');
       localStorage.removeItem('sibyl_demo_ver');
       window.location.href = window.location.pathname;
