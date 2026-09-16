@@ -193,7 +193,7 @@
     <div id="profileModule" class="w-full flex flex-col items-center text-center transition-all">
       <div onclick="openAdminDirectly()" class="relative group cursor-pointer" title="點擊設定個人資訊">
         <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/90 via-white/40 to-white shadow-md">
-          <img id="displayAvatar" src="" alt="頭像" class="w-full h-full rounded-full object-cover bg-[#E8DFD3]">
+          <img id="displayAvatar" src="" alt="" onerror="this.src='https://api.dicebear.com/7.x/lorelei/svg?seed=Chloe&backgroundColor=e8dfd3'" class="w-full h-full rounded-full object-cover bg-[#E8DFD3]">
         </div>
       </div>
       <h1 id="displayName" class="mt-3.5 text-xl font-bold tracking-tight" style="color: var(--title-color);"></h1>
@@ -1759,28 +1759,35 @@
       const mod = document.getElementById('scheduleModule');
       if (!mod) return;
 
-      // 若資料結構缺失則給予預設值，確保示範前台 100% 渲染
+      // 1. 防禦機制：確保 appData.schedule 存在
       if (!appData.schedule) {
-        appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
+        appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
       }
       const s = appData.schedule;
 
-      // 非示範頁且店主未開啟時才隱藏
+      // 2. 若為業主模式且未啟用排班，直接隱藏，避免露出空的框框
       if (isRealUser && !s.enabled) {
         mod.style.display = 'none';
         return;
       }
+
+      // 示範模式或已啟用時顯示
       mod.style.display = 'block';
 
-      // 嚴格控制引導文案：業主模式絕不出現
+      // 3. 嚴格控制教學文案：業主模式絕不顯示
       const tagEl = document.getElementById('demoScheduleTag');
       const guideEl = document.getElementById('demoScheduleGuideBox');
       if (tagEl) tagEl.style.display = isRealUser ? 'none' : 'inline-block';
       if (guideEl) guideEl.style.display = isRealUser ? 'none' : 'block';
 
-      // 設定當前月份文字
+      // 4. 防禦機制：確保 currentCalDate 是合法的 Date 物件
+      if (!(currentCalDate instanceof Date) || isNaN(currentCalDate.getTime())) {
+        currentCalDate = new Date();
+      }
+
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
+
       const titleEl = document.getElementById('calMonthTitle');
       if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
 
@@ -1801,7 +1808,7 @@
         grid.appendChild(empty);
       }
 
-      // 日期格生成
+      // 建立 1 ~ 31 號實體格子
       for (let d = 1; d <= totalDays; d++) {
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
