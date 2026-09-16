@@ -110,7 +110,7 @@
     </div>
   </div>
 
-  <!-- 頂部導航列 (修正黏住問題，確保層次分離) -->
+  <!-- 頂部導航列 -->
   <header class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between relative z-30 bg-transparent">
     <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-white/60 shadow-xs transition active:scale-95 cursor-pointer">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -127,16 +127,14 @@
     </div>
   </header>
 
-  <!-- 主體畫布 (加入 space-y-6 確保各模組不打架) -->
+  <!-- 主體畫布 -->
   <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-1 pb-16 flex-grow flex flex-col items-center relative z-10 space-y-6">
 
     <!-- 示範模式專屬：高轉換引導與痛點解析卡片 (僅在示範模式出現) -->
     <div id="demoGuideBanner" class="w-full relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#3C322A] to-[#1C1815] shadow-xl border border-stone-800 transition-all mb-4">
-      <!-- 裝飾性光暈背景 -->
       <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
       
       <div class="relative z-10 p-5 space-y-4">
-        <!-- 頂部標籤與微指引 -->
         <div class="flex items-center justify-between">
           <span class="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[9px] font-bold tracking-widest uppercase flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
@@ -148,7 +146,6 @@
           </div>
         </div>
 
-        <!-- 核心價值主張 -->
         <div class="space-y-1">
           <h3 class="text-[17px] font-extrabold text-amber-50 leading-tight tracking-wide">
             為什麼你需要<span class="text-amber-400">專屬品牌連結頁</span>？
@@ -158,7 +155,6 @@
           </p>
         </div>
 
-        <!-- 痛點解析條列 (視覺化膠囊) -->
         <div class="space-y-2.5 pt-1">
           <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
             <div class="w-6 h-6 rounded-full bg-rose-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -205,7 +201,7 @@
       <div id="displaySocials" class="flex flex-wrap items-center justify-center gap-3 mt-4"></div>
     </div>
 
-    <!-- 模組 2：品牌視覺輪播牆 (置中自適應 + 動態毛玻璃背景) -->
+    <!-- 模組 2：品牌視覺輪播牆 -->
     <div id="carouselWrapper" class="w-full my-2 relative select-none" style="display: none;">
       <div id="carouselHeaderBox" class="px-1 mb-2 flex items-center justify-between">
         <span class="text-[10px] font-bold tracking-wider uppercase opacity-80 flex items-center gap-1.5" style="color: var(--title-color);">
@@ -227,23 +223,23 @@
     </div>
 
     <!-- 模組 3：檔期排班／空檔日曆 (莫蘭迪色系) -->
-    <div id="scheduleModule" class="w-full my-2 p-4 rounded-2xl app-card transition-all" style="display: none;">
+    <div id="scheduleModule" class="w-full my-2 p-4 rounded-2xl app-card transition-all block">
       <div class="flex items-center justify-between mb-1.5">
         <div class="flex items-center gap-1.5 font-bold text-xs" style="color: var(--title-color);">
           <i class="fa-regular fa-calendar-check text-[#4C6F5E]"></i>
           <span>即時檔期與預約空檔</span>
         </div>
-        <span id="demoScheduleTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#E2D9CE] text-[#4A3F35] font-medium tracking-wide">
+        <span id="demoScheduleTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#E2D9CE] text-[#4A3F35] font-medium tracking-wide" style="display: none;">
           適合：新秘・婚禮主持・巡迴接案
         </span>
       </div>
-      <div id="demoScheduleGuideBox" class="px-3 py-2 rounded-xl bg-white/60 border border-white/80 shadow-2xs mb-2.5">
+      <div id="demoScheduleGuideBox" class="px-3 py-2 rounded-xl bg-white/60 border border-white/80 shadow-2xs mb-2.5" style="display: none;">
         <p class="text-[10.5px] text-[#645E59] leading-relaxed">
           <b>你可以這樣應用：</b>標註當日所在縣市（例：台北、台南），客戶點選綠色空檔即自動複製諮詢模板，省去來回私訊問時間。
         </p>
       </div>
 
-      <!-- 圖例 -->
+      <!-- 圖例與月曆導覽 -->
       <div class="flex items-center justify-between py-2 border-t border-stone-200/50">
         <div class="flex items-center gap-2.5 text-[9px] text-[#645E59]">
           <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#5D8270]"></span>可預約</span>
@@ -264,7 +260,7 @@
       <div class="grid grid-cols-7 gap-1 text-center font-medium text-[9px] mb-1.5 text-stone-400">
         <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
       </div>
-      <div id="calendarGrid" class="grid grid-cols-7 gap-1 w-full min-h-[220px]"></div>
+      <div id="calendarGrid" class="cal-grid-box w-full min-h-[220px]"></div>
 
       <p id="scheduleNoteText" class="mt-2.5 text-[10.5px] text-[#645E59] leading-relaxed text-center font-light border-t pt-2 border-stone-200/50"></p>
     </div>
@@ -281,7 +277,6 @@
         </button>
       </div>
 
-      <!-- 免費開通卡片 -->
       <div class="w-full p-5 rounded-3xl bg-white/80 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
         <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
           <i class="fa-solid fa-palette text-[9px]"></i>
@@ -509,7 +504,7 @@
             </label>
           </div>
           <p class="text-[11px] text-[#645E59] leading-relaxed">
-            當訪客在前台點擊任意卡片時，將隨機彈出此視窗，引導訪客加入 LINE 官方帳號。
+            當訪客在前台點擊任意卡片時，將引導訪客加入 LINE 官方帳號。
           </p>
           <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
             <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
@@ -561,7 +556,7 @@
           <div id="adminSectionsList" class="space-y-4 min-h-[120px]"></div>
         </div>
 
-        <!-- ⭐ 許願功能池 (直傳 super.html 資料庫) -->
+        <!-- 數位管家功能許願池 -->
         <div class="p-4 rounded-2xl bg-gradient-to-br from-[#FAF6F0] to-[#EFE7DC] border border-[#DFD1C0] space-y-3 shadow-xs">
           <div class="flex items-center justify-between">
             <span class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
@@ -574,7 +569,7 @@
             希望新增什麼實用功能、排版樣式或系統串接？直接寫下您的想法，我們將在每週版本更新中排程開發！
           </p>
           <div class="space-y-2">
-            <textarea id="inputFeedbackWish" rows="2" placeholder="例：希望卡片可以設定外連影片、或希望有自訂字體功能..." class="w-full bg-white border border-[#DFD1C0] rounded-xl px-3 py-2 text-xs text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400"></textarea>
+            <textarea id="inputFeedbackWish" rows="2" placeholder="告訴我們您想要的功能..." class="w-full bg-white border border-[#DFD1C0] rounded-xl px-3 py-2 text-xs text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400"></textarea>
             <button type="button" onclick="submitWishToSuper()" class="w-full py-2 rounded-xl bg-stone-900 hover:bg-black text-white text-[11px] font-semibold transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
               <i class="fa-solid fa-paper-plane text-[10px]"></i>
               <span>送出功能願望</span>
@@ -591,7 +586,7 @@
     </div>
   </div>
 
-  <!-- ⭐ 關鍵修復：卡片編輯彈窗升至 z-[300] (確保永遠高於後台抽屜 z-[200]) -->
+  <!-- 卡片編輯彈窗 (z-[300]) -->
   <div id="itemModal" style="display: none;" class="fixed inset-0 z-[300] flex items-center justify-center p-4">
     <div onclick="closeItemModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
     <div class="relative z-10 bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-xs max-h-[88vh] overflow-y-auto border border-stone-100">
@@ -675,7 +670,7 @@
     </div>
   </div>
 
-  <!-- 免費開通抽屜 -->
+  <!-- 免費開通抽屜 (包含：忘記專屬網址？輸入 Email 免費找回) -->
   <div id="onboardSheet" style="display: none;" class="fixed inset-0 z-[150]">
     <div onclick="closeOnboardModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6">
@@ -734,14 +729,10 @@
   <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-[400]">
     操作完成
   </div>
-
   <script>
     const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxJlhG1eDEwuyjiJedTtvND-iwIzGXA3sfc_iN_Pq-15LIKWwlHGDX5tFRVdlOzfanONA/exec";
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JnpaLZVnGkW9Jr967LeYuQ_d8bXwfnz";
-
-    // 全新版號：強制刷新過期快取
-    const DEMO_DATA_VERSION = 'v20260916_perfect_restored_full_v1';
 
     window.openAdminDirectly = function() {
       if (typeof isRealUser !== 'undefined' && isRealUser) {
@@ -761,6 +752,7 @@
     ];
     let avatarIndex = 0;
 
+    // 官方完整展示版型：涵蓋大正方形置頂、滿版長海報置頂、標準中長方左側、小方形右側、小方形左側、純文字無圖
     const demoData = {
       theme: 'cashmere-latte',
       brandName: 'STUDIO AURA ╳ 慢奢選品',
@@ -773,7 +765,7 @@
       },
       carousel: {
         enabled: true,
-        aspectRatio: 'square', // 預設正方形
+        aspectRatio: 'square',
         position: 'below',
         images: [
           'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
@@ -812,18 +804,18 @@
       sections: [
         {
           id: 'sec-1',
-          title: 'WEDDING & STYLING ╳ 造型與預約',
+          title: 'SEASONAL SPECIAL ╳ 當季主打特企',
           items: [
             {
               id: 'item-101',
-              title: '【新娘造型定製】純淨光透妝感 ╳ 奢華禮服梳化',
-              subtitle: '一對一試妝諮詢，贈送手工精油保養安瓶（版型示範：大正方形・上方置頂）',
-              img: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
+              title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
+              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100（版型示範：大正方形・上方置頂）',
+              img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
               imgSize: 'large-square',
               imgPos: 'top',
               url: 'https://heysibyl.com',
-              discountCode: 'WEDDING2026',
-              badge: '本月主打',
+              discountCode: 'AURA100',
+              badge: '限時特惠',
               countdownEnd: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
               clicks: 142
             },
@@ -842,14 +834,14 @@
             },
             {
               id: 'item-103',
-              title: '婚禮當日宴客梳化 ╳ 伴娘媽媽造型升級',
-              subtitle: '以高級自然光澤打造專屬氣質（版型示範：標準中長方・左側配圖）',
+              title: '法式亞麻生活抱枕組（手工梭織限量款）',
+              subtitle: '厚磅質樸手感，為起居空間注入溫潤暖意（版型示範：標準中長方・左側配圖）',
               img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
               imgSize: 'medium',
               imgPos: 'left',
               url: 'https://heysibyl.com',
               discountCode: '',
-              badge: '熱門推薦',
+              badge: '熱銷',
               countdownEnd: '',
               clicks: 89
             }
@@ -857,31 +849,31 @@
         },
         {
           id: 'sec-2',
-          title: 'SELECTED PRODUCTS ╳ 當季感官選品',
+          title: 'SPACES & BOOKINGS ╳ 空間預約與諮詢',
           items: [
             {
               id: 'item-201',
-              title: '【晨霧檜木】手工低溫萃取精油 ╳ 黑陶擴香座',
-              subtitle: '以天然山林氣息安撫日常緊繃，輸入代碼現抵 100（版型示範：小方形・右側配圖）',
-              img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80',
+              title: '草本舒緩複方滾珠精油 (10ml 便攜瓶)',
+              subtitle: '隨身放鬆必備，淡雅甜橙與雪松調（版型示範：小方形・右側配圖）',
+              img: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=300&q=80',
               imgSize: 'small',
               imgPos: 'right',
               url: 'https://heysibyl.com',
-              discountCode: 'AURA100',
-              badge: '限量',
+              discountCode: 'MINI88',
+              badge: '隨行款',
               countdownEnd: '',
               clicks: 53
             },
             {
               id: 'item-202',
-              title: '草本舒緩複方滾珠精油 (10ml 便攜瓶)',
-              subtitle: '隨身放鬆必備，淡雅甜橙與雪松調（版型示範：小方形・左側配圖）',
-              img: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=300&q=80',
+              title: '秋季私廚感官餐桌（每週僅開放五席微醺晚宴）',
+              subtitle: '以在地當令旬味為靈感的 7 道私廚微醺晚宴（版型示範：小方形・左側配圖）',
+              img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
               imgSize: 'small',
               imgPos: 'left',
               url: 'https://heysibyl.com',
-              discountCode: 'MINI88',
-              badge: '隨行款',
+              discountCode: '',
+              badge: '席位預約',
               countdownEnd: '',
               clicks: 41
             },
@@ -912,140 +904,26 @@
     let currentCalDate = new Date(2026, 9, 1);
     let adminCalDate = new Date(2026, 9, 1);
 
-    function getStorageKey() {
-      return currentSlug ? `sibyl_data_${currentSlug}` : 'sibyl_demo_data';
-    }
-
-    window.handleAdminEntry = async function() {
-      if (!isRealUser) {
-        openAdminModal();
-        return;
-      }
-      const { value: pin } = await Swal.fire({
-        title: '請輸入管理 PIN 碼',
-        input: 'password',
-        inputPlaceholder: '預設 8888',
-        showCancelButton: true,
-        confirmButtonText: '登入後台',
-        cancelButtonText: '取消'
-      });
-      if (pin === appData.adminPin) {
-        if (pin === '8888') {
-          await forceChangeDefaultPin();
-        } else {
-          openAdminModal();
-        }
-      } else if (pin) {
-        Swal.fire('密碼錯誤', '請確認管理 PIN 碼。', 'error');
-      }
-    };
-
-    async function forceChangeDefaultPin() {
-      const { value: newPin } = await Swal.fire({
-        title: '首次登入安全設定',
-        text: '請自訂一組 4-6 位數新 PIN 碼：',
-        input: 'password',
-        allowOutsideClick: false,
-        confirmButtonText: '確認並進入後台',
-        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
-      });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        autoSaveToCloud();
-        Swal.fire('設定成功！', '管理 PIN 碼已更新。', 'success');
-        openAdminModal();
-      }
-    }
-
-    window.promptChangePin = async function() {
-      const { value: newPin } = await Swal.fire({
-        title: '修改管理 PIN 碼',
-        input: 'password',
-        showCancelButton: true,
-        confirmButtonText: '儲存新密碼',
-        cancelButtonText: '取消',
-        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
-      });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        autoSaveToCloud();
-        Swal.fire('修改成功！', '管理 PIN 碼已變更。', 'success');
-      }
-    };
-
-    // 確保點開後台時：社群、分類卡片、日曆 100% 立即繪製，杜絕空白
-    window.openAdminModal = function() {
-      const sheet = document.getElementById('adminSheet');
-      if (!sheet) return;
-      sheet.style.display = 'block';
-
-      // 1. 同步立即填入資料
-      populateAdmin();
-
-      // 2. 利用 requestAnimationFrame 與微延遲確保 DOM 完成展開後再次保證繪製
-      requestAnimationFrame(() => {
-        populateAdmin();
-        if (typeof renderAdminCalendar === 'function') {
-          renderAdminCalendar();
-        }
-      });
-
-      setTimeout(() => {
-        if (typeof renderAdminCalendar === 'function') {
-          renderAdminCalendar();
-        }
-      }, 80);
-    };
-
-    window.openOnboardModal = function() {
-      document.getElementById('onboardSheet').style.display = 'block';
-    };
-    window.closeOnboardModal = function() {
-      document.getElementById('onboardSheet').style.display = 'none';
-    };
-    window.openShareModal = function() {
-      document.getElementById('shareSheet').style.display = 'flex';
-    };
-    window.closeShareModal = function() {
-      document.getElementById('shareSheet').style.display = 'none';
-    };
-
     // ====================================================
-    // 雲端資料永遠絕對優先 (Network-First 架構)
-    // 徹底解決手機與電腦讀到不同版本、快取打架問題
+    // 初始化：純雲端優先架構（徹底清除 LocalStorage 污染）
     // ====================================================
-
     async function initPage() {
       const p = new URLSearchParams(window.location.search);
       const slug = p.get('u');
       currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.trim().toLowerCase() : null;
 
       if (currentSlug) {
-        // 1. 業主模式：先讀取本地暫存秒開畫面，避免白屏或出現展示卡
-        const localCache = localStorage.getItem(getStorageKey());
-        if (localCache) {
-          try {
-            appData = JSON.parse(localCache);
-            isRealUser = true;
-            renderView();
-          } catch (e) {}
-        }
-        // 2. 向雲端同步最新資料
+        // 真實使用者模式：徹底不讀 LocalStorage，每次重新整理 100% 直連雲端資料庫
+        isRealUser = true;
+        document.getElementById('demoGuideBanner').style.display = 'none';
+        document.getElementById('demoSwitchBar').style.display = 'block';
+        document.getElementById('btnAdminLabel').innerText = '管理後台';
         await loadStoreFromSupabase(currentSlug);
       } else {
-        // 官方示範模式
+        // 示範模式
         isRealUser = false;
-        const localCache = localStorage.getItem('sibyl_demo_data');
-        if (localCache) {
-          try {
-            appData = JSON.parse(localCache);
-          } catch (e) {
-            appData = JSON.parse(JSON.stringify(demoData));
-          }
-        } else {
-          appData = JSON.parse(JSON.stringify(demoData));
-        }
-
+        appData = JSON.parse(JSON.stringify(demoData));
+        document.getElementById('demoGuideBanner').style.display = 'block';
         document.getElementById('demoSwitchBar').style.display = 'none';
         document.getElementById('btnAdminLabel').innerText = '示範設定後台';
         renderView();
@@ -1054,11 +932,13 @@
 
     async function loadStoreFromSupabase(slug) {
       try {
-        // 1. 查詢店鋪主檔 (最乾淨的查詢字串)
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}`, {
+        // 關鍵：加入 _t 時間戳記與 Cache-Control 標頭，破除手機瀏覽器快取
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*&_t=${Date.now()}`, {
           headers: {
             "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache"
           }
         });
 
@@ -1067,7 +947,6 @@
 
         if (rows && rows.length > 0) {
           const s = rows[0];
-          isRealUser = true;
           currentStoreDbId = s.id;
           appData.theme = s.theme || 'cashmere-latte';
           appData.brandName = s.brand_name || slug;
@@ -1086,11 +965,11 @@
             appData.bio = s.bio_text || '';
           }
 
-          // 2. 查詢該店家的卡片清單
-          const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+          const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`, {
             headers: {
               "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+              "Cache-Control": "no-cache, no-store, must-revalidate"
             }
           });
 
@@ -1121,40 +1000,35 @@
               });
             });
             appData.sections = Object.values(map);
+          } else {
+            appData.sections = [];
           }
 
-          // 寫入本地備份
-          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
-          document.getElementById('demoSwitchBar').style.display = 'block';
-          document.getElementById('btnAdminLabel').innerText = '管理後台';
           document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
           document.title = `${appData.brandName} | 品牌名片`;
           renderView();
         } else {
-          console.warn("找不到此店家 slug:", slug);
+          Swal.fire('找不到此頁面', `網址代號「${slug}」尚未開通。`, 'info').then(() => {
+            window.location.href = window.location.pathname;
+          });
         }
       } catch (err) {
-        console.warn("載入過程異常，維持本地資料渲染:", err);
+        console.error("雲端讀取異常:", err);
       }
     }
 
-    window.switchToDemoMode = function() {
-      // 只有在明確點擊「查看完整官方示範」按鈕時，才清除網址參數回示範頁
-      localStorage.removeItem('sibyl_demo_data');
-      localStorage.removeItem('sibyl_demo_ver');
-      window.location.href = window.location.pathname;
-    };
-
+    // ====================================================
+    // 前台渲染：支援所有版型與轉換文案
+    // ====================================================
     function renderView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
       document.getElementById('displayName').innerText = appData.brandName;
-      document.getElementById('displayBio').innerHTML = (appData.bio || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+      document.getElementById('displayBio').innerHTML = (appData.bio || '').replace(/\n/g, '<br>');
       document.getElementById('displayAvatar').src = appData.avatar;
       document.getElementById('shareBrandTitle').innerText = appData.brandName;
       document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(window.location.href)}`;
 
-      // 跑馬燈
+      // 跑馬燈公告
       const mar = appData.marquee;
       const marEl = document.getElementById('marqueeBanner');
       if (mar && mar.enabled && mar.text) {
@@ -1164,7 +1038,7 @@
         marEl.style.display = 'none';
       }
 
-      // 社群列表
+      // 社群入口
       const socBox = document.getElementById('displaySocials');
       socBox.innerHTML = '';
       (appData.socials || []).forEach(s => {
@@ -1176,7 +1050,7 @@
         socBox.appendChild(a);
       });
 
-      // 嚴格控制教學文案：真實使用者模式隱藏所有提示
+      // 示範模式專屬引導標籤：業主模式下全面隱藏
       const demoGuideBanner = document.getElementById('demoGuideBanner');
       const demoCarouselTag = document.getElementById('demoCarouselTag');
       const demoCarouselGuideBox = document.getElementById('demoCarouselGuideBox');
@@ -1197,7 +1071,7 @@
         if (demoScheduleGuideBox) demoScheduleGuideBox.style.display = 'block';
       }
 
-      // 渲染卡片分類
+      // 渲染卡片清單與「適合誰／你可以這樣應用」
       const secBox = document.getElementById('sectionsContainer');
       secBox.innerHTML = '';
 
@@ -1250,7 +1124,6 @@
 
         (sec.items || []).forEach((item, iIdx) => {
           const card = document.createElement('div');
-          // 確保卡片在手機端 min-w-full 且高度自動伸展，避免高度塌陷
           card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 block';
           card.onclick = (e) => {
             if (!e.target.closest('.copy-btn')) {
@@ -1268,7 +1141,6 @@
             </div>
           ` : '';
 
-          // 左右側圖片在手機版的自適應尺寸（確保強制 shrink-0，絕不被文字擠壓為 0）
           const sideSizeClass = {
             'small': 'w-12 h-12 min-w-[48px] min-h-[48px]',
             'medium': 'w-16 h-16 min-w-[64px] min-h-[64px]',
@@ -1276,7 +1148,7 @@
             'large': 'w-20 h-20 min-w-[80px] min-h-[80px]'
           }[item.imgSize || 'medium'];
 
-          // 1. 上方置頂排版 (Top) - 手機版高度自適應，不寫死固定高度
+          // 1. 上方置頂排版 (Top)
           if (item.img && item.imgPos === 'top') {
             const isSquare = item.imgSize === 'large-square';
             const imgContainerClass = isSquare ? 'w-full p-3.5 pb-0 flex justify-center bg-stone-50/50' : 'w-full aspect-[16/9] max-h-48 overflow-hidden bg-stone-100';
@@ -1297,7 +1169,7 @@
                 </div>
               </div>
             `;
-          // 2. 右側圖排版 (Right) - 移除強制 truncate，改用 break-words 確保手機換行不消失
+          // 2. 右側圖排版 (Right)
           } else if (item.img && item.imgPos === 'right') {
             card.innerHTML = `
               <div class="p-3.5 flex justify-between items-center gap-3 w-full">
@@ -1329,7 +1201,7 @@
                 ${codeBtn ? `<div class="flex-shrink-0">${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30 flex-shrink-0"></i>'}
               </div>
             `;
-          // 4. 純文字卡片 (無圖卡片) - 確保在窄螢幕不會塌陷
+          // 4. 純文字卡片 (無圖卡片)
           } else {
             card.innerHTML = `
               <div class="p-4 flex flex-col justify-between gap-1.5 w-full">
@@ -1357,153 +1229,184 @@
       startCountdownTimers();
     }
 
-    function handleCardClickTrack(sIdx, iIdx, targetUrl) {
-      if (appData.sections[sIdx] && appData.sections[sIdx].items[iIdx]) {
-        appData.sections[sIdx].items[iIdx].clicks = (appData.sections[sIdx].items[iIdx].clicks || 0) + 1;
-        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-        autoSaveToCloud();
-      }
+    // ====================================================
+    // 後台儲存核心：100% 同步寫入 Supabase
+    // ====================================================
+    window.saveAdminAndClose = async function(silent = false) {
+      const btn = document.getElementById('btnSaveAdmin');
+      btn.disabled = true;
+      btn.innerText = '正在寫入雲端節點...';
 
-      const lead = appData.lineLead;
-      const hasShownLead = sessionStorage.getItem('has_shown_line_lead');
-      if (lead && lead.enabled && !hasShownLead && Math.random() > 0.45) {
-        sessionStorage.setItem('has_shown_line_lead', 'true');
-        openLineLeadModal(targetUrl);
-      } else {
-        window.open(targetUrl, '_blank');
-      }
-    }
+      if (isRealUser && currentStoreDbId) {
+        try {
+          const metaPayload = JSON.stringify({
+            bio: appData.bio,
+            marquee: appData.marquee,
+            carousel: appData.carousel,
+            lineLead: appData.lineLead,
+            schedule: appData.schedule
+          });
 
-    function openLineLeadModal(targetUrl) {
-      const modal = document.getElementById('lineLeadModal');
-      const lead = appData.lineLead;
-      document.getElementById('leadModalTitle').innerText = lead.title || '領取官方專屬禮遇';
-      document.getElementById('btnLineLeadAction').href = lead.url || '#';
-      document.getElementById('btnLineLeadAction').onclick = () => {
-        closeLineLeadModal();
-        setTimeout(() => { window.open(targetUrl, '_blank'); }, 400);
-      };
-      modal.style.display = 'flex';
-    }
-    window.closeLineLeadModal = function() { document.getElementById('lineLeadModal').style.display = 'none'; };
+          // A. 更新主表
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
+            method: "PATCH",
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              brand_name: appData.brandName,
+              bio_text: metaPayload,
+              theme: appData.theme,
+              avatar_url: appData.avatar,
+              social_links: appData.socials,
+              admin_pin: appData.adminPin
+            })
+          });
 
-    function renderScheduleModule() {
-      const s = appData.schedule;
-      const mod = document.getElementById('scheduleModule');
-      if (!s || !s.enabled) {
-        if (mod) mod.style.display = 'none';
-        return;
-      }
-      if (mod) mod.style.display = 'block';
-
-      const profEl = document.getElementById('profileModule');
-      const carEl = document.getElementById('carouselWrapper');
-      const secEl = document.getElementById('sectionsContainer');
-
-      if (profEl) profEl.style.order = '1';
-      if (s.position === 'above_carousel') {
-        if (mod) mod.style.order = '2';
-        if (carEl) carEl.style.order = '3';
-        if (secEl) secEl.style.order = '4';
-      } else if (s.position === 'below_sections') {
-        if (carEl) carEl.style.order = '2';
-        if (secEl) secEl.style.order = '3';
-        if (mod) mod.style.order = '4';
-      } else {
-        if (carEl) carEl.style.order = '2';
-        if (mod) mod.style.order = '3';
-        if (secEl) secEl.style.order = '4';
-      }
-
-      const year = currentCalDate.getFullYear();
-      const month = currentCalDate.getMonth();
-      const titleEl = document.getElementById('calMonthTitle');
-      if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
-      
-      const noteEl = document.getElementById('scheduleNoteText');
-      if (noteEl) noteEl.innerText = s.note || '點選有空檔的日期，可直接複製預約文字私訊我們！';
-
-      const grid = document.getElementById('calendarGrid');
-      if (!grid) return;
-      grid.className = 'cal-grid-box';
-      grid.innerHTML = '';
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-
-      for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement('div');
-        empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
-        grid.appendChild(empty);
-      }
-
-      for (let d = 1; d <= totalDays; d++) {
-        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
-        let status = 'none';
-        let location = '';
-
-        if (item) {
-          if (typeof item === 'object') {
-            status = item.status || 'none';
-            location = item.location || '';
-          } else if (typeof item === 'string') {
-            status = item;
-          }
-        }
-
-        const cell = document.createElement('div');
-        cell.className = `cal-cell status-${status}`;
-
-        let locBadge = '';
-        if (location) {
-          locBadge = `<span style="font-size: 8px; line-height: 1; padding: 1.5px 3px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${location}</span>`;
-        }
-
-        cell.innerHTML = `<span style="font-size: 12px; font-weight: 600; line-height: 1;">${d}</span>${locBadge}`;
-
-        if (status === 'available') {
-          cell.onclick = () => handleScheduleDateClick(dateKey, false);
-        } else if (status === 'pending') {
-          cell.onclick = () => handleScheduleDateClick(dateKey, true);
-        }
-        grid.appendChild(cell);
-      }
-    }
-
-    window.changeCalMonth = function(dir) {
-      currentCalDate.setMonth(currentCalDate.getMonth() + dir);
-      renderScheduleModule();
-    };
-
-    function handleScheduleDateClick(dateKey, isPending = false) {
-      const item = (appData.schedule && appData.schedule.dates) ? appData.schedule.dates[dateKey] : null;
-      const loc = (item && typeof item === 'object' && item.location) ? `【${item.location}場次】` : '';
-      const statusText = isPending ? '尚在保留中' : '目前顯示有檔期';
-      const msg = `您好！我在品牌頁看到 ${dateKey} ${loc}${statusText}，想向您諮詢服務細節！\n（來自 Sibyl 品牌預約頁）`;
-
-      navigator.clipboard.writeText(msg).then(() => {
-        Swal.fire({
-          title: `已複製 ${dateKey} ${loc}諮詢！`,
-          html: `<div style="text-align:left;background:#f5efe6;padding:12px;border-radius:12px;font-size:12px;color:#4A3F35;line-height:1.6;font-family:monospace;margin:10px 0;">${msg.replace(/\n/g, '<br>')}</div><p style="font-size:11px;color:#7A6C62;">內容已複製至剪貼簿，是否立即前往官方私訊洽詢？</p>`,
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonText: '前往私訊預約',
-          cancelButtonText: '稍後手動貼上'
-        }).then((res) => {
-          if (res.isConfirmed) {
-            const line = (appData.socials || []).find(it => it.icon && it.icon.includes('line'));
-            if (line && line.url) {
-              window.open(line.url, '_blank');
-            } else if (appData.socials && appData.socials.length > 0) {
-              window.open(appData.socials[0].url, '_blank');
-            } else {
-              showToast('已複製！請開啟 LINE 或 IG 直接貼上發送');
+          // B. 整理卡片陣列
+          const itemsToInsert = [];
+          let sortIdx = 0;
+          for (const sec of appData.sections) {
+            for (const it of (sec.items || [])) {
+              itemsToInsert.push({
+                store_id: currentStoreDbId,
+                section_title: sec.title || '精選推薦',
+                title: it.title || '',
+                subtitle: it.subtitle || '',
+                thumbnail_url: it.img || '',
+                img_size: it.imgSize || 'large-square',
+                img_pos: it.imgPos || 'top',
+                target_url: it.url || '#',
+                discount_code: it.discountCode || '',
+                badge_label: it.badge || '',
+                sort_order: sortIdx++,
+                click_count: it.clicks || 0
+              });
             }
           }
+
+          // C. 先刪除舊卡片，再批次寫入新卡片
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+            method: "DELETE",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+          });
+
+          if (itemsToInsert.length > 0) {
+            const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+              method: "POST",
+              headers: {
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=representation"
+              },
+              body: JSON.stringify(itemsToInsert)
+            });
+
+            if (!insertRes.ok) {
+              const errText = await insertRes.text();
+              console.error("卡片寫入失敗:", errText);
+            }
+          }
+        } catch(err) {
+          console.error("雲端同步異常:", err);
+          Swal.fire('同步提醒', '請確認網路連線是否通暢。', 'warning');
+        }
+      }
+
+      btn.disabled = false;
+      btn.innerText = '儲存並同步發布';
+      document.getElementById('adminSheet').style.display = 'none';
+      renderView();
+
+      if (!silent) {
+        Swal.fire({
+          title: '已成功儲存並同步雲端！',
+          html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">資料已安全寫入資料庫。<br>電腦與手機重新整理即可完全同步最新畫面！</p>',
+          icon: 'success',
+          confirmButtonText: '太棒了',
+          confirmButtonColor: '#2C241E'
         });
+      }
+    };
+
+    // ====================================================
+    // 後台管理密碼驗證
+    // ====================================================
+    window.handleAdminEntry = async function() {
+      if (!isRealUser) {
+        openAdminModal();
+        return;
+      }
+      const { value: pin } = await Swal.fire({
+        title: '請輸入管理 PIN 碼',
+        input: 'password',
+        inputPlaceholder: '預設 8888',
+        showCancelButton: true,
+        confirmButtonText: '登入後台',
+        cancelButtonText: '取消'
       });
+      if (pin === appData.adminPin) {
+        if (pin === '8888') {
+          await forceChangeDefaultPin();
+        } else {
+          openAdminModal();
+        }
+      } else if (pin) {
+        Swal.fire('密碼錯誤', '請確認管理 PIN 碼。', 'error');
+      }
+    };
+
+    async function forceChangeDefaultPin() {
+      const { value: newPin } = await Swal.fire({
+        title: '首次登入安全設定',
+        text: '請自訂一組 4-6 位數新 PIN 碼：',
+        input: 'password',
+        allowOutsideClick: false,
+        confirmButtonText: '確認並進入後台',
+        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        await saveAdminAndClose(true);
+        Swal.fire('設定成功！', '管理 PIN 碼已更新。', 'success');
+        openAdminModal();
+      }
     }
+
+    window.promptChangePin = async function() {
+      const { value: newPin } = await Swal.fire({
+        title: '修改管理 PIN 碼',
+        input: 'password',
+        showCancelButton: true,
+        confirmButtonText: '儲存新密碼',
+        cancelButtonText: '取消',
+        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        Swal.fire('修改成功！', '請記得點擊右下角【儲存並同步發布】以更新至雲端。', 'success');
+      }
+    };
+
+    window.openAdminModal = function() {
+      const sheet = document.getElementById('adminSheet');
+      if (!sheet) return;
+      sheet.style.display = 'block';
+      populateAdmin();
+      setTimeout(() => {
+        if (typeof renderAdminCalendar === 'function') renderAdminCalendar();
+      }, 60);
+    };
+
+    window.closeAdminModal = function() { document.getElementById('adminSheet').style.display = 'none'; };
+    window.openOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'block'; };
+    window.closeOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'none'; };
+    window.openShareModal = function() { document.getElementById('shareSheet').style.display = 'flex'; };
+    window.closeShareModal = function() { document.getElementById('shareSheet').style.display = 'none'; };
+    window.switchToDemoMode = function() { window.location.href = window.location.pathname; };
 
     function populateAdmin() {
       document.getElementById('inputBrandName').value = appData.brandName;
@@ -1515,32 +1418,33 @@
       document.getElementById('inputMarqueeText').value = appData.marquee.text || '';
       document.getElementById('marqueeConfigBox').style.display = appData.marquee.enabled ? 'block' : 'none';
 
-      if (!appData.lineLead) appData.lineLead = { enabled: true, url: '', title: '' };
+      if (!appData.lineLead) appData.lineLead = { enabled: false, url: '', title: '' };
       document.getElementById('inputLineLeadEnabled').checked = appData.lineLead.enabled;
       document.getElementById('inputLineLeadUrl').value = appData.lineLead.url || '';
       document.getElementById('inputLineLeadTitle').value = appData.lineLead.title || '';
       document.getElementById('lineLeadConfigBox').style.display = appData.lineLead.enabled ? 'block' : 'none';
 
+      // 社群
       const socBox = document.getElementById('adminSocialsList');
       socBox.innerHTML = '';
       (appData.socials || []).forEach((s, idx) => {
         const row = document.createElement('div');
         row.className = 'flex items-center gap-2 bg-white p-2 rounded-xl border';
         row.innerHTML = `
-          <select onchange="appData.socials[${idx}].icon = this.value; markAsDirty(); renderView();" class="text-xs border rounded-lg px-2 py-1 bg-white">
-            <option value="fa-solid fa-globe" ${s.icon.includes('globe') ? 'selected' : ''}>🌐 官網 / 部落格 (任意連結)</option>
+          <select onchange="appData.socials[${idx}].icon = this.value; renderView();" class="text-xs border rounded-lg px-2 py-1 bg-white">
+            <option value="fa-solid fa-globe" ${s.icon.includes('globe') ? 'selected' : ''}>🌐 官網 / 任意連結</option>
             <option value="fa-brands fa-instagram" ${s.icon.includes('instagram') ? 'selected' : ''}>Instagram</option>
             <option value="fa-brands fa-threads" ${s.icon.includes('threads') ? 'selected' : ''}>Threads</option>
             <option value="fa-brands fa-line" ${s.icon.includes('line') ? 'selected' : ''}>LINE</option>
             <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
           </select>
-          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView(); autoSaveToCloud();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
-          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView(); autoSaveToCloud();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
+          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
+          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
         `;
         socBox.appendChild(row);
       });
 
-      // 分類與卡片項目管理渲染 (語法完整閉合版)
+      // 分類清單
       const adminSecBox = document.getElementById('adminSectionsList');
       if (adminSecBox) {
         adminSecBox.innerHTML = '';
@@ -1549,7 +1453,7 @@
           box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
           box.innerHTML = `
             <div class="flex justify-between items-center gap-2">
-              <input type="text" value="${sec.title || ''}" oninput="appData.sections[${sIdx}].title = this.value; markAsDirty(); renderView(); autoSaveToCloud();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
+              <input type="text" value="${sec.title || ''}" oninput="appData.sections[${sIdx}].title = this.value; renderView();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
               <div class="flex items-center gap-1 flex-shrink-0">
                 <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[9px]"></i></button>
                 <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[9px]"></i></button>
@@ -1569,7 +1473,7 @@
               row.innerHTML = `
                 <div class="truncate mr-2 font-bold flex items-center gap-1.5 min-w-0 flex-1">
                   <span class="truncate">${it.title || ''}</span>
-                  <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[9px] font-mono flex-shrink-0 shadow-2xs" title="累積點擊次數">
+                  <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[9px] font-mono flex-shrink-0 shadow-2xs" title="點擊次數">
                     <i class="fa-solid fa-chart-simple mr-0.5 text-[8px]"></i>${it.clicks || 0}
                   </span>
                 </div>
@@ -1731,19 +1635,9 @@
               <span>預約狀態</span>
             </label>
             <select id="swal-status-select" style="
-              width: 100%;
-              height: 42px;
-              border: 1px solid #DFD1C0;
-              border-radius: 12px;
-              background-color: #FFFFFF;
-              color: #2C241E;
-              font-size: 12px;
-              font-weight: 500;
-              padding: 0 12px;
-              outline: none;
-              margin-bottom: 14px;
-              display: block;
-              cursor: pointer;
+              width: 100%; height: 42px; border: 1px solid #DFD1C0; border-radius: 12px;
+              background-color: #FFFFFF; color: #2C241E; font-size: 12px; font-weight: 500;
+              padding: 0 12px; outline: none; margin-bottom: 14px; display: block; cursor: pointer;
             ">
               <option value="available" ${currentStatus === 'available' ? 'selected' : ''}>可預約（鼠尾草綠）</option>
               <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>保留中（乾燥薑黃）</option>
@@ -1756,17 +1650,9 @@
               <span>所在地區／服務城市 (選填)</span>
             </label>
             <input id="swal-loc-input" type="text" placeholder="例：台北、台中、高雄、台南" value="${currentLoc}" style="
-              width: 100%;
-              height: 42px;
-              border: 1px solid #DFD1C0;
-              border-radius: 12px;
-              background-color: #FFFFFF;
-              color: #2C241E;
-              font-size: 12px;
-              padding: 0 12px;
-              box-sizing: border-box;
-              outline: none;
-              display: block;
+              width: 100%; height: 42px; border: 1px solid #DFD1C0; border-radius: 12px;
+              background-color: #FFFFFF; color: #2C241E; font-size: 12px; padding: 0 12px;
+              box-sizing: border-box; outline: none; display: block;
             ">
           </div>
         `,
@@ -1803,7 +1689,6 @@
 
         renderAdminCalendar();
         renderScheduleModule();
-        autoSaveToCloud();
       }
     }
 
@@ -1829,7 +1714,6 @@
       }
       renderAdminCalendar();
       renderScheduleModule();
-      autoSaveToCloud();
       showToast('當月週末已全設為可預約！');
     };
 
@@ -1845,7 +1729,6 @@
       }
       renderAdminCalendar();
       renderScheduleModule();
-      autoSaveToCloud();
       showToast('當月排程已清空');
     };
 
@@ -1857,17 +1740,14 @@
         setTimeout(renderAdminCalendar, 50);
       }
       renderView();
-      autoSaveToCloud();
     };
     window.changeScheduleOrder = function(val) {
       appData.schedule.position = val;
       renderView();
-      autoSaveToCloud();
     };
     window.updateScheduleNote = function(txt) {
       appData.schedule.note = txt.trim();
       renderView();
-      autoSaveToCloud();
     };
 
     let carouselTimer = null;
@@ -1875,6 +1755,87 @@
     let touchStartX = 0;
     let touchEndX = 0;
 
+    function renderScheduleModule() {
+      const mod = document.getElementById('scheduleModule');
+      if (!mod) return;
+
+      // 若資料結構缺失則給予預設值，確保示範前台 100% 渲染
+      if (!appData.schedule) {
+        appData.schedule = { enabled: true, position: 'below_carousel', note: '', dates: {} };
+      }
+      const s = appData.schedule;
+
+      // 非示範頁且店主未開啟時才隱藏
+      if (isRealUser && !s.enabled) {
+        mod.style.display = 'none';
+        return;
+      }
+      mod.style.display = 'block';
+
+      // 嚴格控制引導文案：業主模式絕不出現
+      const tagEl = document.getElementById('demoScheduleTag');
+      const guideEl = document.getElementById('demoScheduleGuideBox');
+      if (tagEl) tagEl.style.display = isRealUser ? 'none' : 'inline-block';
+      if (guideEl) guideEl.style.display = isRealUser ? 'none' : 'block';
+
+      // 設定當前月份文字
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      const titleEl = document.getElementById('calMonthTitle');
+      if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
+
+      const noteEl = document.getElementById('scheduleNoteText');
+      if (noteEl) noteEl.innerText = s.note || '點選有空檔的日期，可直接複製預約文字私訊我們！';
+
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      // 空白前置格
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
+        grid.appendChild(empty);
+      }
+
+      // 日期格生成
+      for (let d = 1; d <= totalDays; d++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
+        let status = 'none';
+        let location = '';
+
+        if (item) {
+          if (typeof item === 'object') {
+            status = item.status || 'none';
+            location = item.location || '';
+          } else if (typeof item === 'string') {
+            status = item;
+          }
+        }
+
+        const cell = document.createElement('div');
+        cell.className = `cal-cell status-${status}`;
+
+        let locBadge = '';
+        if (location) {
+          locBadge = `<span style="font-size: 8px; line-height: 1; padding: 1.5px 3px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${location}</span>`;
+        }
+
+        cell.innerHTML = `<span style="font-size: 12px; font-weight: 600; line-height: 1;">${d}</span>${locBadge}`;
+
+        if (status === 'available') {
+          cell.onclick = () => handleScheduleDateClick(dateKey, false);
+        } else if (status === 'pending') {
+          cell.onclick = () => handleScheduleDateClick(dateKey, true);
+        }
+        grid.appendChild(cell);
+      }
+    }
+    
     function renderCarousel() {
       const c = appData.carousel;
       const wrap = document.getElementById('carouselWrapper');
@@ -1951,50 +1912,23 @@
       });
     }
 
-    function startCountdownTimers() {
-      if (countdownInterval) clearInterval(countdownInterval);
-      function update() {
-        document.querySelectorAll('[data-countdown]').forEach(el => {
-          const end = new Date(el.getAttribute('data-countdown')).getTime();
-          const now = Date.now();
-          const diff = end - now;
-          const timerEl = el.querySelector('.countdown-timer');
-          if (diff <= 0) {
-            timerEl.innerText = '活動已截止';
-          } else {
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const m = Math.floor((diff / 1000 / 60) % 60);
-            const s = Math.floor((diff / 1000) % 60);
-            timerEl.innerText = `${d > 0 ? d + '天 ' : ''}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-          }
-        });
-      }
-      update();
-      countdownInterval = setInterval(update, 1000);
-    }
-
     window.toggleCarouselEnabled = function(enabled) {
       appData.carousel.enabled = enabled;
       document.getElementById('adminCarouselConfig').style.display = enabled ? 'block' : 'none';
       renderView();
-      autoSaveToCloud();
     };
     window.changeCarouselAspect = function(val) {
       appData.carousel.aspectRatio = val;
       renderView();
-      autoSaveToCloud();
     };
     window.changeCarouselOrder = function(val) {
       appData.carousel.position = val;
       renderView();
-      autoSaveToCloud();
     };
     window.removeCarouselImage = function(idx) {
       appData.carousel.images.splice(idx, 1);
       populateCarouselAdmin();
       renderView();
-      autoSaveToCloud();
     };
 
     window.handleCarouselUpload = function(e) {
@@ -2028,7 +1962,6 @@
           appData.carousel.images.push(compressed);
           populateCarouselAdmin();
           renderView();
-          autoSaveToCloud();
           showToast('輪播圖已加入！');
         };
         img.src = event.target.result;
@@ -2064,7 +1997,6 @@
             appData.avatar = compressed;
             document.getElementById('adminAvatarThumb').src = compressed;
             renderView();
-            autoSaveToCloud();
             showToast('頭像已更新！');
           } else {
             const imgEl = document.getElementById('modalPreviewImg');
@@ -2169,331 +2101,10 @@
       closeItemModal();
       populateAdmin();
       renderView();
-      autoSaveToCloud();
-      showToast('卡片已就緒！');
-      markAsDirty();
+      showToast('卡片已就緒，請點右下角儲存發布！');
     };
 
-    let saveTimer = null;
-    let isSavingLock = false;
-
-    async function autoSaveToCloud() {
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
-      if (saveTimer) clearTimeout(saveTimer);
-      saveTimer = setTimeout(async () => {
-        if (!isRealUser || !currentStoreDbId) return;
-        if (isSavingLock) return;
-
-        isSavingLock = true;
-        try {
-          const metaPayload = JSON.stringify({
-            bio: appData.bio,
-            marquee: appData.marquee,
-            carousel: appData.carousel,
-            lineLead: appData.lineLead,
-            schedule: appData.schedule
-          });
-
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              brand_name: appData.brandName,
-              bio_text: metaPayload,
-              theme: appData.theme,
-              avatar_url: appData.avatar,
-              social_links: appData.socials,
-              admin_pin: appData.adminPin
-            })
-          });
-
-          const itemsToInsert = [];
-          let sortIdx = 0;
-          for (const sec of appData.sections) {
-            for (const it of (sec.items || [])) {
-              itemsToInsert.push({
-                store_id: currentStoreDbId,
-                section_title: sec.title,
-                title: it.title,
-                subtitle: it.subtitle || '',
-                thumbnail_url: it.img || '',
-                img_size: it.imgSize || 'large-square',
-                img_pos: it.imgPos || 'top',
-                target_url: it.url || '#',
-                discount_code: it.discountCode || '',
-                badge_label: it.badge || '',
-                sort_order: sortIdx++,
-                click_count: it.clicks || 0
-              });
-            }
-          }
-
-          const delRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-            method: "DELETE",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-          });
-
-          if (delRes.ok && itemsToInsert.length > 0) {
-            await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-              method: "POST",
-              headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-              body: JSON.stringify(itemsToInsert)
-            });
-          }
-        } catch(err) {
-          console.warn("雲端同步異常:", err);
-        } finally {
-          isSavingLock = false;
-        }
-      }, 500);
-    }
-
-    // ----------------------------------------------------
-    // 防未儲存遺失核心防護系統 (Dirty State Tracking)
-    // ----------------------------------------------------
-    let hasUnsavedChanges = false;
-
-    // 任何更動觸發未儲存標記
-    function markAsDirty() {
-      hasUnsavedChanges = true;
-      const saveBtn = document.getElementById('btnSaveAdmin');
-      if (saveBtn) {
-        saveBtn.classList.remove('bg-stone-900');
-        saveBtn.classList.add('bg-emerald-600', 'animate-pulse');
-        saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1"></i> 請點此儲存同步雲端';
-      }
-      // 即時先存本機草稿，防止斷電閃退
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-    }
-
-    // 瀏覽器重新整理/關閉分頁防護
-    window.addEventListener('beforeunload', (e) => {
-      if (hasUnsavedChanges) {
-        e.preventDefault();
-        e.returnValue = '您有尚未儲存至雲端的內容，確定要離開嗎？';
-      }
-    });
-
-    // 關閉後台防呆攔截 (點擊 ✕ 或背景遮罩)
-    window.closeAdminModal = async function() {
-      if (hasUnsavedChanges) {
-        const result = await Swal.fire({
-          title: '⚠️ 尚有內容未儲存！',
-          html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">您剛剛編輯的卡片或排程尚未發布至雲端。<br>若直接離開，再次打開可能需要重新設定。<br><br>建議先點擊右下角<b>【儲存並同步雲端】</b>！</p>',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: '立即儲存發布',
-          cancelButtonText: '放棄本次修改並離開',
-          confirmButtonColor: '#059669',
-          cancelButtonColor: '#78716C'
-        });
-
-        if (result.isConfirmed) {
-          await saveAdminAndClose();
-          return;
-        }
-      }
-      document.getElementById('adminSheet').style.display = 'none';
-      hasUnsavedChanges = false;
-    };
-
-    // 儲存並同步雲端 (含大綠勾確認彈窗)
-    window.saveAdminAndClose = async function() {
-      const btn = document.getElementById('btnSaveAdmin');
-      btn.disabled = true;
-      btn.innerText = '正在寫入雲端節點...';
-
-      // 1. 本機備份
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
-      // 2. 雲端同步
-      if (isRealUser && currentStoreDbId) {
-        try {
-          const metaPayload = JSON.stringify({
-            bio: appData.bio,
-            marquee: appData.marquee,
-            carousel: appData.carousel,
-            lineLead: appData.lineLead,
-            schedule: appData.schedule
-          });
-
-          // A. 更新主表
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH",
-            headers: {
-              "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              brand_name: appData.brandName,
-              bio_text: metaPayload,
-              theme: appData.theme,
-              avatar_url: appData.avatar,
-              social_links: appData.socials,
-              admin_pin: appData.adminPin
-            })
-          });
-
-          // B. 整理卡片清單 (重要：移除自訂字串 ID，讓 Supabase 自動生成標準 UUID)
-          const itemsToInsert = [];
-          let sortIdx = 0;
-          for (const sec of appData.sections) {
-            for (const it of (sec.items || [])) {
-              const itemRow = {
-                store_id: currentStoreDbId,
-                section_title: sec.title || '精選推薦',
-                title: it.title || '',
-                subtitle: it.subtitle || '',
-                thumbnail_url: it.img || '',
-                img_size: it.imgSize || 'large-square',
-                img_pos: it.imgPos || 'top',
-                target_url: it.url || '#',
-                discount_code: it.discountCode || '',
-                badge_label: it.badge || '',
-                sort_order: sortIdx++,
-                click_count: it.clicks || 0
-              };
-
-              // 只有符合標準 UUID 格式的既有 ID 才保留，避免資料庫拒收
-              const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(it.id);
-              if (isUuid) {
-                itemRow.id = it.id;
-              }
-
-              itemsToInsert.push(itemRow);
-            }
-          }
-
-          // 先刪除該店家的所有卡片
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-            method: "DELETE",
-            headers: {
-              "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-            }
-          });
-
-          // 重新批量寫入新卡片
-          if (itemsToInsert.length > 0) {
-            const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-              method: "POST",
-              headers: {
-                "apikey": SUPABASE_ANON_KEY,
-                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-                "Content-Type": "application/json",
-                "Prefer": "return=representation"
-              },
-              body: JSON.stringify(itemsToInsert)
-            });
-
-            if (!insertRes.ok) {
-              const errText = await insertRes.text();
-              console.error("卡片寫入失敗:", errText);
-              throw new Error("卡片寫入失敗: " + errText);
-            }
-          }
-        } catch(err) {
-          console.error("雲端同步異常:", err);
-          Swal.fire('同步提醒', '已先為您儲存於本地暫存。', 'info');
-        }
-      }
-
-      hasUnsavedChanges = false;
-      btn.disabled = false;
-      btn.classList.remove('bg-emerald-600', 'animate-pulse');
-      btn.classList.add('bg-stone-900');
-      btn.innerText = '儲存並同步發布';
-
-      document.getElementById('adminSheet').style.display = 'none';
-      renderView();
-
-      Swal.fire({
-        title: '已成功儲存並同步雲端！',
-        html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">您的名片資料與商品卡片已安全寫入資料庫。<br>電腦與手機重新整理即可完全同步！</p>',
-        icon: 'success',
-        confirmButtonText: '完成',
-        confirmButtonColor: '#2C241E'
-      });
-    };
-    
-    window.copyShareUrl = function() {
-      navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
-    };
-
-    window.changeTheme = function(k) { 
-      appData.theme = k; 
-      document.documentElement.setAttribute('data-theme', k); 
-      markAsDirty(); 
-      showToast('色系已套用！'); 
-    };
-    window.syncLiveProfile = function() { 
-      appData.brandName = document.getElementById('inputBrandName').value; 
-      appData.bio = document.getElementById('inputBrandBio').value; 
-      markAsDirty(); 
-      renderView(); 
-    };
-    window.cycleIllustrationAvatar = function() { avatarIndex = (avatarIndex + 1) % illustrationAvatars.length; appData.avatar = illustrationAvatars[avatarIndex]; document.getElementById('adminAvatarThumb').src = appData.avatar; renderView(); autoSaveToCloud(); };
-    window.addSocialLink = function() { 
-      appData.socials.push({ icon: 'fa-solid fa-globe', label: 'Website', url: 'https://' }); 
-      markAsDirty();
-      populateAdmin(); 
-      renderView(); 
-    };
-
-    window.reorderSection = function(sIdx, dir) {
-      const targetIdx = sIdx + dir;
-      if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
-      const temp = appData.sections[sIdx];
-      appData.sections[sIdx] = appData.sections[targetIdx];
-      appData.sections[targetIdx] = temp;
-      populateAdmin(); renderView(); autoSaveToCloud();
-    };
-    window.reorderItem = function(sIdx, iIdx, dir) {
-      const items = appData.sections[sIdx].items;
-      const targetIdx = iIdx + dir;
-      if (targetIdx < 0 || targetIdx >= items.length) return;
-      const temp = items[iIdx];
-      items[iIdx] = items[targetIdx];
-      items[targetIdx] = temp;
-      populateAdmin(); renderView(); autoSaveToCloud();
-    };
-    window.deleteSection = async function(idx) {
-      const res = await Swal.fire({ title: '確定刪除分類？', text: '將連帶刪除該分類下所有卡片。', icon: 'warning', showCancelButton: true });
-      if (res.isConfirmed) { appData.sections.splice(idx, 1); populateAdmin(); renderView(); autoSaveToCloud(); }
-    };
-    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
-      appData.sections[sIdx].items.splice(iIdx, 1);
-      populateAdmin(); renderView(); autoSaveToCloud();
-      showToast('項目已移除');
-    };
-    window.openCreateSectionModal = async function() {
-      const { value: name } = await Swal.fire({ title: '新增專屬分類', input: 'text', showCancelButton: true, inputValidator: (v) => !v ? '分類名稱不可為空' : null });
-      if (name) { appData.sections.push({ id: 'sec-' + Date.now(), title: name.trim(), items: [] }); populateAdmin(); renderView(); autoSaveToCloud(); }
-    };
-
-    window.toggleMarqueeEnabled = function(en) {
-      appData.marquee.enabled = en;
-      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
-      renderView(); autoSaveToCloud();
-    };
-    window.updateMarqueeText = function(txt) {
-      appData.marquee.text = txt.trim();
-      renderView(); autoSaveToCloud();
-    };
-    window.toggleLineLeadEnabled = function(en) {
-      appData.lineLead.enabled = en;
-      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
-      autoSaveToCloud();
-    };
-    window.updateLineLeadConfig = function() {
-      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
-      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
-      autoSaveToCloud();
-    };
-
-    // 找回專屬網址
+    // 找回專屬網址功能 (直查 Supabase)
     window.findMySlugPrompt = async function() {
       const { value: email } = await Swal.fire({
         title: '找回您的專屬網址',
@@ -2529,7 +2140,7 @@
       }
     };
 
-    // ⭐ 送出願望直傳後台 (比照美業系統規格)
+    // 數位管家功能許願池直傳
     window.submitWishToSuper = async function() {
       const wishText = document.getElementById('inputFeedbackWish').value.trim();
       if (!wishText) {
@@ -2538,27 +2149,6 @@
       }
 
       showToast('正在傳送您的願望...');
-
-      const payload = {
-        action: "FEATURE_WISH",
-        payload: {
-          brandName: appData.brandName,
-          slug: currentSlug || 'demo',
-          wish: wishText,
-          theme: appData.theme,
-          submittedAt: new Date().toISOString()
-        }
-      };
-
-      try {
-        fetch(GAS_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-      } catch (e) {}
-
       try {
         await fetch(`${SUPABASE_URL}/rest/v1/system_feedbacks`, {
           method: "POST",
@@ -2585,6 +2175,7 @@
       });
     };
 
+    // 註冊開通新頁面
     window.handleOnboardSubmit = async function(e) {
       e.preventDefault();
       const brand = document.getElementById('quickBrand').value.trim();
@@ -2651,6 +2242,74 @@
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1"></i> 立即免費開通專屬品牌頁';
       }
+    };
+
+    // 常用工具
+    window.copyShareUrl = function() {
+      navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
+    };
+
+    window.changeTheme = function(k) { 
+      appData.theme = k; 
+      document.documentElement.setAttribute('data-theme', k); 
+      showToast('色系已套用！'); 
+    };
+    window.syncLiveProfile = function() { 
+      appData.brandName = document.getElementById('inputBrandName').value; 
+      appData.bio = document.getElementById('inputBrandBio').value; 
+      renderView(); 
+    };
+    window.cycleIllustrationAvatar = function() { avatarIndex = (avatarIndex + 1) % illustrationAvatars.length; appData.avatar = illustrationAvatars[avatarIndex]; document.getElementById('adminAvatarThumb').src = appData.avatar; renderView(); };
+    window.addSocialLink = function() { 
+      appData.socials.push({ icon: 'fa-solid fa-globe', label: 'Website', url: 'https://' }); 
+      populateAdmin(); 
+      renderView(); 
+    };
+
+    window.reorderSection = function(sIdx, dir) {
+      const targetIdx = sIdx + dir;
+      if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
+      const temp = appData.sections[sIdx];
+      appData.sections[sIdx] = appData.sections[targetIdx];
+      appData.sections[targetIdx] = temp;
+      populateAdmin(); renderView();
+    };
+    window.reorderItem = function(sIdx, iIdx, dir) {
+      const items = appData.sections[sIdx].items;
+      const targetIdx = iIdx + dir;
+      if (targetIdx < 0 || targetIdx >= items.length) return;
+      const temp = items[iIdx];
+      items[iIdx] = items[targetIdx];
+      items[targetIdx] = temp;
+      populateAdmin(); renderView();
+    };
+    window.deleteSection = async function(idx) {
+      const res = await Swal.fire({ title: '確定刪除分類？', text: '將連帶刪除該分類下所有卡片。', icon: 'warning', showCancelButton: true });
+      if (res.isConfirmed) { appData.sections.splice(idx, 1); populateAdmin(); renderView(); }
+    };
+    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
+      appData.sections[sIdx].items.splice(iIdx, 1);
+      populateAdmin(); renderView();
+      showToast('項目已移除');
+    };
+    window.openCreateSectionModal = async function() {
+      const { value: name } = await Swal.fire({ title: '新增專屬分類', input: 'text', showCancelButton: true, inputValidator: (v) => !v ? '分類名稱不可為空' : null });
+      if (name) { appData.sections.push({ id: 'sec-' + Date.now(), title: name.trim(), items: [] }); populateAdmin(); renderView(); }
+    };
+
+    window.toggleMarqueeEnabled = function(en) {
+      appData.marquee.enabled = en;
+      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
+      renderView();
+    };
+    window.updateMarqueeText = function(txt) { appData.marquee.text = txt.trim(); renderView(); };
+    window.toggleLineLeadEnabled = function(en) {
+      appData.lineLead.enabled = en;
+      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
+    };
+    window.updateLineLeadConfig = function() {
+      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
+      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
     };
 
     window.copyCode = function(c, e) {
