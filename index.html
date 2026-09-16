@@ -1018,18 +1018,25 @@
     async function initPage() {
       const p = new URLSearchParams(window.location.search);
       const slug = p.get('u');
-      currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
+      currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.trim().toLowerCase() : null;
 
       if (currentSlug) {
-        // ✅ 修正：確實呼叫  載入業主資料
-        await (currentSlug);
+        // 1. 業主模式：先讀取本地暫存秒開畫面，避免白屏或出現展示卡
+        const localCache = localStorage.getItem(getStorageKey());
+        if (localCache) {
+          try {
+            appData = JSON.parse(localCache);
+            isRealUser = true;
+            renderView();
+          } catch (e) {}
+        }
+        // 2. 向雲端同步最新資料
+        await loadStoreFromSupabase(currentSlug);
       } else {
-        // 【官方示範模式】
+        // 官方示範模式
         isRealUser = false;
-        const cachedVer = localStorage.getItem('sibyl_demo_ver');
         const localCache = localStorage.getItem('sibyl_demo_data');
-
-        if (cachedVer === DEMO_DATA_VERSION && localCache) {
+        if (localCache) {
           try {
             appData = JSON.parse(localCache);
           } catch (e) {
@@ -1037,8 +1044,6 @@
           }
         } else {
           appData = JSON.parse(JSON.stringify(demoData));
-          localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
-          localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
         }
 
         document.getElementById('demoSwitchBar').style.display = 'none';
@@ -1049,17 +1054,15 @@
 
     async function loadStoreFromSupabase(slug) {
       try {
-        // 1. 查詢店鋪主檔
-        const targetUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*`;
-        const res = await fetch(targetUrl, {
+        // 1. 查詢店鋪主檔 (最乾淨的查詢字串)
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}`, {
           headers: {
             "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "Cache-Control": "no-cache"
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
           }
         });
 
-        if (!res.ok) throw new Error(`Supabase Store HTTP ${res.status}`);
+        if (!res.ok) throw new Error("Store 查詢失敗");
         const rows = await res.json();
 
         if (rows && rows.length > 0) {
@@ -1083,25 +1086,20 @@
             appData.bio = s.bio_text || '';
           }
 
-          // 2. 查詢 bio_items (使用最安全、不帶複雜 URL 排序的查詢，改在 JS 排序)
-          const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*`;
-          const itemsRes = await fetch(itemsUrl, {
+          // 2. 查詢該店家的卡片清單
+          const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
             headers: {
               "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-              "Cache-Control": "no-cache"
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
             }
           });
-          
+
           let cloudItems = [];
           if (itemsRes.ok) {
             cloudItems = await itemsRes.json();
-          } else {
-            console.warn("bio_items 查詢未成功，狀態碼:", itemsRes.status);
           }
 
           if (cloudItems && cloudItems.length > 0) {
-            // 在前端以 sort_order 進行精確排序
             cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
 
             const map = {};
@@ -1123,20 +1121,10 @@
               });
             });
             appData.sections = Object.values(map);
-            localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-          } else {
-            // ⚠️ 雲端若查無卡片，嘗試從本地快取救援
-            const localFallback = localStorage.getItem(getStorageKey());
-            if (localFallback) {
-              try {
-                const parsedLocal = JSON.parse(localFallback);
-                if (parsedLocal.sections && parsedLocal.sections.length > 0) {
-                  appData.sections = parsedLocal.sections;
-                  console.log("已從本機暫存救回卡片資料");
-                }
-              } catch(e) {}
-            }
           }
+
+          // 寫入本地備份
+          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
 
           document.getElementById('demoSwitchBar').style.display = 'block';
           document.getElementById('btnAdminLabel').innerText = '管理後台';
@@ -1144,18 +1132,10 @@
           document.title = `${appData.brandName} | 品牌名片`;
           renderView();
         } else {
-          switchToDemoMode();
+          console.warn("找不到此店家 slug:", slug);
         }
-      } catch (e) {
-        console.warn("讀取異常，啟動本機快取備援:", e);
-        const fallback = localStorage.getItem(getStorageKey());
-        if (fallback) {
-          try {
-            appData = JSON.parse(fallback);
-            isRealUser = true;
-            renderView();
-          } catch(err) {}
-        }
+      } catch (err) {
+        console.warn("載入過程異常，維持本地資料渲染:", err);
       }
     }
 
