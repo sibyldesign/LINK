@@ -992,102 +992,115 @@
     }
 
     async function loadStoreFromSupabase(slug) {
-      try {
-        const storeUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`;
-        const res = await fetch(storeUrl, {
-          headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "Cache-Control": "no-cache, no-store, must-revalidate"
+  try {
+    // 加上時間戳防止任何快取
+    const storeUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`;
+    const res = await fetch(storeUrl, {
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error(`讀取主檔失敗: HTTP ${res.status}`);
+    }
+
+    const rows = await res.json();
+    if (!rows || rows.length === 0) {
+      Swal.fire({
+        title: '找不到此專屬頁面',
+        text: `資料庫查無網址代號「${slug}」，請確認是否已開通。`,
+        icon: 'warning',
+        confirmButtonText: '確定'
+      });
+      return;
+    }
+
+    const s = rows[0];
+    isRealUser = true;
+    currentStoreDbId = s.id;
+    appData.brandName = s.brand_name || slug;
+    appData.avatar = s.avatar_url || illustrationAvatars[0];
+    appData.theme = s.theme || 'cashmere-latte';
+    appData.adminPin = s.admin_pin || '8888';
+    appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
+
+    // 解析 bio_text JSON
+    try {
+      const meta = JSON.parse(s.bio_text);
+      appData.bio = meta.bio || '';
+      appData.marquee = meta.marquee || { enabled: false, text: '' };
+      appData.carousel = meta.carousel || { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
+      appData.lineLead = meta.lineLead || { enabled: false, url: '', title: '' };
+      appData.schedule = meta.schedule || { enabled: false, position: 'below_carousel', note: '', dates: {} };
+    } catch(e) {
+      appData.bio = s.bio_text || '';
+    }
+
+    // 抓取卡片項目
+    const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`;
+    const itemsRes = await fetch(itemsUrl, {
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    });
+
+    if (itemsRes.ok) {
+      const cloudItems = await itemsRes.json();
+      if (cloudItems && cloudItems.length > 0) {
+        cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+        const secMap = {};
+        cloudItems.forEach(it => {
+          const secTitle = it.section_title || '精選推薦';
+          if (!secMap[secTitle]) {
+            secMap[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
           }
-        });
-        if (!res.ok) throw new Error("主檔讀取失敗");
-        const rows = await res.json();
-        if (!rows || rows.length === 0) {
-          Swal.fire({
-            title: '找不到此專屬頁面',
-            text: `網址代號「${slug}」尚未註冊開通。`,
-            icon: 'warning'
+          secMap[secTitle].items.push({
+            id: it.id,
+            title: it.title || '',
+            subtitle: it.subtitle || '',
+            img: it.thumbnail_url || '',
+            imgSize: it.img_size || 'large-square',
+            imgPos: it.img_pos || 'top',
+            url: it.target_url || '#',
+            discountCode: it.discount_code || '',
+            badge: it.badge_label || '',
+            countdownEnd: it.countdown_end || '',
+            clicks: Number(it.click_count) || 0
           });
-          return;
-        }
-
-        const s = rows[0];
-        currentStoreDbId = s.id;
-        appData.brandName = s.brand_name || slug;
-        appData.avatar = s.avatar_url || illustrationAvatars[0];
-        appData.theme = s.theme || 'cashmere-latte';
-        appData.adminPin = s.admin_pin || '8888';
-        appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
-
-        try {
-          const meta = JSON.parse(s.bio_text);
-          appData.bio = meta.bio || '';
-          appData.marquee = meta.marquee || { enabled: false, text: '' };
-          appData.carousel = meta.carousel || { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
-          appData.lineLead = meta.lineLead || { enabled: false, url: '', title: '' };
-          appData.schedule = meta.schedule || { enabled: false, position: 'below_carousel', note: '', dates: {} };
-        } catch(e) {
-          appData.bio = s.bio_text || '';
-          appData.marquee = { enabled: false, text: '' };
-          appData.carousel = { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
-          appData.lineLead = { enabled: false, url: '', title: '' };
-          appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
-        }
-
-        const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`;
-        const itemsRes = await fetch(itemsUrl, {
-          headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "Cache-Control": "no-cache, no-store, must-revalidate"
-          }
         });
-
-        if (itemsRes.ok) {
-          const cloudItems = await itemsRes.json();
-          if (cloudItems && cloudItems.length > 0) {
-            cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
-            const secMap = {};
-            cloudItems.forEach(it => {
-              const secTitle = it.section_title || '精選推薦';
-              if (!secMap[secTitle]) {
-                secMap[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
-              }
-              secMap[secTitle].items.push({
-                id: it.id,
-                title: it.title || '',
-                subtitle: it.subtitle || '',
-                img: it.thumbnail_url || '',
-                imgSize: it.img_size || 'large-square',
-                imgPos: it.img_pos || 'top',
-                url: it.target_url || '#',
-                discountCode: it.discount_code || '',
-                badge: it.badge_label || '',
-                countdownEnd: it.countdown_end || '',
-                clicks: Number(it.click_count) || 0
-              });
-            });
-            appData.sections = Object.values(secMap);
-          } else {
-            appData.sections = [];
-          }
-        }
-
-        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-        const switchBar = document.getElementById('demoSwitchBar');
-        if (switchBar) switchBar.style.display = 'block';
-        const adminLabel = document.getElementById('btnAdminLabel');
-        if (adminLabel) adminLabel.innerText = '管理後台';
-        const shareUrlDisplay = document.getElementById('shareUrlDisplay');
-        if (shareUrlDisplay) shareUrlDisplay.innerText = `link.heysibyl.com/?u=${slug}`;
-        document.title = `${appData.brandName} | 品牌名片`;
-        renderView();
-      } catch (err) {
-        console.error("載入失敗:", err);
-        renderView();
+        appData.sections = Object.values(secMap);
+      } else {
+        appData.sections = []; // 如果資料庫內無卡片，保持清空，不亂套 demo 卡片
       }
     }
+
+    // 儲存至本地作為離線備援
+    localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+    
+    // 前台介面設定
+    const switchBar = document.getElementById('demoSwitchBar');
+    if (switchBar) switchBar.style.display = 'block';
+    const adminLabel = document.getElementById('btnAdminLabel');
+    if (adminLabel) adminLabel.innerText = '管理後台';
+    const shareUrlDisplay = document.getElementById('shareUrlDisplay');
+    if (shareUrlDisplay) shareUrlDisplay.innerText = `link.heysibyl.com/?u=${slug}`;
+    document.title = `${appData.brandName} | 品牌名片`;
+
+    renderView();
+  } catch (err) {
+    console.error("雲端載入失敗:", err);
+    Swal.fire({
+      title: '連線異常',
+      text: '無法從雲端資料庫取得您的名片資料，請檢查網路連線。',
+      icon: 'error'
+    });
+  }
+}
 
     function renderView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
@@ -2013,71 +2026,110 @@
     };
 
     async function autoSaveToCloud() {
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-      if (saveTimer) clearTimeout(saveTimer);
-      saveTimer = setTimeout(async () => {
-        if (!isRealUser || !currentStoreDbId) return;
-        if (isSavingLock) return;
-        isSavingLock = true;
-        try {
-          const metaPayload = JSON.stringify({
-            bio: appData.bio,
-            marquee: appData.marquee,
-            carousel: appData.carousel,
-            lineLead: appData.lineLead,
-            schedule: appData.schedule
+  localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+  if (saveTimer) clearTimeout(saveTimer);
+  
+  saveTimer = setTimeout(async () => {
+    if (!isRealUser || !currentStoreDbId) return;
+    if (isSavingLock) return;
+    isSavingLock = true;
+
+    try {
+      const metaPayload = JSON.stringify({
+        bio: appData.bio || '',
+        marquee: appData.marquee || { enabled: false, text: '' },
+        carousel: appData.carousel || { enabled: false, images: [] },
+        lineLead: appData.lineLead || { enabled: false, url: '', title: '' },
+        schedule: appData.schedule || { enabled: false, dates: {} }
+      });
+
+      // 1. 更新主檔
+      const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
+        method: "PATCH",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          brand_name: appData.brandName,
+          bio_text: metaPayload,
+          theme: appData.theme,
+          avatar_url: appData.avatar,
+          social_links: appData.socials,
+          admin_pin: appData.adminPin
+        })
+      });
+
+      if (!storeRes.ok) {
+        const errText = await storeRes.text();
+        throw new Error(`主檔寫入失敗: ${errText}`);
+      }
+
+      // 2. 整理卡片
+      const itemsToInsert = [];
+      let sortIdx = 0;
+      for (const sec of appData.sections) {
+        for (const it of (sec.items || [])) {
+          itemsToInsert.push({
+            store_id: currentStoreDbId,
+            section_title: sec.title || '精選推薦',
+            title: it.title || '',
+            subtitle: it.subtitle || '',
+            thumbnail_url: it.img || '',
+            img_size: it.imgSize || 'large-square',
+            img_pos: it.imgPos || 'top',
+            target_url: it.url || '#',
+            discount_code: it.discountCode || '',
+            badge_label: it.badge || '',
+            sort_order: sortIdx++,
+            click_count: it.clicks || 0,
+            countdown_end: it.countdownEnd || ''
           });
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              brand_name: appData.brandName,
-              bio_text: metaPayload,
-              theme: appData.theme,
-              avatar_url: appData.avatar,
-              social_links: appData.socials,
-              admin_pin: appData.adminPin
-            })
-          });
-          const itemsToInsert = [];
-          let sortIdx = 0;
-          for (const sec of appData.sections) {
-            for (const it of (sec.items || [])) {
-              itemsToInsert.push({
-                store_id: currentStoreDbId,
-                section_title: sec.title,
-                title: it.title,
-                subtitle: it.subtitle || '',
-                thumbnail_url: it.img || '',
-                img_size: it.imgSize || 'large-square',
-                img_pos: it.imgPos || 'top',
-                target_url: it.url || '#',
-                discount_code: it.discountCode || '',
-                badge_label: it.badge || '',
-                sort_order: sortIdx++,
-                click_count: it.clicks || 0,
-                countdown_end: it.countdownEnd || ''
-              });
-            }
-          }
-          const delRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-            method: "DELETE",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-          });
-          if (delRes.ok && itemsToInsert.length > 0) {
-            await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-              method: "POST",
-              headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
-              body: JSON.stringify(itemsToInsert)
-            });
-          }
-        } catch(err) {
-          console.warn("雲端同步異常:", err);
-        } finally {
-          isSavingLock = false;
         }
-      }, 500);
+      }
+
+      // 3. 先刪除舊卡片
+      await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+        method: "DELETE",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+
+      // 4. 批次寫入新卡片
+      if (itemsToInsert.length > 0) {
+        const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(itemsToInsert)
+        });
+
+        if (!insertRes.ok) {
+          const insertErr = await insertRes.text();
+          throw new Error(`卡片儲存失敗: ${insertErr}`);
+        }
+      }
+
+      console.log("雲端資料同步完成！");
+    } catch (err) {
+      console.error("雲端同步異常:", err);
+      Swal.fire({
+        title: '雲端同步失敗',
+        html: `<p style="font-size:12px;color:#c2410c;">請確認資料庫欄位是否已在 Supabase 執行補齊指令。<br>錯誤細節：${err.message}</p>`,
+        icon: 'error'
+      });
+    } finally {
+      isSavingLock = false;
     }
+  }, 400);
+}
 
     window.saveAdminAndClose = async function() {
       const btn = document.getElementById('btnSaveAdmin');
