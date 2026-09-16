@@ -1049,9 +1049,8 @@
 
     async function loadStoreFromSupabase(slug) {
       try {
-        // 標準 Supabase REST 查詢，確保過濾器 slug 正常比對
-        const targetUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*,bio_items(*)`;
-        
+        // 1. 查詢店鋪主檔
+        const targetUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*`;
         const res = await fetch(targetUrl, {
           headers: {
             "apikey": SUPABASE_ANON_KEY,
@@ -1060,10 +1059,7 @@
           }
         });
 
-        if (!res.ok) {
-          throw new Error(`Supabase HTTP ${res.status}`);
-        }
-
+        if (!res.ok) throw new Error(`Supabase HTTP ${res.status}`);
         const rows = await res.json();
 
         if (rows && rows.length > 0) {
@@ -1076,7 +1072,6 @@
           appData.adminPin = s.admin_pin || '8888';
           appData.socials = s.social_links || [];
 
-          // 解析中繼資料
           try {
             const parsedMeta = JSON.parse(s.bio_text);
             appData.bio = parsedMeta.bio || '';
@@ -1088,10 +1083,24 @@
             appData.bio = s.bio_text || '';
           }
 
-          // 解析卡片項目
-          if (s.bio_items && s.bio_items.length > 0) {
+          // 2. 獨立查詢 bio_items 表 (避開關聯查詢失效問題)
+          const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&order=sort_order.asc`, {
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+              "Cache-Control": "no-cache"
+            }
+          });
+          
+          let cloudItems = [];
+          if (itemsRes.ok) {
+            cloudItems = await itemsRes.json();
+          }
+
+          if (cloudItems && cloudItems.length > 0) {
+            // 雲端有卡片：以雲端為主
             const map = {};
-            s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
+            cloudItems.forEach(it => {
               const sec = it.section_title || '精選推薦';
               if (!map[sec]) map[sec] = { id: 'sec-' + Math.random(), title: sec, items: [] };
               map[sec].items.push({
@@ -1099,8 +1108,8 @@
                 title: it.title,
                 subtitle: it.subtitle || '',
                 img: it.thumbnail_url || '',
-                imgSize: it.img_size || 'medium',
-                imgPos: it.img_pos || 'left',
+                imgSize: it.img_size || 'large-square',
+                imgPos: it.img_pos || 'top',
                 url: it.target_url || '#',
                 discountCode: it.discount_code || '',
                 badge: it.badge_label || '',
@@ -1109,12 +1118,22 @@
               });
             });
             appData.sections = Object.values(map);
+            localStorage.setItem(getStorageKey(), JSON.stringify(appData));
           } else {
-            appData.sections = [];
+            // ⚠️ 關鍵防護：若雲端是空的，檢查本機快取有沒有卡片！有的話自動救援，絕不直接洗成空白
+            const localFallback = localStorage.getItem(getStorageKey());
+            if (localFallback) {
+              try {
+                const parsedLocal = JSON.parse(localFallback);
+                if (parsedLocal.sections && parsedLocal.sections.length > 0) {
+                  appData.sections = parsedLocal.sections;
+                  console.log("已從本機暫存救回卡片資料，準備自動回補雲端");
+                  // 自動背景把本機卡片寫回雲端
+                  setTimeout(autoSaveToCloud, 1000);
+                }
+              } catch(e) {}
+            }
           }
-
-          // 備份最新內容到本地快取
-          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
 
           document.getElementById('demoSwitchBar').style.display = 'block';
           document.getElementById('btnAdminLabel').innerText = '管理後台';
@@ -1122,35 +1141,14 @@
           document.title = `${appData.brandName} | 品牌名片`;
           renderView();
         } else {
-          // ⚠️ 查無此代號時，友善提示使用者，絕不靜默跳轉踢回首頁
-          console.warn(`[Supabase] 找不到代號為 ${slug} 的店鋪`);
-          isRealUser = false;
-          // 若本機有快取則優先顯示快取，避免空白
-          const localFallback = localStorage.getItem(getStorageKey());
-          if (localFallback) {
-            try {
-              appData = JSON.parse(localFallback);
-              renderView();
-              return;
-            } catch(e) {}
-          }
-          Swal.fire({
-            title: '找不到此品牌頁面',
-            text: `網址代號「${slug}」尚未開通或已被移除。`,
-            icon: 'info',
-            confirmButtonText: '回到官方首頁'
-          }).then(() => {
-            window.location.href = window.location.pathname;
-          });
+          switchToDemoMode();
         }
       } catch (e) {
-        console.warn("雲端讀取異常，啟動本機快取備援:", e);
-        // 斷網或連線不穩時，嚴格保留在當前頁面，用本地快取渲染
+        console.warn("讀取異常，啟動本機快取備援:", e);
         const fallback = localStorage.getItem(getStorageKey());
         if (fallback) {
           try {
             appData = JSON.parse(fallback);
-            isRealUser = true;
             renderView();
           } catch(err) {}
         }
