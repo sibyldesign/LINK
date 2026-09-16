@@ -1010,35 +1010,35 @@
       document.getElementById('shareSheet').style.display = 'none';
     };
 
+    // ====================================================
+    // 雲端資料永遠絕對優先 (Network-First 架構)
+    // 徹底解決手機與電腦讀到不同版本、快取打架問題
+    // ====================================================
+
     async function initPage() {
       const p = new URLSearchParams(window.location.search);
       const slug = p.get('u');
       currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
 
       if (currentSlug) {
-        const localCache = localStorage.getItem(getStorageKey());
-        if (localCache) {
-          try {
-            appData = JSON.parse(localCache);
-            renderView();
-          } catch (e) {}
-        }
+        // 【真實使用者模式】：絕不優先拿舊快取蓋掉畫面，直接強制向雲端抓最新資料！
         await loadStoreFromSupabase(currentSlug);
       } else {
+        // 【官方示範模式】
         isRealUser = false;
         const cachedVer = localStorage.getItem('sibyl_demo_ver');
         const localCache = localStorage.getItem('sibyl_demo_data');
 
-        if (cachedVer !== DEMO_DATA_VERSION || !localCache) {
-          appData = JSON.parse(JSON.stringify(demoData));
-          localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
-          localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
-        } else {
+        if (cachedVer === DEMO_DATA_VERSION && localCache) {
           try {
             appData = JSON.parse(localCache);
           } catch (e) {
             appData = JSON.parse(JSON.stringify(demoData));
           }
+        } else {
+          appData = JSON.parse(JSON.stringify(demoData));
+          localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
+          localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
         }
 
         document.getElementById('demoSwitchBar').style.display = 'none';
@@ -1049,9 +1049,19 @@
 
     async function loadStoreFromSupabase(slug) {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)`, {
-          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+        // 關鍵核心：加入時間戳記 ?t=... 與 Cache-Control: no-cache
+        // 100% 強制手機/電腦瀏覽器每次都跟 Supabase 要最新資料，絕不吃本機快取！
+        const noCacheUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*,bio_items(*)&_t=${Date.now()}`;
+        
+        const res = await fetch(noCacheUrl, {
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache"
+          }
         });
+
         const rows = await res.json();
         if (rows && rows.length > 0) {
           const s = rows[0];
@@ -1063,36 +1073,31 @@
           appData.adminPin = s.admin_pin || '8888';
           appData.socials = s.social_links || [];
 
+          // 解析中繼資料 (跑馬燈、輪播、導流彈窗、排程)
           try {
             const parsedMeta = JSON.parse(s.bio_text);
             appData.bio = parsedMeta.bio || '';
-            if (parsedMeta.marquee) appData.marquee = parsedMeta.marquee;
-            if (parsedMeta.carousel) appData.carousel = parsedMeta.carousel;
-            if (parsedMeta.lineLead) appData.lineLead = parsedMeta.lineLead;
+            appData.marquee = parsedMeta.marquee || { enabled: false, text: '' };
+            appData.carousel = parsedMeta.carousel || { enabled: false, aspectRatio: 'landscape', position: 'below', images: [] };
+            appData.lineLead = parsedMeta.lineLead || { enabled: false, url: '', title: '' };
             if (parsedMeta.schedule) appData.schedule = parsedMeta.schedule;
           } catch(e) {
             appData.bio = s.bio_text || '';
           }
 
+          // 解析卡片項目 (以雲端資料庫為主，依 sort_order 嚴格排序)
           if (s.bio_items && s.bio_items.length > 0) {
             const map = {};
-            const seenIds = new Set();
-
             s.bio_items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).forEach(it => {
-              if (it.id && seenIds.has(it.id)) return;
-              if (it.id) seenIds.add(it.id);
-
-              const secTitle = it.section_title || '精選推薦';
-              if (!map[secTitle]) {
-                map[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
-              }
-              map[secTitle].items.push({
+              const sec = it.section_title || '精選推薦';
+              if (!map[sec]) map[sec] = { id: 'sec-' + Math.random(), title: sec, items: [] };
+              map[sec].items.push({
                 id: it.id,
                 title: it.title,
                 subtitle: it.subtitle || '',
                 img: it.thumbnail_url || '',
-                imgSize: it.img_size || 'large-square',
-                imgPos: it.img_pos || 'top',
+                imgSize: it.img_size || 'medium',
+                imgPos: it.img_pos || 'left',
                 url: it.target_url || '#',
                 discountCode: it.discount_code || '',
                 badge: it.badge_label || '',
@@ -1101,9 +1106,13 @@
               });
             });
             appData.sections = Object.values(map);
+          } else {
+            appData.sections = [];
           }
 
+          // 抓到雲端最新版本後，才把本機快取更新為最新（僅作為離線備份用）
           localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+
           document.getElementById('demoSwitchBar').style.display = 'block';
           document.getElementById('btnAdminLabel').innerText = '管理後台';
           document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
@@ -1113,7 +1122,14 @@
           switchToDemoMode();
         }
       } catch (e) {
-        renderView();
+        console.warn("雲端讀取例外，僅在完全斷網時才退回本機快取:", e);
+        const fallback = localStorage.getItem(getStorageKey());
+        if (fallback) {
+          try {
+            appData = JSON.parse(fallback);
+            renderView();
+          } catch(err) {}
+        }
       }
     }
 
