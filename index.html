@@ -909,30 +909,49 @@
     // ====================================================
     async function initPage() {
       const p = new URLSearchParams(window.location.search);
-      const slug = p.get('u');
-      currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.trim().toLowerCase() : null;
-
-      if (currentSlug) {
-        // 真實使用者模式：徹底不讀 LocalStorage，每次重新整理 100% 直連雲端資料庫
+      const rawSlug = p.get('u');
+      
+      // 判斷是否為真實業主網址 (只要不是空值、不是 demo，就一律進入業主模式)
+      if (rawSlug && rawSlug.trim().toLowerCase() !== 'demo') {
+        currentSlug = rawSlug.trim().toLowerCase();
         isRealUser = true;
-        document.getElementById('demoGuideBanner').style.display = 'none';
-        document.getElementById('demoSwitchBar').style.display = 'block';
-        document.getElementById('btnAdminLabel').innerText = '管理後台';
+
+        // 立即隱藏官方體驗引導，切換至正式業主模式
+        const guideBanner = document.getElementById('demoGuideBanner');
+        if (guideBanner) guideBanner.style.display = 'none';
+        
+        const switchBar = document.getElementById('demoSwitchBar');
+        if (switchBar) switchBar.style.display = 'block';
+
+        const adminLabel = document.getElementById('btnAdminLabel');
+        if (adminLabel) adminLabel.innerText = '管理後台';
+
+        // 啟動業主資料庫直讀
         await loadStoreFromSupabase(currentSlug);
       } else {
-        // 示範模式
+        // 純官方示範模式 (無 ?u 參數時才顯示)
         isRealUser = false;
+        currentSlug = null;
         appData = JSON.parse(JSON.stringify(demoData));
-        document.getElementById('demoGuideBanner').style.display = 'block';
-        document.getElementById('demoSwitchBar').style.display = 'none';
-        document.getElementById('btnAdminLabel').innerText = '示範設定後台';
+
+        const guideBanner = document.getElementById('demoGuideBanner');
+        if (guideBanner) guideBanner.style.display = 'block';
+
+        const switchBar = document.getElementById('demoSwitchBar');
+        if (switchBar) switchBar.style.display = 'none';
+
+        const adminLabel = document.getElementById('btnAdminLabel');
+        if (adminLabel) adminLabel.innerText = '示範設定後台';
+
         renderView();
       }
     }
 
     async function loadStoreFromSupabase(slug) {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`, {
+        // 1. 抓取業主主檔 (加上防快取時間戳記，確保每秒抓到的都是最新編輯結果)
+        const storeUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`;
+        const res = await fetch(storeUrl, {
           headers: {
             "apikey": SUPABASE_ANON_KEY,
             "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
@@ -940,87 +959,107 @@
           }
         });
 
-        if (!res.ok) throw new Error("Store 查詢失敗");
+        if (!res.ok) throw new Error("讀取業主主檔失敗");
         const rows = await res.json();
 
-        if (rows && rows.length > 0) {
-          const s = rows[0];
-          isRealUser = true;
-          currentStoreDbId = s.id;
-          appData.theme = s.theme || 'cashmere-latte';
-          appData.brandName = s.brand_name || slug;
-          appData.avatar = s.avatar_url || illustrationAvatars[0];
-          appData.adminPin = s.admin_pin || '8888';
-          appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
-
-          // 容錯解析 bio_text
-          try {
-            const parsedMeta = JSON.parse(s.bio_text);
-            appData.bio = parsedMeta.bio || '';
-            appData.marquee = parsedMeta.marquee || { enabled: false, text: '' };
-            appData.carousel = parsedMeta.carousel || { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
-            appData.lineLead = parsedMeta.lineLead || { enabled: false, url: '', title: '' };
-            appData.schedule = parsedMeta.schedule || { enabled: false, position: 'below_carousel', note: '', dates: {} };
-          } catch(e) {
-            appData.bio = s.bio_text || '';
-            appData.marquee = { enabled: false, text: '' };
-            appData.carousel = { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
-            appData.lineLead = { enabled: false, url: '', title: '' };
-            appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
-          }
-
-          // 讀取卡片
-          const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`, {
-            headers: {
-              "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-              "Cache-Control": "no-cache, no-store, must-revalidate"
-            }
+        if (!rows || rows.length === 0) {
+          // 真正查無此帳號時才彈窗提示，絕不靜默跳轉
+          Swal.fire({
+            title: '找不到此專屬頁面',
+            text: `網址代號「${slug}」尚未註冊開通。`,
+            icon: 'warning',
+            confirmButtonText: '回到首頁'
+          }).then(() => {
+            window.location.href = window.location.pathname;
           });
-
-          let cloudItems = [];
-          if (itemsRes.ok) {
-            cloudItems = await itemsRes.json();
-          }
-
-          if (cloudItems && cloudItems.length > 0) {
-            cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
-
-            const map = {};
-            cloudItems.forEach(it => {
-              const sec = it.section_title || '精選推薦';
-              if (!map[sec]) map[sec] = { id: 'sec-' + Math.random(), title: sec, items: [] };
-              map[sec].items.push({
-                id: it.id,
-                title: it.title || '',
-                subtitle: it.subtitle || '',
-                img: it.thumbnail_url || '',
-                imgSize: it.img_size || 'large-square',
-                imgPos: it.img_pos || 'top',
-                url: it.target_url || '#',
-                discountCode: it.discount_code || '',
-                badge: it.badge_label || '',
-                countdownEnd: it.countdown_end || '',
-                clicks: it.click_count || 0
-              });
-            });
-            appData.sections = Object.values(map);
-          } else {
-            appData.sections = [];
-          }
-
-          document.getElementById('shareUrlDisplay').innerText = `link.heysibyl.com/?u=${slug}`;
-          document.title = `${appData.brandName} | 品牌名片`;
-          renderView();
-        } else {
-          switchToDemoMode();
+          return;
         }
+
+        const s = rows[0];
+        currentStoreDbId = s.id;
+
+        // 2. 嚴格綁定業主自己的設定 (不再使用 demoData 覆蓋)
+        appData.brandName = s.brand_name || slug;
+        appData.avatar = s.avatar_url || illustrationAvatars[0];
+        appData.theme = s.theme || 'cashmere-latte';
+        appData.adminPin = s.admin_pin || '8888';
+        appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
+
+        // 3. 解析自訂模組 (跑馬燈、輪播、排班、LINE 導流)
+        try {
+          const meta = JSON.parse(s.bio_text);
+          appData.bio = meta.bio || '';
+          appData.marquee = meta.marquee || { enabled: false, text: '' };
+          appData.carousel = meta.carousel || { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
+          appData.lineLead = meta.lineLead || { enabled: false, url: '', title: '' };
+          appData.schedule = meta.schedule || { enabled: false, position: 'below_carousel', note: '', dates: {} };
+        } catch(e) {
+          appData.bio = s.bio_text || '';
+          appData.marquee = { enabled: false, text: '' };
+          appData.carousel = { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
+          appData.lineLead = { enabled: false, url: '', title: '' };
+          appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
+        }
+
+        // 4. 抓取業主自己設定的卡片項目 (bio_items)
+        const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`;
+        const itemsRes = await fetch(itemsUrl, {
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+            "Cache-Control": "no-cache, no-store, must-revalidate"
+          }
+        });
+
+        let cloudItems = [];
+        if (itemsRes.ok) {
+          cloudItems = await itemsRes.json();
+        }
+
+        // 5. 將資料庫的卡片依分類完整排好
+        if (cloudItems && cloudItems.length > 0) {
+          cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+
+          const secMap = {};
+          cloudItems.forEach(it => {
+            const secTitle = it.section_title || '精選推薦';
+            if (!secMap[secTitle]) {
+              secMap[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
+            }
+            secMap[secTitle].items.push({
+              id: it.id,
+              title: it.title || '',
+              subtitle: it.subtitle || '',
+              img: it.thumbnail_url || '',
+              imgSize: it.img_size || 'large-square',
+              imgPos: it.img_pos || 'top',
+              url: it.target_url || '#',
+              discountCode: it.discount_code || '',
+              badge: it.badge_label || '',
+              countdownEnd: it.countdown_end || '',
+              clicks: Number(it.click_count) || 0
+            });
+          });
+          appData.sections = Object.values(secMap);
+        } else {
+          // 如果業主剛開通還沒有卡片，清空陣列，絕不亂塞 demo 卡片進來
+          appData.sections = [];
+        }
+
+        // 更新網址與頁面標題
+        const shareUrlDisplay = document.getElementById('shareUrlDisplay');
+        if (shareUrlDisplay) shareUrlDisplay.innerText = `link.heysibyl.com/?u=${slug}`;
+        document.title = `${appData.brandName} | 品牌名片`;
+
+        // 6. 正式渲染業主專屬畫面
+        renderView();
+
       } catch (err) {
-        console.error("載入異常:", err);
+        console.error("載入業主資料庫失敗:", err);
+        // 發生連線錯誤時，停留在當前狀態並提示，絕不退回 demo 示範模式
         renderView();
       }
     }
-
     // ====================================================
     // 前台渲染：支援所有版型與轉換文案
     // ====================================================
