@@ -1021,8 +1021,8 @@
       currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
 
       if (currentSlug) {
-        // 【真實使用者模式】：絕不優先拿舊快取蓋掉畫面，直接強制向雲端抓最新資料！
-        await (currentSlug);
+        // ✅ 修正：確實呼叫 loadStoreFromSupabase 載入業主資料
+        await loadStoreFromSupabase(currentSlug);
       } else {
         // 【官方示範模式】
         isRealUser = false;
