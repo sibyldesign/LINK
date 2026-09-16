@@ -1214,74 +1214,98 @@
 
         (sec.items || []).forEach((item, iIdx) => {
           const card = document.createElement('div');
-          card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer';
+          // 確保卡片在手機端 min-w-full 且高度自動伸展，避免高度塌陷
+          card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 block';
           card.onclick = (e) => {
             if (!e.target.closest('.copy-btn')) {
               handleCardClickTrack(sIdx, iIdx, item.url);
             }
           };
 
-          const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
-          const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs"><i class="fa-regular fa-copy text-[9px]"></i><span>${item.discountCode}</span></button>` : '';
+          const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 flex-shrink-0" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
+          const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border border-stone-200 flex items-center gap-1 shadow-2xs flex-shrink-0"><i class="fa-regular fa-copy text-[9px]"></i><span>${item.discountCode}</span></button>` : '';
 
           const countdownHtml = item.countdownEnd ? `
-            <div class="mt-2 py-1 px-2.5 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono" data-countdown="${item.countdownEnd}">
+            <div class="mt-2 py-1 px-2.5 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono w-full" data-countdown="${item.countdownEnd}">
               <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-amber-600"></i><span>活動倒數</span></span>
               <span class="countdown-timer font-bold tracking-wider">計算中...</span>
             </div>
           ` : '';
 
+          // 左右側圖片在手機版的自適應尺寸（確保強制 shrink-0，絕不被文字擠壓為 0）
           const sideSizeClass = {
-            'small': 'w-12 h-12',
-            'medium': 'w-16 h-16',
-            'large-square': 'w-24 h-24',
-            'large': 'w-24 h-24'
+            'small': 'w-12 h-12 min-w-[48px] min-h-[48px]',
+            'medium': 'w-16 h-16 min-w-[64px] min-h-[64px]',
+            'large-square': 'w-20 h-20 min-w-[80px] min-h-[80px]',
+            'large': 'w-20 h-20 min-w-[80px] min-h-[80px]'
           }[item.imgSize || 'medium'];
 
-          // 1. 上方置頂排版 (Top)
+          // 1. 上方置頂排版 (Top) - 手機版高度自適應，不寫死固定高度
           if (item.img && item.imgPos === 'top') {
             const isSquare = item.imgSize === 'large-square';
-            const imgContainerClass = isSquare ? 'w-full p-4 pb-0 flex justify-center bg-stone-50/50' : 'w-full h-40 overflow-hidden bg-stone-100';
-            const imgInsideClass = isSquare ? 'w-full aspect-square max-w-[340px] rounded-2xl object-cover shadow-sm' : 'w-full h-full object-cover';
+            const imgContainerClass = isSquare ? 'w-full p-3.5 pb-0 flex justify-center bg-stone-50/50' : 'w-full aspect-[16/9] max-h-48 overflow-hidden bg-stone-100';
+            const imgInsideClass = isSquare ? 'w-full aspect-square max-w-[340px] rounded-xl object-cover shadow-sm' : 'w-full h-full object-cover';
+            
             card.innerHTML = `
-              <div class="${imgContainerClass}"><img src="${item.img}" class="${imgInsideClass}"></div>
-              <div class="p-4 space-y-1">
-                ${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light leading-relaxed text-[#645E59]">${item.subtitle}</div>
+              <div class="${imgContainerClass}">
+                <img src="${item.img}" class="${imgInsideClass}" loading="lazy">
+              </div>
+              <div class="p-4 space-y-1.5 w-full">
+                ${badge}
+                <div class="text-xs font-bold text-stone-900 leading-snug break-words">${item.title}</div>
+                ${item.subtitle ? `<div class="text-[11px] font-light leading-relaxed text-[#645E59] break-words line-clamp-2">${item.subtitle}</div>` : ''}
                 ${countdownHtml}
-                <div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60 flex items-center gap-1"><span>探索詳情</span><i class="fa-solid fa-arrow-right text-[8px]"></i></span>${codeBtn}</div>
+                <div class="pt-2 flex justify-between items-center gap-2">
+                  <span class="text-[10px] opacity-60 flex items-center gap-1 flex-shrink-0"><span>探索詳情</span><i class="fa-solid fa-arrow-right text-[8px]"></i></span>
+                  ${codeBtn}
+                </div>
               </div>
             `;
-          // 2. 右側圖排版 (Right)
+          // 2. 右側圖排版 (Right) - 移除強制 truncate，改用 break-words 確保手機換行不消失
           } else if (item.img && item.imgPos === 'right') {
             card.innerHTML = `
-              <div class="p-3.5 flex justify-between items-center gap-3">
-                <div class="min-w-0 space-y-0.5 flex-grow">
-                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate text-[#645E59]">${item.subtitle}</div>
+              <div class="p-3.5 flex justify-between items-center gap-3 w-full">
+                <div class="min-w-0 flex-1 space-y-1">
+                  ${badge}
+                  <div class="text-xs font-bold text-stone-900 leading-snug break-words line-clamp-2">${item.title}</div>
+                  ${item.subtitle ? `<div class="text-[11px] font-light text-[#645E59] leading-tight break-words line-clamp-2">${item.subtitle}</div>` : ''}
                   ${countdownHtml}
                   ${codeBtn ? `<div class="pt-1">${codeBtn}</div>` : ''}
                 </div>
-                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100 border border-stone-200/50">
+                  <img src="${item.img}" class="w-full h-full object-cover" loading="lazy">
+                </div>
               </div>
             `;
           // 3. 左側圖排版 (Left - 預設)
           } else if (item.img) {
             card.innerHTML = `
-              <div class="p-3.5 flex items-center gap-3.5">
-                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div>
-                <div class="flex-grow min-w-0">
-                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2 text-[#645E59]">${item.subtitle}</div>
+              <div class="p-3.5 flex items-center gap-3.5 w-full">
+                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100 border border-stone-200/50">
+                  <img src="${item.img}" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <div class="min-w-0 flex-1 space-y-1">
+                  ${badge}
+                  <div class="text-xs font-bold text-stone-900 leading-snug break-words line-clamp-2">${item.title}</div>
+                  ${item.subtitle ? `<div class="text-[11px] font-light text-[#645E59] leading-tight break-words line-clamp-2">${item.subtitle}</div>` : ''}
                   ${countdownHtml}
                 </div>
-                ${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
+                ${codeBtn ? `<div class="flex-shrink-0">${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30 flex-shrink-0"></i>'}
               </div>
             `;
-          // 4. 純文字卡片 (無圖)
+          // 4. 純文字卡片 (無圖卡片) - 確保在窄螢幕不會塌陷
           } else {
             card.innerHTML = `
-              <div class="p-4 flex flex-col justify-between gap-1">
-                <div class="flex items-center justify-between gap-3">
-                  <div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2 text-[#645E59]">${item.subtitle}</div></div>
-                  <div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
+              <div class="p-4 flex flex-col justify-between gap-1.5 w-full">
+                <div class="flex items-start justify-between gap-3 w-full">
+                  <div class="min-w-0 flex-1 space-y-1">
+                    ${badge}
+                    <div class="text-xs font-bold text-stone-900 leading-snug break-words">${item.title}</div>
+                    ${item.subtitle ? `<div class="text-[11px] font-light text-[#645E59] leading-relaxed break-words">${item.subtitle}</div>` : ''}
+                  </div>
+                  <div class="flex-shrink-0 pt-0.5">
+                    ${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
+                  </div>
                 </div>
                 ${countdownHtml}
               </div>
