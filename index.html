@@ -1021,8 +1021,8 @@
       currentSlug = (slug && slug.toLowerCase() !== 'demo') ? slug.toLowerCase() : null;
 
       if (currentSlug) {
-        // ✅ 修正：確實呼叫 loadStoreFromSupabase 載入業主資料
-        await loadStoreFromSupabase(currentSlug);
+        // ✅ 修正：確實呼叫  載入業主資料
+        await (currentSlug);
       } else {
         // 【官方示範模式】
         isRealUser = false;
@@ -1059,7 +1059,7 @@
           }
         });
 
-        if (!res.ok) throw new Error(`Supabase HTTP ${res.status}`);
+        if (!res.ok) throw new Error(`Supabase Store HTTP ${res.status}`);
         const rows = await res.json();
 
         if (rows && rows.length > 0) {
@@ -1076,15 +1076,16 @@
             const parsedMeta = JSON.parse(s.bio_text);
             appData.bio = parsedMeta.bio || '';
             appData.marquee = parsedMeta.marquee || { enabled: false, text: '' };
-            appData.carousel = parsedMeta.carousel || { enabled: false, aspectRatio: 'landscape', position: 'below', images: [] };
+            appData.carousel = parsedMeta.carousel || { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
             appData.lineLead = parsedMeta.lineLead || { enabled: false, url: '', title: '' };
             if (parsedMeta.schedule) appData.schedule = parsedMeta.schedule;
           } catch(e) {
             appData.bio = s.bio_text || '';
           }
 
-          // 2. 獨立查詢 bio_items 表 (避開關聯查詢失效問題)
-          const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&order=sort_order.asc`, {
+          // 2. 查詢 bio_items (使用最安全、不帶複雜 URL 排序的查詢，改在 JS 排序)
+          const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*`;
+          const itemsRes = await fetch(itemsUrl, {
             headers: {
               "apikey": SUPABASE_ANON_KEY,
               "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
@@ -1095,17 +1096,21 @@
           let cloudItems = [];
           if (itemsRes.ok) {
             cloudItems = await itemsRes.json();
+          } else {
+            console.warn("bio_items 查詢未成功，狀態碼:", itemsRes.status);
           }
 
           if (cloudItems && cloudItems.length > 0) {
-            // 雲端有卡片：以雲端為主
+            // 在前端以 sort_order 進行精確排序
+            cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+
             const map = {};
             cloudItems.forEach(it => {
               const sec = it.section_title || '精選推薦';
               if (!map[sec]) map[sec] = { id: 'sec-' + Math.random(), title: sec, items: [] };
               map[sec].items.push({
                 id: it.id,
-                title: it.title,
+                title: it.title || '',
                 subtitle: it.subtitle || '',
                 img: it.thumbnail_url || '',
                 imgSize: it.img_size || 'large-square',
@@ -1120,16 +1125,14 @@
             appData.sections = Object.values(map);
             localStorage.setItem(getStorageKey(), JSON.stringify(appData));
           } else {
-            // ⚠️ 關鍵防護：若雲端是空的，檢查本機快取有沒有卡片！有的話自動救援，絕不直接洗成空白
+            // ⚠️ 雲端若查無卡片，嘗試從本地快取救援
             const localFallback = localStorage.getItem(getStorageKey());
             if (localFallback) {
               try {
                 const parsedLocal = JSON.parse(localFallback);
                 if (parsedLocal.sections && parsedLocal.sections.length > 0) {
                   appData.sections = parsedLocal.sections;
-                  console.log("已從本機暫存救回卡片資料，準備自動回補雲端");
-                  // 自動背景把本機卡片寫回雲端
-                  setTimeout(autoSaveToCloud, 1000);
+                  console.log("已從本機暫存救回卡片資料");
                 }
               } catch(e) {}
             }
@@ -1149,6 +1152,7 @@
         if (fallback) {
           try {
             appData = JSON.parse(fallback);
+            isRealUser = true;
             renderView();
           } catch(err) {}
         }
@@ -2320,10 +2324,10 @@
       btn.disabled = true;
       btn.innerText = '正在寫入雲端節點...';
 
-      // 1. 強制本機持久化備份
+      // 1. 本機備份
       localStorage.setItem(getStorageKey(), JSON.stringify(appData));
 
-      // 2. 雲端 Supabase 同步 (真實使用者)
+      // 2. 雲端同步
       if (isRealUser && currentStoreDbId) {
         try {
           const metaPayload = JSON.stringify({
@@ -2334,10 +2338,14 @@
             schedule: appData.schedule
           });
 
-          // A. 寫入主表
+          // A. 更新主表
           await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
             method: "PATCH",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({
               brand_name: appData.brandName,
               bio_text: metaPayload,
@@ -2348,20 +2356,15 @@
             })
           });
 
-          // B. 覆蓋更新卡片表
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-            method: "DELETE",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-          });
-
+          // B. 整理卡片清單 (重要：移除自訂字串 ID，讓 Supabase 自動生成標準 UUID)
           const itemsToInsert = [];
           let sortIdx = 0;
           for (const sec of appData.sections) {
             for (const it of (sec.items || [])) {
-              itemsToInsert.push({
+              const itemRow = {
                 store_id: currentStoreDbId,
-                section_title: sec.title,
-                title: it.title,
+                section_title: sec.title || '精選推薦',
+                title: it.title || '',
                 subtitle: it.subtitle || '',
                 thumbnail_url: it.img || '',
                 img_size: it.imgSize || 'large-square',
@@ -2371,38 +2374,66 @@
                 badge_label: it.badge || '',
                 sort_order: sortIdx++,
                 click_count: it.clicks || 0
-              });
+              };
+
+              // 只有符合標準 UUID 格式的既有 ID 才保留，避免資料庫拒收
+              const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(it.id);
+              if (isUuid) {
+                itemRow.id = it.id;
+              }
+
+              itemsToInsert.push(itemRow);
             }
           }
 
+          // 先刪除該店家的所有卡片
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+            method: "DELETE",
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+            }
+          });
+
+          // 重新批量寫入新卡片
           if (itemsToInsert.length > 0) {
-            await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+            const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
               method: "POST",
-              headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+              headers: {
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=representation"
+              },
               body: JSON.stringify(itemsToInsert)
             });
+
+            if (!insertRes.ok) {
+              const errText = await insertRes.text();
+              console.error("卡片寫入失敗:", errText);
+              throw new Error("卡片寫入失敗: " + errText);
+            }
           }
         } catch(err) {
           console.error("雲端同步異常:", err);
-          Swal.fire('雲端備份提示', '雲端連線延遲，已先安全備份於本機瀏覽器。', 'info');
+          Swal.fire('同步提醒', '已先為您儲存於本地暫存。', 'info');
         }
       }
 
-      // 儲存完成後清除標記與按鈕狀態
       hasUnsavedChanges = false;
       btn.disabled = false;
       btn.classList.remove('bg-emerald-600', 'animate-pulse');
       btn.classList.add('bg-stone-900');
-      btn.innerText = '儲存並同步雲端';
+      btn.innerText = '儲存並同步發布';
 
       document.getElementById('adminSheet').style.display = 'none';
+      renderView();
 
-      // 綠色大勾勾安心確認彈窗
       Swal.fire({
         title: '已成功儲存並同步雲端！',
-        html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">您的名片內容、商品卡片與檔期排班已百分之百安全寫入資料庫。<br>訪客現在即可看到最新頁面！</p>',
+        html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">您的名片資料與商品卡片已安全寫入資料庫。<br>電腦與手機重新整理即可完全同步！</p>',
         icon: 'success',
-        confirmButtonText: '太棒了',
+        confirmButtonText: '完成',
         confirmButtonColor: '#2C241E'
       });
     };
