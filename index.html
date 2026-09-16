@@ -10,7 +10,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@200;300;400;500;600;700&display=swap');
     * { font-family: 'Plus Jakarta Sans', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-
     :root[data-theme="cashmere-latte"] {
       --bg-gradient: radial-gradient(120% 120% at 50% 0%, #F5EFE6 0%, #E8DFD3 100%);
       --card-bg: rgba(255, 255, 255, 0.88); --card-border: rgba(219, 206, 193, 0.85); --card-hover: rgba(255, 255, 255, 0.98);
@@ -47,11 +46,9 @@
       --card-shadow: 0 10px 28px -8px rgba(105, 68, 73, 0.14); --title-color: #332023; --desc-color: #7D6367;
       --tag-bg: #EEDADB; --tag-text: #613E43; --accent-color: #8E5A62;
     }
-
     body { background: var(--bg-gradient); min-height: 100vh; color: var(--title-color); transition: background 0.3s ease; margin: 0; padding: 0; }
     .app-card { background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--card-shadow); backdrop-filter: blur(14px); transition: all 0.22s ease; }
     .app-card:hover { background: var(--card-hover); transform: translateY(-2px); }
-
     div:where(.swal2-container) div:where(.swal2-popup) {
       background: #FAF6F0 !important; border: 1px solid #DFD1C0 !important; border-radius: 28px !important;
       padding: 24px 20px !important; box-shadow: 0 20px 40px -10px rgba(74, 59, 44, 0.2) !important; color: #2C241E !important;
@@ -64,10 +61,8 @@
     }
     div:where(.swal2-container) button.swal2-confirm { background: #2C241E !important; color: #FFFFFF !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; padding: 10px 22px !important; }
     div:where(.swal2-container) button.swal2-cancel { background: #EAE1D5 !important; color: #5A4C40 !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; padding: 10px 20px !important; }
-
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 16s linear infinite; }
-
     /* 莫蘭迪低飽和日曆樣式 */
     .cal-grid-box {
       display: grid !important;
@@ -99,7 +94,6 @@
   </style>
 </head>
 <body class="flex flex-col items-center justify-between">
-
   <!-- 置頂跑馬燈公告 -->
   <div id="marqueeBanner" class="w-full bg-stone-900 text-white text-[11px] py-1.5 px-4 overflow-hidden relative z-30" style="display: none;">
     <div class="flex items-center gap-2 max-w-[480px] mx-auto overflow-hidden">
@@ -129,11 +123,9 @@
 
   <!-- 主體畫布 -->
   <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-1 pb-16 flex-grow flex flex-col items-center relative z-10 space-y-6">
-
-    <!-- 示範模式專屬：高轉換引導與痛點解析卡片 (僅在示範模式出現) -->
+    <!-- 示範模式專屬：高轉換引導與痛點解析卡片 -->
     <div id="demoGuideBanner" class="w-full relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#3C322A] to-[#1C1815] shadow-xl border border-stone-800 transition-all mb-4">
       <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
-      
       <div class="relative z-10 p-5 space-y-4">
         <div class="flex items-center justify-between">
           <span class="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[9px] font-bold tracking-widest uppercase flex items-center gap-1.5">
@@ -145,7 +137,6 @@
             <i class="fa-solid fa-arrow-up-right animate-bounce text-amber-400"></i>
           </div>
         </div>
-
         <div class="space-y-1">
           <h3 class="text-[17px] font-extrabold text-amber-50 leading-tight tracking-wide">
             為什麼你需要<span class="text-amber-400">專屬品牌連結頁</span>？
@@ -154,7 +145,6 @@
             拒絕模板感！30秒內建立極簡奢華的數位門面，徹底解決社群行銷的轉單痛點
           </p>
         </div>
-
         <div class="space-y-2.5 pt-1">
           <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
             <div class="w-6 h-6 rounded-full bg-rose-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -165,7 +155,6 @@
               <div class="text-[10px] text-amber-100/60 mt-0.5 leading-snug">IG、Threads、LINE 首頁一次整合所有核心入口，流量不漏接</div>
             </div>
           </div>
-          
           <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
             <div class="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
               <i class="fa-solid fa-calendar-check text-emerald-300 text-[10px]"></i>
@@ -175,7 +164,6 @@
               <div class="text-[10px] text-amber-100/60 mt-0.5 leading-snug">內建即時排班月曆，顧客點選空檔直接複製預約模板，加速成交</div>
             </div>
           </div>
-
           <div class="flex items-start gap-2.5 bg-white/5 rounded-xl p-2.5 border border-white/10 hover:bg-white/10 transition">
             <div class="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
               <i class="fa-solid fa-hourglass-half text-amber-300 text-[10px]"></i>
@@ -222,8 +210,8 @@
       </div>
     </div>
 
-    <!-- 模組 3：檔期排班／空檔日曆 (莫蘭迪色系) -->
-    <div id="scheduleModule" class="w-full my-2 p-4 rounded-2xl app-card transition-all block">
+    <!-- 模組 3：檔期排班／空檔日曆 -->
+    <div id="scheduleModule" class="w-full my-2 p-4 rounded-2xl app-card transition-all" style="display: none;">
       <div class="flex items-center justify-between mb-1.5">
         <div class="flex items-center gap-1.5 font-bold text-xs" style="color: var(--title-color);">
           <i class="fa-regular fa-calendar-check text-[#4C6F5E]"></i>
@@ -238,8 +226,6 @@
           <b>你可以這樣應用：</b>標註當日所在縣市（例：台北、台南），客戶點選綠色空檔即自動複製諮詢模板，省去來回私訊問時間。
         </p>
       </div>
-
-      <!-- 圖例與月曆導覽 -->
       <div class="flex items-center justify-between py-2 border-t border-stone-200/50">
         <div class="flex items-center gap-2.5 text-[9px] text-[#645E59]">
           <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#5D8270]"></span>可預約</span>
@@ -256,12 +242,10 @@
           </button>
         </div>
       </div>
-
       <div class="grid grid-cols-7 gap-1 text-center font-medium text-[9px] mb-1.5 text-stone-400">
         <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
       </div>
       <div id="calendarGrid" class="cal-grid-box w-full min-h-[220px]"></div>
-
       <p id="scheduleNoteText" class="mt-2.5 text-[10.5px] text-[#645E59] leading-relaxed text-center font-light border-t pt-2 border-stone-200/50"></p>
     </div>
 
@@ -276,7 +260,6 @@
           <span>查看完整官方示範</span>
         </button>
       </div>
-
       <div class="w-full p-5 rounded-3xl bg-white/80 backdrop-blur-md border border-white/70 shadow-xs flex flex-col items-center text-center space-y-3">
         <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-stone-900 text-white text-[10px] font-medium">
           <i class="fa-solid fa-palette text-[9px]"></i>
@@ -291,7 +274,6 @@
           <span>立即免費開通專屬頁面</span>
         </button>
       </div>
-
       <div class="pt-2 flex flex-col items-center text-center max-w-[360px] mx-auto space-y-2">
         <a href="https://heysibyl.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-xs font-bold tracking-wide text-stone-700 hover:text-black transition">
           <span>Designed by Sibyl | 數位管家</span>
@@ -346,11 +328,12 @@
             <button type="button" onclick="promptChangePin()" class="text-[11px] text-stone-600 hover:text-black font-semibold border px-2.5 py-1 rounded-lg bg-white cursor-pointer">
               <i class="fa-solid fa-key mr-1"></i>改密碼
             </button>
-            <button type="button" onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button type="button" onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-600 flex items-center justify-center cursor-pointer">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
           </div>
         </div>
       </div>
-
       <div class="p-6 overflow-y-auto space-y-6 flex-grow text-xs text-stone-700">
         <!-- 主題切換 -->
         <div>
@@ -400,7 +383,6 @@
           <p class="text-[11px] text-[#645E59] leading-relaxed">
             點擊下方日期即可設定預約狀態與所在城市（例：台北、台南），再次點擊可循環變更。
           </p>
-
           <div id="adminScheduleConfig" class="space-y-3 pt-1" style="display: none;">
             <div class="grid grid-cols-2 gap-2">
               <div>
@@ -419,7 +401,6 @@
                 </div>
               </div>
             </div>
-
             <!-- 後台日曆容器 -->
             <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-2">
               <div class="flex justify-between items-center px-1 font-bold text-xs text-stone-800">
@@ -432,7 +413,6 @@
               </div>
               <div id="adminCalendarGrid" class="grid grid-cols-7 gap-1 w-full min-h-[220px]"></div>
             </div>
-
             <div>
               <label class="block text-[10px] font-medium text-stone-500 mb-1">檔期說明或備註</label>
               <input type="text" id="inputScheduleNote" placeholder="例：點選日期查看當日所在城市，可直接複製諮詢私訊！" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-1.5 text-xs" oninput="updateScheduleNote(this.value)">
@@ -504,7 +484,7 @@
             </label>
           </div>
           <p class="text-[11px] text-[#645E59] leading-relaxed">
-            當訪客在前台點擊任意卡片時，將引導訪客加入 LINE 官方帳號。
+            當訪客在前台點擊任意卡片時，將隨機彈出此視窗，引導訪客加入 LINE 官方帳號。
           </p>
           <div id="lineLeadConfigBox" class="space-y-2 pt-1" style="display: none;">
             <input type="text" id="inputLineLeadUrl" placeholder="LINE 官方好友連結 (https://lin.ee/...)" class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs" oninput="updateLineLeadConfig()">
@@ -535,7 +515,7 @@
           </div>
         </div>
 
-        <!-- 社群入口 -->
+        <!-- 社群入口 (支援地球/部落格/官網) -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <span class="font-bold text-stone-900 flex items-center gap-1.5"><i class="fa-solid fa-share-nodes text-stone-600"></i><span>社群與官方入口</span></span>
@@ -569,16 +549,14 @@
             希望新增什麼實用功能、排版樣式或系統串接？直接寫下您的想法，我們將在每週版本更新中排程開發！
           </p>
           <div class="space-y-2">
-            <textarea id="inputFeedbackWish" rows="2" placeholder="告訴我們您想要的功能..." class="w-full bg-white border border-[#DFD1C0] rounded-xl px-3 py-2 text-xs text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400"></textarea>
+            <textarea id="inputFeedbackWish" rows="2" placeholder="例：希望卡片可以設定外連影片、或希望有自訂字體功能..." class="w-full bg-white border border-[#DFD1C0] rounded-xl px-3 py-2 text-xs text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400"></textarea>
             <button type="button" onclick="submitWishToSuper()" class="w-full py-2 rounded-xl bg-stone-900 hover:bg-black text-white text-[11px] font-semibold transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
               <i class="fa-solid fa-paper-plane text-[10px]"></i>
               <span>送出功能願望</span>
             </button>
           </div>
         </div>
-
       </div>
-
       <div class="px-6 py-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between">
         <span class="text-[11px] text-stone-500">雲端即時連動中</span>
         <button type="button" id="btnSaveAdmin" onclick="saveAdminAndClose()" class="px-6 py-2 rounded-xl bg-stone-900 hover:bg-black text-white font-semibold text-xs shadow-md cursor-pointer">儲存並同步發布</button>
@@ -594,7 +572,6 @@
         <h3 id="modalHeaderTitle" class="font-bold text-stone-900 text-sm">編輯卡片內容</h3>
         <button type="button" onclick="closeItemModal()" class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
       </div>
-
       <div class="space-y-3">
         <div>
           <label class="block font-semibold mb-1">放入哪個分類？</label>
@@ -608,13 +585,11 @@
           <label class="block font-semibold mb-1">內容說明 (小字 細字體)</label>
           <input type="text" id="modalSubtitle" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-light text-stone-600" placeholder="例：以天然山林氣息安撫日常緊繃">
         </div>
-
         <div class="p-3 bg-amber-50/50 rounded-2xl border border-amber-200 space-y-1.5">
           <label class="block font-bold text-amber-950 text-[11px]"><i class="fa-solid fa-hourglass-half mr-1 text-amber-600"></i>限時活動截止時間 (選填，啟用倒數鐘)</label>
           <input type="datetime-local" id="modalCountdownEnd" class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-stone-700">
           <p class="text-[10px] text-amber-800/80">設定截止時間後，卡片會自動浮現精緻倒數時鐘，營造活動氛圍！</p>
         </div>
-
         <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-2.5">
           <div class="flex items-center justify-between">
             <label class="font-bold text-stone-800">圖片設定</label>
@@ -655,14 +630,12 @@
             </div>
           </div>
         </div>
-
         <div class="grid grid-cols-2 gap-2">
           <input type="text" id="modalUrl" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs" placeholder="跳轉網址 https://">
           <input type="text" id="modalCode" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs font-mono uppercase" placeholder="優惠代碼 (選填)">
         </div>
         <input type="text" id="modalBadge" class="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs" placeholder="角標標籤 (例：熱銷限定)">
       </div>
-
       <div class="flex justify-end gap-2 pt-3 border-t">
         <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-xl border text-stone-600 cursor-pointer">取消</button>
         <button type="button" onclick="saveItemData()" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-medium cursor-pointer">確定儲存</button>
@@ -670,7 +643,7 @@
     </div>
   </div>
 
-  <!-- 免費開通抽屜 (包含：忘記專屬網址？輸入 Email 免費找回) -->
+  <!-- 免費開通抽屜 -->
   <div id="onboardSheet" style="display: none;" class="fixed inset-0 z-[150]">
     <div onclick="closeOnboardModal()" class="absolute inset-0 bg-black/50 backdrop-blur-xs"></div>
     <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-[32px] shadow-2xl p-6">
@@ -698,7 +671,6 @@
         <button type="submit" id="btnSubmitOnboard" class="w-full py-3 rounded-xl bg-stone-900 hover:bg-black text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
           <i class="fa-solid fa-bolt text-amber-300"></i><span>立即開通專屬品牌頁</span>
         </button>
-
         <div class="text-center pt-2">
           <button type="button" onclick="findMySlugPrompt()" class="text-[11px] text-stone-400 hover:text-stone-800 underline cursor-pointer">
             忘記專屬網址？輸入 Email 免費找回
@@ -733,16 +705,7 @@
     const GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxJlhG1eDEwuyjiJedTtvND-iwIzGXA3sfc_iN_Pq-15LIKWwlHGDX5tFRVdlOzfanONA/exec";
     const SUPABASE_URL = "https://kwbxskvnfejfguuwzqfr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JnpaLZVnGkW9Jr967LeYuQ_d8bXwfnz";
-
-    window.openAdminDirectly = function() {
-      if (typeof isRealUser !== 'undefined' && isRealUser) {
-        if (typeof handleAdminEntry === 'function') {
-          handleAdminEntry();
-          return;
-        }
-      }
-      openAdminModal();
-    };
+    const DEMO_DATA_VERSION = 'v20260916_perfect_restored_full_v2';
 
     const illustrationAvatars = [
       'https://api.dicebear.com/7.x/lorelei/svg?seed=Chloe&backgroundColor=e8dfd3&accessories=earrings&head=variant02',
@@ -752,7 +715,6 @@
     ];
     let avatarIndex = 0;
 
-    // 官方完整展示版型：涵蓋大正方形置頂、滿版長海報置頂、標準中長方左側、小方形右側、小方形左側、純文字無圖
     const demoData = {
       theme: 'cashmere-latte',
       brandName: 'STUDIO AURA ╳ 慢奢選品',
@@ -796,6 +758,7 @@
         title: '領取好友專屬體驗禮遇'
       },
       socials: [
+        { icon: 'fa-solid fa-globe', label: '官方網站', url: 'https://heysibyl.com' },
         { icon: 'fa-brands fa-instagram', label: 'Instagram', url: 'https://instagram.com' },
         { icon: 'fa-brands fa-threads', label: 'Threads', url: 'https://threads.net' },
         { icon: 'fa-brands fa-line', label: 'LINE Official', url: 'https://line.me' },
@@ -900,56 +863,136 @@
     let currentStoreDbId = null;
     let currentSlug = null;
     let countdownInterval = null;
-
     let currentCalDate = new Date(2026, 9, 1);
     let adminCalDate = new Date(2026, 9, 1);
+    let saveTimer = null;
+    let isSavingLock = false;
 
-    // ====================================================
-    // 初始化：純雲端優先架構（徹底清除 LocalStorage 污染）
-    // ====================================================
+    function getStorageKey() {
+      return currentSlug ? `sibyl_data_${currentSlug}` : 'sibyl_demo_data';
+    }
+
+    window.openAdminDirectly = function() {
+      if (isRealUser) {
+        handleAdminEntry();
+      } else {
+        openAdminModal();
+      }
+    };
+
+    window.handleAdminEntry = async function() {
+      if (!isRealUser) {
+        openAdminModal();
+        return;
+      }
+      const { value: pin } = await Swal.fire({
+        title: '請輸入管理 PIN 碼',
+        input: 'password',
+        inputPlaceholder: '請輸入 PIN 碼',
+        showCancelButton: true,
+        confirmButtonText: '登入後台',
+        cancelButtonText: '取消',
+        confirmButtonColor: '#2C241E'
+      });
+      if (pin && pin.trim() === String(appData.adminPin).trim()) {
+        openAdminModal();
+      } else if (pin) {
+        Swal.fire({
+          title: '密碼錯誤',
+          text: '若忘記管理 PIN 碼，請使用開通信箱查詢或聯繫管理員。',
+          icon: 'error',
+          confirmButtonColor: '#2C241E'
+        });
+      }
+    };
+
+    window.promptChangePin = async function() {
+      const { value: newPin } = await Swal.fire({
+        title: '修改管理 PIN 碼',
+        input: 'password',
+        showCancelButton: true,
+        confirmButtonText: '儲存新密碼',
+        cancelButtonText: '取消',
+        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
+      });
+      if (newPin) {
+        appData.adminPin = newPin.trim();
+        autoSaveToCloud();
+        Swal.fire('修改成功！', '管理 PIN 碼已變更並同步雲端。', 'success');
+      }
+    };
+
+    window.openAdminModal = function() {
+      const sheet = document.getElementById('adminSheet');
+      if (sheet) sheet.style.display = 'block';
+      populateAdmin();
+      setTimeout(() => { renderAdminCalendar(); }, 50);
+    };
+
+    window.closeAdminModal = function() {
+      document.getElementById('adminSheet').style.display = 'none';
+    };
+
+    window.openOnboardModal = function() {
+      document.getElementById('onboardSheet').style.display = 'block';
+    };
+    window.closeOnboardModal = function() {
+      document.getElementById('onboardSheet').style.display = 'none';
+    };
+
+    window.openShareModal = function() {
+      document.getElementById('shareSheet').style.display = 'flex';
+    };
+    window.closeShareModal = function() {
+      document.getElementById('shareSheet').style.display = 'none';
+    };
+
+    window.switchToDemoMode = function() {
+      window.location.href = window.location.pathname;
+    };
+
     async function initPage() {
       const p = new URLSearchParams(window.location.search);
       const rawSlug = p.get('u');
-      
-      // 判斷是否為真實業主網址 (只要不是空值、不是 demo，就一律進入業主模式)
+
       if (rawSlug && rawSlug.trim().toLowerCase() !== 'demo') {
         currentSlug = rawSlug.trim().toLowerCase();
         isRealUser = true;
 
-        // 立即隱藏官方體驗引導，切換至正式業主模式
-        const guideBanner = document.getElementById('demoGuideBanner');
-        if (guideBanner) guideBanner.style.display = 'none';
-        
-        const switchBar = document.getElementById('demoSwitchBar');
-        if (switchBar) switchBar.style.display = 'block';
-
-        const adminLabel = document.getElementById('btnAdminLabel');
-        if (adminLabel) adminLabel.innerText = '管理後台';
-
-        // 啟動業主資料庫直讀
+        const localCache = localStorage.getItem(getStorageKey());
+        if (localCache) {
+          try {
+            appData = JSON.parse(localCache);
+            renderView();
+          } catch(e) {}
+        }
         await loadStoreFromSupabase(currentSlug);
       } else {
-        // 純官方示範模式 (無 ?u 參數時才顯示)
         isRealUser = false;
         currentSlug = null;
-        appData = JSON.parse(JSON.stringify(demoData));
-
-        const guideBanner = document.getElementById('demoGuideBanner');
-        if (guideBanner) guideBanner.style.display = 'block';
-
+        const cachedVer = localStorage.getItem('sibyl_demo_ver');
+        const localCache = localStorage.getItem('sibyl_demo_data');
+        if (cachedVer !== DEMO_DATA_VERSION || !localCache) {
+          appData = JSON.parse(JSON.stringify(demoData));
+          localStorage.setItem('sibyl_demo_data', JSON.stringify(appData));
+          localStorage.setItem('sibyl_demo_ver', DEMO_DATA_VERSION);
+        } else {
+          try {
+            appData = JSON.parse(localCache);
+          } catch (e) {
+            appData = JSON.parse(JSON.stringify(demoData));
+          }
+        }
         const switchBar = document.getElementById('demoSwitchBar');
         if (switchBar) switchBar.style.display = 'none';
-
         const adminLabel = document.getElementById('btnAdminLabel');
         if (adminLabel) adminLabel.innerText = '示範設定後台';
-
         renderView();
       }
     }
 
     async function loadStoreFromSupabase(slug) {
       try {
-        // 1. 抓取業主主檔 (加上防快取時間戳記，確保每秒抓到的都是最新編輯結果)
         const storeUrl = `${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`;
         const res = await fetch(storeUrl, {
           headers: {
@@ -958,34 +1001,25 @@
             "Cache-Control": "no-cache, no-store, must-revalidate"
           }
         });
-
-        if (!res.ok) throw new Error("讀取業主主檔失敗");
+        if (!res.ok) throw new Error("主檔讀取失敗");
         const rows = await res.json();
-
         if (!rows || rows.length === 0) {
-          // 真正查無此帳號時才彈窗提示，絕不靜默跳轉
           Swal.fire({
             title: '找不到此專屬頁面',
             text: `網址代號「${slug}」尚未註冊開通。`,
-            icon: 'warning',
-            confirmButtonText: '回到首頁'
-          }).then(() => {
-            window.location.href = window.location.pathname;
+            icon: 'warning'
           });
           return;
         }
 
         const s = rows[0];
         currentStoreDbId = s.id;
-
-        // 2. 嚴格綁定業主自己的設定 (不再使用 demoData 覆蓋)
         appData.brandName = s.brand_name || slug;
         appData.avatar = s.avatar_url || illustrationAvatars[0];
         appData.theme = s.theme || 'cashmere-latte';
         appData.adminPin = s.admin_pin || '8888';
         appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
 
-        // 3. 解析自訂模組 (跑馬燈、輪播、排班、LINE 導流)
         try {
           const meta = JSON.parse(s.bio_text);
           appData.bio = meta.bio || '';
@@ -1001,7 +1035,6 @@
           appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
         }
 
-        // 4. 抓取業主自己設定的卡片項目 (bio_items)
         const itemsUrl = `${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`;
         const itemsRes = await fetch(itemsUrl, {
           headers: {
@@ -1011,67 +1044,59 @@
           }
         });
 
-        let cloudItems = [];
         if (itemsRes.ok) {
-          cloudItems = await itemsRes.json();
-        }
-
-        // 5. 將資料庫的卡片依分類完整排好
-        if (cloudItems && cloudItems.length > 0) {
-          cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
-
-          const secMap = {};
-          cloudItems.forEach(it => {
-            const secTitle = it.section_title || '精選推薦';
-            if (!secMap[secTitle]) {
-              secMap[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
-            }
-            secMap[secTitle].items.push({
-              id: it.id,
-              title: it.title || '',
-              subtitle: it.subtitle || '',
-              img: it.thumbnail_url || '',
-              imgSize: it.img_size || 'large-square',
-              imgPos: it.img_pos || 'top',
-              url: it.target_url || '#',
-              discountCode: it.discount_code || '',
-              badge: it.badge_label || '',
-              countdownEnd: it.countdown_end || '',
-              clicks: Number(it.click_count) || 0
+          const cloudItems = await itemsRes.json();
+          if (cloudItems && cloudItems.length > 0) {
+            cloudItems.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+            const secMap = {};
+            cloudItems.forEach(it => {
+              const secTitle = it.section_title || '精選推薦';
+              if (!secMap[secTitle]) {
+                secMap[secTitle] = { id: 'sec-' + secTitle, title: secTitle, items: [] };
+              }
+              secMap[secTitle].items.push({
+                id: it.id,
+                title: it.title || '',
+                subtitle: it.subtitle || '',
+                img: it.thumbnail_url || '',
+                imgSize: it.img_size || 'large-square',
+                imgPos: it.img_pos || 'top',
+                url: it.target_url || '#',
+                discountCode: it.discount_code || '',
+                badge: it.badge_label || '',
+                countdownEnd: it.countdown_end || '',
+                clicks: Number(it.click_count) || 0
+              });
             });
-          });
-          appData.sections = Object.values(secMap);
-        } else {
-          // 如果業主剛開通還沒有卡片，清空陣列，絕不亂塞 demo 卡片進來
-          appData.sections = [];
+            appData.sections = Object.values(secMap);
+          } else {
+            appData.sections = [];
+          }
         }
 
-        // 更新網址與頁面標題
+        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+        const switchBar = document.getElementById('demoSwitchBar');
+        if (switchBar) switchBar.style.display = 'block';
+        const adminLabel = document.getElementById('btnAdminLabel');
+        if (adminLabel) adminLabel.innerText = '管理後台';
         const shareUrlDisplay = document.getElementById('shareUrlDisplay');
         if (shareUrlDisplay) shareUrlDisplay.innerText = `link.heysibyl.com/?u=${slug}`;
         document.title = `${appData.brandName} | 品牌名片`;
-
-        // 6. 正式渲染業主專屬畫面
         renderView();
-
       } catch (err) {
-        console.error("載入業主資料庫失敗:", err);
-        // 發生連線錯誤時，停留在當前狀態並提示，絕不退回 demo 示範模式
+        console.error("載入失敗:", err);
         renderView();
       }
     }
-    // ====================================================
-    // 前台渲染：支援所有版型與轉換文案
-    // ====================================================
+
     function renderView() {
       document.documentElement.setAttribute('data-theme', appData.theme);
       document.getElementById('displayName').innerText = appData.brandName;
-      document.getElementById('displayBio').innerHTML = (appData.bio || '').replace(/\n/g, '<br>');
+      document.getElementById('displayBio').innerHTML = (appData.bio || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
       document.getElementById('displayAvatar').src = appData.avatar;
       document.getElementById('shareBrandTitle').innerText = appData.brandName;
       document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(window.location.href)}`;
 
-      // 跑馬燈公告
       const mar = appData.marquee;
       const marEl = document.getElementById('marqueeBanner');
       if (mar && mar.enabled && mar.text) {
@@ -1081,7 +1106,6 @@
         marEl.style.display = 'none';
       }
 
-      // 社群入口
       const socBox = document.getElementById('displaySocials');
       socBox.innerHTML = '';
       (appData.socials || []).forEach(s => {
@@ -1093,13 +1117,11 @@
         socBox.appendChild(a);
       });
 
-      // 示範模式專屬引導標籤：業主模式下全面隱藏
       const demoGuideBanner = document.getElementById('demoGuideBanner');
       const demoCarouselTag = document.getElementById('demoCarouselTag');
       const demoCarouselGuideBox = document.getElementById('demoCarouselGuideBox');
       const demoScheduleTag = document.getElementById('demoScheduleTag');
       const demoScheduleGuideBox = document.getElementById('demoScheduleGuideBox');
-
       if (isRealUser) {
         if (demoGuideBanner) demoGuideBanner.style.display = 'none';
         if (demoCarouselTag) demoCarouselTag.style.display = 'none';
@@ -1114,10 +1136,8 @@
         if (demoScheduleGuideBox) demoScheduleGuideBox.style.display = 'block';
       }
 
-      // 渲染卡片清單與「適合誰／你可以這樣應用」
       const secBox = document.getElementById('sectionsContainer');
       secBox.innerHTML = '';
-
       const appTipsMap = {
         'sec-1': {
           tag: '適合：團購選物・品牌檔期',
@@ -1137,13 +1157,11 @@
           tag: '適合：個人品牌・多連結管理',
           guide: '你可以這樣應用：自由建立多個專屬分類，支援大圖置頂、左右配圖或純文字版型，拖曳即可自由排序。'
         };
-
         const demoHeaderTips = !isRealUser ? `
           <span class="text-[9px] px-2.5 py-0.5 rounded-full bg-[#E2D9CE] text-[#4A3F35] font-medium tracking-wide">
             ${tip.tag}
           </span>
         ` : '';
-
         const demoBodyGuide = !isRealUser ? `
           <div class="px-3 py-2 rounded-xl bg-white/60 border border-white/80 shadow-2xs mt-1 mb-2">
             <p class="text-[10.5px] text-[#645E59] leading-relaxed">
@@ -1167,96 +1185,69 @@
 
         (sec.items || []).forEach((item, iIdx) => {
           const card = document.createElement('div');
-          card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 block';
+          card.className = 'app-card w-full rounded-2xl overflow-hidden cursor-pointer';
           card.onclick = (e) => {
             if (!e.target.closest('.copy-btn')) {
               handleCardClickTrack(sIdx, iIdx, item.url);
             }
           };
 
-          const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 flex-shrink-0" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
-          const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border border-stone-200 flex items-center gap-1 shadow-2xs flex-shrink-0"><i class="fa-regular fa-copy text-[9px]"></i><span>${item.discountCode}</span></button>` : '';
-
+          const badge = item.badge ? `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-1" style="background-color: var(--tag-bg); color: var(--tag-text);">${item.badge}</span>` : '';
+          const codeBtn = item.discountCode ? `<button type="button" onclick="copyCode('${item.discountCode}', event)" class="copy-btn text-[11px] font-mono px-2 py-0.5 rounded-lg bg-white/90 border flex items-center gap-1 shadow-2xs"><i class="fa-regular fa-copy text-[9px]"></i><span>${item.discountCode}</span></button>` : '';
           const countdownHtml = item.countdownEnd ? `
-            <div class="mt-2 py-1 px-2.5 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono w-full" data-countdown="${item.countdownEnd}">
+            <div class="mt-2 py-1 px-2.5 rounded-lg bg-amber-50 border border-amber-200/80 flex items-center justify-between text-[10px] text-amber-900 font-mono" data-countdown="${item.countdownEnd}">
               <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-amber-600"></i><span>活動倒數</span></span>
               <span class="countdown-timer font-bold tracking-wider">計算中...</span>
             </div>
           ` : '';
 
           const sideSizeClass = {
-            'small': 'w-12 h-12 min-w-[48px] min-h-[48px]',
-            'medium': 'w-16 h-16 min-w-[64px] min-h-[64px]',
-            'large-square': 'w-20 h-20 min-w-[80px] min-h-[80px]',
-            'large': 'w-20 h-20 min-w-[80px] min-h-[80px]'
+            'small': 'w-12 h-12',
+            'medium': 'w-16 h-16',
+            'large-square': 'w-24 h-24',
+            'large': 'w-24 h-24'
           }[item.imgSize || 'medium'];
 
-          // 1. 上方置頂排版 (Top)
           if (item.img && item.imgPos === 'top') {
             const isSquare = item.imgSize === 'large-square';
-            const imgContainerClass = isSquare ? 'w-full p-3.5 pb-0 flex justify-center bg-stone-50/50' : 'w-full aspect-[16/9] max-h-48 overflow-hidden bg-stone-100';
-            const imgInsideClass = isSquare ? 'w-full aspect-square max-w-[340px] rounded-xl object-cover shadow-sm' : 'w-full h-full object-cover';
-            
+            const imgContainerClass = isSquare ? 'w-full p-4 pb-0 flex justify-center bg-stone-50/50' : 'w-full h-40 overflow-hidden bg-stone-100';
+            const imgInsideClass = isSquare ? 'w-full aspect-square max-w-[340px] rounded-2xl object-cover shadow-sm' : 'w-full h-full object-cover';
             card.innerHTML = `
-              <div class="${imgContainerClass}">
-                <img src="${item.img}" class="${imgInsideClass}" loading="lazy">
-              </div>
-              <div class="p-4 space-y-1.5 w-full">
-                ${badge}
-                <div class="text-xs font-bold text-stone-900 leading-snug break-words">${item.title}</div>
-                ${item.subtitle ? `<div class="text-[11px] font-light leading-relaxed text-[#645E59] break-words line-clamp-2">${item.subtitle}</div>` : ''}
+              <div class="${imgContainerClass}"><img src="${item.img}" class="${imgInsideClass}"></div>
+              <div class="p-4 space-y-1">
+                ${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light leading-relaxed text-[#645E59]">${item.subtitle}</div>
                 ${countdownHtml}
-                <div class="pt-2 flex justify-between items-center gap-2">
-                  <span class="text-[10px] opacity-60 flex items-center gap-1 flex-shrink-0"><span>探索詳情</span><i class="fa-solid fa-arrow-right text-[8px]"></i></span>
-                  ${codeBtn}
-                </div>
+                <div class="pt-2 flex justify-between items-center"><span class="text-[10px] opacity-60 flex items-center gap-1"><span>探索詳情</span><i class="fa-solid fa-arrow-right text-[8px]"></i></span>${codeBtn}</div>
               </div>
             `;
-          // 2. 右側圖排版 (Right)
           } else if (item.img && item.imgPos === 'right') {
             card.innerHTML = `
-              <div class="p-3.5 flex justify-between items-center gap-3 w-full">
-                <div class="min-w-0 flex-1 space-y-1">
-                  ${badge}
-                  <div class="text-xs font-bold text-stone-900 leading-snug break-words line-clamp-2">${item.title}</div>
-                  ${item.subtitle ? `<div class="text-[11px] font-light text-[#645E59] leading-tight break-words line-clamp-2">${item.subtitle}</div>` : ''}
+              <div class="p-3.5 flex justify-between items-center gap-3">
+                <div class="min-w-0 space-y-0.5 flex-grow">
+                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light truncate text-[#645E59]">${item.subtitle}</div>
                   ${countdownHtml}
                   ${codeBtn ? `<div class="pt-1">${codeBtn}</div>` : ''}
                 </div>
-                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100 border border-stone-200/50">
-                  <img src="${item.img}" class="w-full h-full object-cover" loading="lazy">
-                </div>
+                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div>
               </div>
             `;
-          // 3. 左側圖排版 (Left - 預設)
           } else if (item.img) {
             card.innerHTML = `
-              <div class="p-3.5 flex items-center gap-3.5 w-full">
-                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100 border border-stone-200/50">
-                  <img src="${item.img}" class="w-full h-full object-cover" loading="lazy">
-                </div>
-                <div class="min-w-0 flex-1 space-y-1">
-                  ${badge}
-                  <div class="text-xs font-bold text-stone-900 leading-snug break-words line-clamp-2">${item.title}</div>
-                  ${item.subtitle ? `<div class="text-[11px] font-light text-[#645E59] leading-tight break-words line-clamp-2">${item.subtitle}</div>` : ''}
+              <div class="p-3.5 flex items-center gap-3.5">
+                <div class="${sideSizeClass} rounded-xl overflow-hidden flex-shrink-0 bg-stone-100"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                <div class="flex-grow min-w-0">
+                  ${badge}<div class="text-xs font-bold truncate">${item.title}</div><div class="text-[11px] font-light line-clamp-2 text-[#645E59]">${item.subtitle}</div>
                   ${countdownHtml}
                 </div>
-                ${codeBtn ? `<div class="flex-shrink-0">${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30 flex-shrink-0"></i>'}
+                ${codeBtn ? `<div>${codeBtn}</div>` : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
               </div>
             `;
-          // 4. 純文字卡片 (無圖卡片)
           } else {
             card.innerHTML = `
-              <div class="p-4 flex flex-col justify-between gap-1.5 w-full">
-                <div class="flex items-start justify-between gap-3 w-full">
-                  <div class="min-w-0 flex-1 space-y-1">
-                    ${badge}
-                    <div class="text-xs font-bold text-stone-900 leading-snug break-words">${item.title}</div>
-                    ${item.subtitle ? `<div class="text-[11px] font-light text-[#645E59] leading-relaxed break-words">${item.subtitle}</div>` : ''}
-                  </div>
-                  <div class="flex-shrink-0 pt-0.5">
-                    ${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}
-                  </div>
+              <div class="p-4 flex flex-col justify-between gap-1">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="min-w-0 space-y-0.5">${badge}<div class="text-xs font-bold">${item.title}</div><div class="text-[11px] font-light line-clamp-2 text-[#645E59]">${item.subtitle}</div></div>
+                  <div class="flex-shrink-0">${codeBtn ? codeBtn : '<i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>'}</div>
                 </div>
                 ${countdownHtml}
               </div>
@@ -1272,266 +1263,215 @@
       startCountdownTimers();
     }
 
-    // ====================================================
-    // 後台儲存核心：100% 同步寫入 Supabase
-    // ====================================================
-    window.saveAdminAndClose = async function(silent = false) {
-      const btn = document.getElementById('btnSaveAdmin');
-      btn.disabled = true;
-      btn.innerText = '正在寫入雲端節點...';
-
-      if (isRealUser && currentStoreDbId) {
-        try {
-          const metaPayload = JSON.stringify({
-            bio: appData.bio,
-            marquee: appData.marquee,
-            carousel: appData.carousel,
-            lineLead: appData.lineLead,
-            schedule: appData.schedule
-          });
-
-          // A. 更新主表
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
-            method: "PATCH",
-            headers: {
-              "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              brand_name: appData.brandName,
-              bio_text: metaPayload,
-              theme: appData.theme,
-              avatar_url: appData.avatar,
-              social_links: appData.socials,
-              admin_pin: appData.adminPin
-            })
-          });
-
-          // B. 整理卡片陣列
-          const itemsToInsert = [];
-          let sortIdx = 0;
-          for (const sec of appData.sections) {
-            for (const it of (sec.items || [])) {
-              itemsToInsert.push({
-                store_id: currentStoreDbId,
-                section_title: sec.title || '精選推薦',
-                title: it.title || '',
-                subtitle: it.subtitle || '',
-                thumbnail_url: it.img || '',
-                img_size: it.imgSize || 'large-square',
-                img_pos: it.imgPos || 'top',
-                target_url: it.url || '#',
-                discount_code: it.discountCode || '',
-                badge_label: it.badge || '',
-                sort_order: sortIdx++,
-                click_count: it.clicks || 0
-              });
-            }
-          }
-
-          // C. 先刪除舊卡片，再批次寫入新卡片
-          await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
-            method: "DELETE",
-            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
-          });
-
-          if (itemsToInsert.length > 0) {
-            const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
-              method: "POST",
-              headers: {
-                "apikey": SUPABASE_ANON_KEY,
-                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-                "Content-Type": "application/json",
-                "Prefer": "return=representation"
-              },
-              body: JSON.stringify(itemsToInsert)
-            });
-
-            if (!insertRes.ok) {
-              const errText = await insertRes.text();
-              console.error("卡片寫入失敗:", errText);
-            }
-          }
-        } catch(err) {
-          console.error("雲端同步異常:", err);
-          Swal.fire('同步提醒', '請確認網路連線是否通暢。', 'warning');
-        }
+    function handleCardClickTrack(sIdx, iIdx, targetUrl) {
+      if (appData.sections[sIdx] && appData.sections[sIdx].items[iIdx]) {
+        appData.sections[sIdx].items[iIdx].clicks = (appData.sections[sIdx].items[iIdx].clicks || 0) + 1;
+        localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+        autoSaveToCloud();
       }
-
-      btn.disabled = false;
-      btn.innerText = '儲存並同步發布';
-      document.getElementById('adminSheet').style.display = 'none';
-      renderView();
-
-      if (!silent) {
-        Swal.fire({
-          title: '已成功儲存並同步雲端！',
-          html: '<p style="font-size:12px;color:#7A6C62;line-height:1.6;">資料已安全寫入資料庫。<br>電腦與手機重新整理即可完全同步最新畫面！</p>',
-          icon: 'success',
-          confirmButtonText: '太棒了',
-          confirmButtonColor: '#2C241E'
-        });
-      }
-    };
-
-    // ====================================================
-    // 後台管理密碼驗證
-    // ====================================================
-    window.handleAdminEntry = async function() {
-      if (!isRealUser) {
-        openAdminModal();
-        return;
-      }
-      const { value: pin } = await Swal.fire({
-        title: '請輸入管理 PIN 碼',
-        input: 'password',
-        inputPlaceholder: '預設 8888',
-        showCancelButton: true,
-        confirmButtonText: '登入後台',
-        cancelButtonText: '取消'
-      });
-      if (pin === appData.adminPin) {
-        if (pin === '8888') {
-          await forceChangeDefaultPin();
-        } else {
-          openAdminModal();
-        }
-      } else if (pin) {
-        Swal.fire('密碼錯誤', '請確認管理 PIN 碼。', 'error');
-      }
-    };
-
-    async function forceChangeDefaultPin() {
-      const { value: newPin } = await Swal.fire({
-        title: '首次登入安全設定',
-        text: '請自訂一組 4-6 位數新 PIN 碼：',
-        input: 'password',
-        allowOutsideClick: false,
-        confirmButtonText: '確認並進入後台',
-        inputValidator: (v) => (!v || v.length < 4 || v === '8888') ? '密碼至少需 4 碼且不可為 8888！' : null
-      });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        await saveAdminAndClose(true);
-        Swal.fire('設定成功！', '管理 PIN 碼已更新。', 'success');
-        openAdminModal();
+      const lead = appData.lineLead;
+      const hasShownLead = sessionStorage.getItem('has_shown_line_lead');
+      if (lead && lead.enabled && !hasShownLead && Math.random() > 0.45) {
+        sessionStorage.setItem('has_shown_line_lead', 'true');
+        openLineLeadModal(targetUrl);
+      } else {
+        window.open(targetUrl, '_blank');
       }
     }
 
-    window.promptChangePin = async function() {
-      const { value: newPin } = await Swal.fire({
-        title: '修改管理 PIN 碼',
-        input: 'password',
-        showCancelButton: true,
-        confirmButtonText: '儲存新密碼',
-        cancelButtonText: '取消',
-        inputValidator: (v) => (!v || v.length < 4) ? '密碼至少需 4 碼' : null
-      });
-      if (newPin) {
-        appData.adminPin = newPin.trim();
-        Swal.fire('修改成功！', '請記得點擊右下角【儲存並同步發布】以更新至雲端。', 'success');
+    function openLineLeadModal(targetUrl) {
+      const modal = document.getElementById('lineLeadModal');
+      const lead = appData.lineLead;
+      document.getElementById('leadModalTitle').innerText = lead.title || '領取官方專屬禮遇';
+      document.getElementById('btnLineLeadAction').href = lead.url || '#';
+      document.getElementById('btnLineLeadAction').onclick = () => {
+        closeLineLeadModal();
+        setTimeout(() => { window.open(targetUrl, '_blank'); }, 400);
+      };
+      modal.style.display = 'flex';
+    }
+    window.closeLineLeadModal = function() { document.getElementById('lineLeadModal').style.display = 'none'; };
+
+    function renderScheduleModule() {
+      const s = appData.schedule;
+      const mod = document.getElementById('scheduleModule');
+      if (!s || !s.enabled) {
+        if (mod) mod.style.display = 'none';
+        return;
       }
+      if (mod) mod.style.display = 'block';
+      const profEl = document.getElementById('profileModule');
+      const carEl = document.getElementById('carouselWrapper');
+      const secEl = document.getElementById('sectionsContainer');
+      if (profEl) profEl.style.order = '1';
+      if (s.position === 'above_carousel') {
+        if (mod) mod.style.order = '2';
+        if (carEl) carEl.style.order = '3';
+        if (secEl) secEl.style.order = '4';
+      } else if (s.position === 'below_sections') {
+        if (carEl) carEl.style.order = '2';
+        if (secEl) secEl.style.order = '3';
+        if (mod) mod.style.order = '4';
+      } else {
+        if (carEl) carEl.style.order = '2';
+        if (mod) mod.style.order = '3';
+        if (secEl) secEl.style.order = '4';
+      }
+
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      const titleEl = document.getElementById('calMonthTitle');
+      if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
+      
+      const noteEl = document.getElementById('scheduleNoteText');
+      if (noteEl) noteEl.innerText = s.note || '點選有空檔的日期，可直接複製預約文字私訊我們！';
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      grid.className = 'cal-grid-box';
+      grid.innerHTML = '';
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
+        grid.appendChild(empty);
+      }
+      for (let d = 1; d <= totalDays; d++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
+        let status = 'none';
+        let location = '';
+        if (item) {
+          if (typeof item === 'object') {
+            status = item.status || 'none';
+            location = item.location || '';
+          } else if (typeof item === 'string') {
+            status = item;
+          }
+        }
+        const cell = document.createElement('div');
+        cell.className = `cal-cell status-${status}`;
+        let locBadge = '';
+        if (location) {
+          locBadge = `<span style="font-size: 8px; line-height: 1; padding: 1.5px 3px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${location}</span>`;
+        }
+        cell.innerHTML = `<span style="font-size: 12px; font-weight: 600; line-height: 1;">${d}</span>${locBadge}`;
+        if (status === 'available') {
+          cell.onclick = () => handleScheduleDateClick(dateKey, false);
+        } else if (status === 'pending') {
+          cell.onclick = () => handleScheduleDateClick(dateKey, true);
+        }
+        grid.appendChild(cell);
+      }
+    }
+
+    window.changeCalMonth = function(dir) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + dir);
+      renderScheduleModule();
     };
 
-    window.openAdminModal = function() {
-      const sheet = document.getElementById('adminSheet');
-      if (!sheet) return;
-      sheet.style.display = 'block';
-      populateAdmin();
-      setTimeout(() => {
-        if (typeof renderAdminCalendar === 'function') renderAdminCalendar();
-      }, 60);
-    };
-
-    window.closeAdminModal = function() { document.getElementById('adminSheet').style.display = 'none'; };
-    window.openOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'block'; };
-    window.closeOnboardModal = function() { document.getElementById('onboardSheet').style.display = 'none'; };
-    window.openShareModal = function() { document.getElementById('shareSheet').style.display = 'flex'; };
-    window.closeShareModal = function() { document.getElementById('shareSheet').style.display = 'none'; };
-    window.switchToDemoMode = function() { window.location.href = window.location.pathname; };
+    function handleScheduleDateClick(dateKey, isPending = false) {
+      const item = (appData.schedule && appData.schedule.dates) ? appData.schedule.dates[dateKey] : null;
+      const loc = (item && typeof item === 'object' && item.location) ? `【${item.location}場次】` : '';
+      const statusText = isPending ? '尚在保留中' : '目前顯示有檔期';
+      const msg = `您好！我在品牌頁看到 ${dateKey} ${loc}${statusText}，想向您諮詢服務細節！\n（來自 Sibyl 品牌預約頁）`;
+      navigator.clipboard.writeText(msg).then(() => {
+        Swal.fire({
+          title: `已複製 ${dateKey} ${loc}諮詢！`,
+          html: `<div style="text-align:left;background:#f5efe6;padding:12px;border-radius:12px;font-size:12px;color:#4A3F35;line-height:1.6;font-family:monospace;margin:10px 0;">${msg.replace(/\n/g, '<br>')}</div><p style="font-size:11px;color:#7A6C62;">內容已複製至剪貼簿，是否立即前往官方私訊洽詢？</p>`,
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonText: '前往私訊預約',
+          cancelButtonText: '稍後手動貼上'
+        }).then((res) => {
+          if (res.isConfirmed) {
+            const line = (appData.socials || []).find(it => it.icon && it.icon.includes('line'));
+            if (line && line.url) {
+              window.open(line.url, '_blank');
+            } else if (appData.socials && appData.socials.length > 0) {
+              window.open(appData.socials[0].url, '_blank');
+            } else {
+              showToast('已複製！請開啟 LINE 或 IG 直接貼上發送');
+            }
+          }
+        });
+      });
+    }
 
     function populateAdmin() {
       document.getElementById('inputBrandName').value = appData.brandName;
       document.getElementById('inputBrandBio').value = appData.bio;
       document.getElementById('adminAvatarThumb').src = appData.avatar;
-
       if (!appData.marquee) appData.marquee = { enabled: true, text: '' };
       document.getElementById('inputMarqueeEnabled').checked = appData.marquee.enabled;
       document.getElementById('inputMarqueeText').value = appData.marquee.text || '';
       document.getElementById('marqueeConfigBox').style.display = appData.marquee.enabled ? 'block' : 'none';
-
-      if (!appData.lineLead) appData.lineLead = { enabled: false, url: '', title: '' };
+      if (!appData.lineLead) appData.lineLead = { enabled: true, url: '', title: '' };
       document.getElementById('inputLineLeadEnabled').checked = appData.lineLead.enabled;
       document.getElementById('inputLineLeadUrl').value = appData.lineLead.url || '';
       document.getElementById('inputLineLeadTitle').value = appData.lineLead.title || '';
       document.getElementById('lineLeadConfigBox').style.display = appData.lineLead.enabled ? 'block' : 'none';
 
-      // 社群
       const socBox = document.getElementById('adminSocialsList');
       socBox.innerHTML = '';
       (appData.socials || []).forEach((s, idx) => {
         const row = document.createElement('div');
         row.className = 'flex items-center gap-2 bg-white p-2 rounded-xl border';
         row.innerHTML = `
-          <select onchange="appData.socials[${idx}].icon = this.value; renderView();" class="text-xs border rounded-lg px-2 py-1 bg-white">
-            <option value="fa-solid fa-globe" ${s.icon.includes('globe') ? 'selected' : ''}>🌐 官網 / 任意連結</option>
+          <select onchange="appData.socials[${idx}].icon = this.value; renderView(); autoSaveToCloud();" class="text-xs border rounded-lg px-2 py-1 bg-white">
+            <option value="fa-solid fa-globe" ${s.icon.includes('globe') ? 'selected' : ''}>🌐 部落格 / 官網</option>
             <option value="fa-brands fa-instagram" ${s.icon.includes('instagram') ? 'selected' : ''}>Instagram</option>
             <option value="fa-brands fa-threads" ${s.icon.includes('threads') ? 'selected' : ''}>Threads</option>
             <option value="fa-brands fa-line" ${s.icon.includes('line') ? 'selected' : ''}>LINE</option>
             <option value="fa-regular fa-envelope" ${s.icon.includes('envelope') ? 'selected' : ''}>Email</option>
           </select>
-          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
-          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
+          <input type="text" value="${s.url}" oninput="appData.socials[${idx}].url = this.value; renderView(); autoSaveToCloud();" class="flex-grow text-xs border rounded-lg px-2 py-1 font-mono">
+          <button type="button" onclick="appData.socials.splice(${idx},1); populateAdmin(); renderView(); autoSaveToCloud();" class="text-stone-400 hover:text-rose-500 px-1 cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
         `;
         socBox.appendChild(row);
       });
 
-      // 分類清單
       const adminSecBox = document.getElementById('adminSectionsList');
-      if (adminSecBox) {
-        adminSecBox.innerHTML = '';
-        (appData.sections || []).forEach((sec, sIdx) => {
-          const box = document.createElement('div');
-          box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
-          box.innerHTML = `
-            <div class="flex justify-between items-center gap-2">
-              <input type="text" value="${sec.title || ''}" oninput="appData.sections[${sIdx}].title = this.value; renderView();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
-              <div class="flex items-center gap-1 flex-shrink-0">
-                <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[9px]"></i></button>
-                <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[9px]"></i></button>
-                <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium ml-1 cursor-pointer">刪除分類</button>
-              </div>
+      adminSecBox.innerHTML = '';
+      (appData.sections || []).forEach((sec, sIdx) => {
+        const box = document.createElement('div');
+        box.className = 'p-3.5 bg-stone-50 rounded-2xl border space-y-2.5';
+        box.innerHTML = `
+          <div class="flex justify-between items-center gap-2">
+            <input type="text" value="${sec.title}" oninput="appData.sections[${sIdx}].title = this.value; renderView(); autoSaveToCloud();" class="font-bold bg-white border rounded-lg px-2 py-1 text-xs flex-grow">
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <button type="button" onclick="reorderSection(${sIdx}, -1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[9px]"></i></button>
+              <button type="button" onclick="reorderSection(${sIdx}, 1)" class="w-6 h-6 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[9px]"></i></button>
+              <button type="button" onclick="deleteSection(${sIdx})" class="text-rose-600 hover:underline text-[11px] font-medium ml-1 cursor-pointer">刪除分類</button>
             </div>
-            <div id="admin-items-box-${sIdx}" class="space-y-1.5"></div>
-            <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold cursor-pointer hover:bg-stone-50">+ 此分類新增卡片</button>
-          `;
-          adminSecBox.appendChild(box);
+          </div>
+          <div id="admin-items-box-${sIdx}" class="space-y-1.5"></div>
+          <button type="button" onclick="openItemModal(${sIdx}, null)" class="w-full py-1.5 rounded-xl border border-dashed text-xs text-stone-600 bg-white font-semibold cursor-pointer hover:bg-stone-50">+ 此分類新增卡片</button>
+        `;
+        adminSecBox.appendChild(box);
 
-          const itemsContainer = box.querySelector(`#admin-items-box-${sIdx}`);
-          if (itemsContainer) {
-            (sec.items || []).forEach((it, iIdx) => {
-              const row = document.createElement('div');
-              row.className = 'flex justify-between items-center p-2 rounded-xl bg-white border text-xs';
-              row.innerHTML = `
-                <div class="truncate mr-2 font-bold flex items-center gap-1.5 min-w-0 flex-1">
-                  <span class="truncate">${it.title || ''}</span>
-                  <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[9px] font-mono flex-shrink-0 shadow-2xs" title="點擊次數">
-                    <i class="fa-solid fa-chart-simple mr-0.5 text-[8px]"></i>${it.clicks || 0}
-                  </span>
-                </div>
-                <div class="flex items-center gap-1 flex-shrink-0">
-                  <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[8px]"></i></button>
-                  <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[8px]"></i></button>
-                  <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200 font-medium">編輯</button>
-                  <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer" title="刪除"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
-                </div>
-              `;
-              itemsContainer.appendChild(row);
-            });
-          }
+        const itemsContainer = box.querySelector(`#admin-items-box-${sIdx}`);
+        (sec.items || []).forEach((it, iIdx) => {
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center p-2 rounded-xl bg-white border text-xs';
+          row.innerHTML = `
+            <div class="truncate mr-2 font-bold flex items-center gap-1.5 min-w-0 flex-1">
+              <span class="truncate">${it.title}</span>
+              <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[9px] font-mono flex-shrink-0 shadow-2xs" title="累積點擊次數">
+                <i class="fa-solid fa-chart-simple mr-0.5 text-[8px]"></i>${it.clicks || 0}
+              </span>
+            </div>
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, -1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-up text-[8px]"></i></button>
+              <button type="button" onclick="reorderItem(${sIdx}, ${iIdx}, 1)" class="w-6 h-6 rounded-lg bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[10px] cursor-pointer"><i class="fa-solid fa-arrow-down text-[8px]"></i></button>
+              <button type="button" onclick="openItemModal(${sIdx}, ${iIdx})" class="px-2 py-0.5 bg-stone-100 rounded cursor-pointer hover:bg-stone-200 font-medium">編輯</button>
+              <button type="button" onclick="deleteCardItemPrompt(${sIdx}, ${iIdx})" class="text-rose-500 px-1 cursor-pointer" title="刪除"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+            </div>
+          `;
+          itemsContainer.appendChild(row);
         });
-      }
+      });
 
       populateCarouselAdmin();
       populateScheduleAdmin();
@@ -1547,16 +1487,12 @@
       
       const aspectSel = document.getElementById('selectCarouselAspect');
       if (aspectSel) aspectSel.value = c.aspectRatio || 'square';
-
       const orderSel = document.getElementById('selectCarouselOrder');
       if (orderSel) orderSel.value = c.position || 'below';
-
       const cfgBox = document.getElementById('adminCarouselConfig');
       if (cfgBox) cfgBox.style.display = c.enabled ? 'block' : 'none';
-
       const countEl = document.getElementById('carouselCount');
       if (countEl) countEl.innerText = (c.images || []).length;
-
       const thumbList = document.getElementById('adminCarouselThumbList');
       if (thumbList) {
         thumbList.innerHTML = '';
@@ -1588,27 +1524,21 @@
       
       const cfgBox = document.getElementById('adminScheduleConfig');
       if (cfgBox) cfgBox.style.display = s.enabled ? 'block' : 'none';
-
       renderAdminCalendar();
     }
 
     function renderAdminCalendar() {
       const grid = document.getElementById('adminCalendarGrid');
       if (!grid) return;
-
       if (!appData.schedule) appData.schedule = { enabled: true, dates: {} };
       if (!appData.schedule.dates) appData.schedule.dates = {};
       const s = appData.schedule;
-
       const year = adminCalDate.getFullYear();
       const month = adminCalDate.getMonth();
-
       const titleEl = document.getElementById('adminCalMonthTitle');
       if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
-
       grid.className = 'cal-grid-box';
       grid.innerHTML = '';
-
       const firstDayIndex = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
 
@@ -1617,13 +1547,11 @@
         empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
         grid.appendChild(empty);
       }
-
       for (let d = 1; d <= totalDays; d++) {
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const item = s.dates[dateKey];
         let status = 'none';
         let location = '';
-
         if (item) {
           if (typeof item === 'object') {
             status = item.status || 'none';
@@ -1632,7 +1560,6 @@
             status = item;
           }
         }
-
         const cell = document.createElement('div');
         cell.className = `cal-cell status-${status}`;
         
@@ -1648,17 +1575,14 @@
         } else {
           subText = `<span style="font-size: 8px; line-height: 1; opacity: 0.3; margin-top: 2px;">未排</span>`;
         }
-
         cell.innerHTML = `
           <span style="font-size: 12px; font-weight: 600; line-height: 1.1;">${d}</span>
           ${subText}
         `;
-
         cell.onclick = (e) => {
           e.stopPropagation();
           cycleAdminDateStatus(dateKey);
         };
-
         grid.appendChild(cell);
       }
     }
@@ -1668,7 +1592,6 @@
       const current = appData.schedule.dates[dateKey];
       const currentStatus = typeof current === 'object' ? (current.status || 'none') : (current || 'none');
       const currentLoc = typeof current === 'object' ? (current.location || '') : '';
-
       const { value: formValues } = await Swal.fire({
         title: `設定 ${dateKey} 檔期狀態`,
         html: `
@@ -1687,7 +1610,6 @@
               <option value="booked" ${currentStatus === 'booked' ? 'selected' : ''}>已滿檔（煙燻粉褐）</option>
               <option value="none" ${currentStatus === 'none' ? 'selected' : ''}>未排班／清除狀態</option>
             </select>
-
             <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #375346; margin-bottom: 6px;">
               <i class="fa-solid fa-location-dot text-[11px]"></i>
               <span>所在地區／服務城市 (選填)</span>
@@ -1712,7 +1634,6 @@
           };
         }
       });
-
       if (formValues) {
         if (formValues.status === 'none') {
           delete appData.schedule.dates[dateKey];
@@ -1729,9 +1650,9 @@
           };
           showToast(`已儲存：${dateKey}【${statusTextMap[formValues.status]}】`);
         }
-
         renderAdminCalendar();
         renderScheduleModule();
+        autoSaveToCloud();
       }
     }
 
@@ -1745,7 +1666,6 @@
       const year = adminCalDate.getFullYear();
       const month = adminCalDate.getMonth();
       const totalDays = new Date(year, month + 1, 0).getDate();
-
       for (let d = 1; d <= totalDays; d++) {
         const dayOfWeek = new Date(year, month, d).getDay();
         if (dayOfWeek === 0 || dayOfWeek === 6) {
@@ -1757,6 +1677,7 @@
       }
       renderAdminCalendar();
       renderScheduleModule();
+      autoSaveToCloud();
       showToast('當月週末已全設為可預約！');
     };
 
@@ -1765,13 +1686,13 @@
       const year = adminCalDate.getFullYear();
       const month = adminCalDate.getMonth();
       const totalDays = new Date(year, month + 1, 0).getDate();
-
       for (let d = 1; d <= totalDays; d++) {
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         delete appData.schedule.dates[dateKey];
       }
       renderAdminCalendar();
       renderScheduleModule();
+      autoSaveToCloud();
       showToast('當月排程已清空');
     };
 
@@ -1783,14 +1704,19 @@
         setTimeout(renderAdminCalendar, 50);
       }
       renderView();
+      autoSaveToCloud();
     };
+
     window.changeScheduleOrder = function(val) {
       appData.schedule.position = val;
       renderView();
+      autoSaveToCloud();
     };
+
     window.updateScheduleNote = function(txt) {
       appData.schedule.note = txt.trim();
       renderView();
+      autoSaveToCloud();
     };
 
     let carouselTimer = null;
@@ -1798,146 +1724,26 @@
     let touchStartX = 0;
     let touchEndX = 0;
 
-    function renderScheduleModule() {
-      const mod = document.getElementById('scheduleModule');
-      if (!mod) return;
-
-      if (!appData.schedule) {
-        appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
-      }
-      const s = appData.schedule;
-
-      // 關鍵：真實使用者如果沒勾選開啟排班，直接隱藏整塊模組
-      if (isRealUser && !s.enabled) {
-        mod.style.display = 'none';
-        return;
-      }
-
-      mod.style.display = 'block';
-
-      // 示範提示標籤：業主正式頁面 100% 隱藏
-      const tagEl = document.getElementById('demoScheduleTag');
-      const guideEl = document.getElementById('demoScheduleGuideBox');
-      if (tagEl) tagEl.style.display = isRealUser ? 'none' : 'inline-block';
-      if (guideEl) guideEl.style.display = isRealUser ? 'none' : 'block';
-
-      // 日期物件安全檢查
-      if (!(currentCalDate instanceof Date) || isNaN(currentCalDate.getTime())) {
-        currentCalDate = new Date();
-      }
-
-      const year = currentCalDate.getFullYear();
-      const month = currentCalDate.getMonth();
-      const titleEl = document.getElementById('calMonthTitle');
-      if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
-
-      const noteEl = document.getElementById('scheduleNoteText');
-      if (noteEl) noteEl.innerText = s.note || '點選有空檔的日期，可直接複製預約文字私訊我們！';
-
-      const grid = document.getElementById('calendarGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-
-      // 空白前置格
-      for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement('div');
-        empty.style.cssText = 'height: 46px; min-height: 46px; opacity: 0; pointer-events: none;';
-        grid.appendChild(empty);
-      }
-
-      // 生成 1 ~ 31 號實體格子
-      for (let d = 1; d <= totalDays; d++) {
-        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
-        let status = 'none';
-        let location = '';
-
-        if (item) {
-          if (typeof item === 'object') {
-            status = item.status || 'none';
-            location = item.location || '';
-          } else if (typeof item === 'string') {
-            status = item;
-          }
-        }
-
-        const cell = document.createElement('div');
-        cell.className = `cal-cell status-${status}`;
-
-        let locBadge = '';
-        if (location) {
-          locBadge = `<span style="font-size: 8px; line-height: 1; padding: 1.5px 3px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${location}</span>`;
-        }
-
-        cell.innerHTML = `<span style="font-size: 12px; font-weight: 600; line-height: 1;">${d}</span>${locBadge}`;
-
-        if (status === 'available') {
-          cell.onclick = () => handleScheduleDateClick(dateKey, false);
-        } else if (status === 'pending') {
-          cell.onclick = () => handleScheduleDateClick(dateKey, true);
-        }
-        grid.appendChild(cell);
-      }
-    }
-
-    // ====================================================
-    // 3. 後台驗證修復：密碼正確直接開後台，不強迫跳轉修改
-    // ====================================================
-    window.handleAdminEntry = async function() {
-      if (!isRealUser) {
-        openAdminModal();
-        return;
-      }
-      const { value: pin } = await Swal.fire({
-        title: '請輸入管理 PIN 碼',
-        input: 'password',
-        inputPlaceholder: '請輸入 4-6 碼 PIN 碼',
-        showCancelButton: true,
-        confirmButtonText: '登入後台',
-        cancelButtonText: '取消',
-        confirmButtonColor: '#2C241E'
-      });
-
-      // 只要輸入值符合後台密碼（不管是 8888 還是自訂密碼），直接開啟後台
-      if (pin && pin.trim() === String(appData.adminPin).trim()) {
-        openAdminModal();
-      } else if (pin) {
-        Swal.fire({
-          title: '密碼錯誤',
-          text: '若忘記管理 PIN 碼，請聯繫官方 LINE 由總管中心為您查詢。',
-          icon: 'error',
-          confirmButtonColor: '#2C241E'
-        });
-      }
-    };
-    
     function renderCarousel() {
       const c = appData.carousel;
       const wrap = document.getElementById('carouselWrapper');
       const track = document.getElementById('carouselTrack');
       const dots = document.getElementById('carouselDots');
       if (carouselTimer) clearInterval(carouselTimer);
-
       if (!c || !c.enabled || !c.images || c.images.length === 0) {
         wrap.style.display = 'none';
         return;
       }
       wrap.style.display = 'block';
-
       const aspectClassMap = {
         'square': 'aspect-square max-w-[380px] w-full mx-auto',
         'landscape': 'aspect-video max-w-[420px] w-full mx-auto',
         'story': 'aspect-[9/16] max-w-[320px] w-full mx-auto'
       };
-
       const innerBox = wrap.querySelector('.relative.overflow-hidden');
       if (innerBox) {
         innerBox.className = `relative overflow-hidden rounded-2xl shadow-sm border border-white/80 bg-stone-900/10 backdrop-blur-md ${aspectClassMap[c.aspectRatio || 'square']}`;
       }
-
       track.innerHTML = '';
       c.images.forEach(imgUrl => {
         const slide = document.createElement('div');
@@ -1948,7 +1754,6 @@
         `;
         track.appendChild(slide);
       });
-
       dots.innerHTML = '';
       c.images.forEach((_, idx) => {
         const dot = document.createElement('button');
@@ -1956,17 +1761,14 @@
         dot.onclick = () => { currentSlide = idx; updateSlidePosition(); };
         dots.appendChild(dot);
       });
-
       if (currentSlide >= c.images.length) currentSlide = 0;
       updateSlidePosition();
-
       if (c.images.length > 1) {
         carouselTimer = setInterval(() => {
           currentSlide = (currentSlide + 1) % c.images.length;
           updateSlidePosition();
         }, 3800);
       }
-
       wrap.ontouchstart = (e) => { touchStartX = e.changedTouches[0].screenX; };
       wrap.ontouchend = (e) => {
         touchEndX = e.changedTouches[0].screenX;
@@ -1990,23 +1792,53 @@
       });
     }
 
+    function startCountdownTimers() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      function update() {
+        document.querySelectorAll('[data-countdown]').forEach(el => {
+          const end = new Date(el.getAttribute('data-countdown')).getTime();
+          const now = Date.now();
+          const diff = end - now;
+          const timerEl = el.querySelector('.countdown-timer');
+          if (diff <= 0) {
+            timerEl.innerText = '活動已截止';
+          } else {
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / 1000 / 60) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            timerEl.innerText = `${d > 0 ? d + '天 ' : ''}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+          }
+        });
+      }
+      update();
+      countdownInterval = setInterval(update, 1000);
+    }
+
     window.toggleCarouselEnabled = function(enabled) {
       appData.carousel.enabled = enabled;
       document.getElementById('adminCarouselConfig').style.display = enabled ? 'block' : 'none';
       renderView();
+      autoSaveToCloud();
     };
+
     window.changeCarouselAspect = function(val) {
       appData.carousel.aspectRatio = val;
       renderView();
+      autoSaveToCloud();
     };
+
     window.changeCarouselOrder = function(val) {
       appData.carousel.position = val;
       renderView();
+      autoSaveToCloud();
     };
+
     window.removeCarouselImage = function(idx) {
       appData.carousel.images.splice(idx, 1);
       populateCarouselAdmin();
       renderView();
+      autoSaveToCloud();
     };
 
     window.handleCarouselUpload = function(e) {
@@ -2040,6 +1872,7 @@
           appData.carousel.images.push(compressed);
           populateCarouselAdmin();
           renderView();
+          autoSaveToCloud();
           showToast('輪播圖已加入！');
         };
         img.src = event.target.result;
@@ -2070,11 +1903,11 @@
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
           const compressed = canvas.toDataURL('image/jpeg', 0.85);
-
           if (type === 'avatar') {
             appData.avatar = compressed;
             document.getElementById('adminAvatarThumb').src = compressed;
             renderView();
+            autoSaveToCloud();
             showToast('頭像已更新！');
           } else {
             const imgEl = document.getElementById('modalPreviewImg');
@@ -2100,13 +1933,11 @@
         if (sIdx !== null && idx === sIdx) opt.selected = true;
         sel.appendChild(opt);
       });
-
       const it = (sIdx !== null && iIdx !== null && appData.sections[sIdx]) ? appData.sections[sIdx].items[iIdx] : null;
       const hasImg = Boolean(it && it.img);
       document.getElementById('modalPreviewImg').style.display = hasImg ? 'block' : 'none';
       document.getElementById('noImgPlaceholder').style.display = hasImg ? 'none' : 'inline';
       document.getElementById('imgLayoutRow').style.display = hasImg ? 'grid' : 'none';
-
       if (it) {
         document.getElementById('modalTitle').value = it.title;
         document.getElementById('modalSubtitle').value = it.subtitle || '';
@@ -2151,7 +1982,6 @@
       const targetSec = parseInt(document.getElementById('modalSectionSelect').value) || 0;
       const imgEl = document.getElementById('modalPreviewImg');
       const currentImg = (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.endsWith('/')) ? imgEl.src : '';
-
       const itObj = {
         id: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) ? appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].id : ('item-' + Date.now()),
         title: t,
@@ -2165,7 +1995,6 @@
         imgPos: document.getElementById('modalImgPos').value,
         clicks: (editingPointer.sIdx !== null && editingPointer.iIdx !== null && appData.sections[editingPointer.sIdx].items[editingPointer.iIdx]) ? (appData.sections[editingPointer.sIdx].items[editingPointer.iIdx].clicks || 0) : 0
       };
-
       if (editingPointer.sIdx !== null && editingPointer.iIdx !== null) {
         if (editingPointer.sIdx !== targetSec) {
           appData.sections[editingPointer.sIdx].items.splice(editingPointer.iIdx, 1);
@@ -2179,10 +2008,152 @@
       closeItemModal();
       populateAdmin();
       renderView();
-      showToast('卡片已就緒，請點右下角儲存發布！');
+      autoSaveToCloud();
+      showToast('卡片已就緒！');
     };
 
-    // 找回專屬網址功能 (直查 Supabase)
+    async function autoSaveToCloud() {
+      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(async () => {
+        if (!isRealUser || !currentStoreDbId) return;
+        if (isSavingLock) return;
+        isSavingLock = true;
+        try {
+          const metaPayload = JSON.stringify({
+            bio: appData.bio,
+            marquee: appData.marquee,
+            carousel: appData.carousel,
+            lineLead: appData.lineLead,
+            schedule: appData.schedule
+          });
+          await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?id=eq.${currentStoreDbId}`, {
+            method: "PATCH",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              brand_name: appData.brandName,
+              bio_text: metaPayload,
+              theme: appData.theme,
+              avatar_url: appData.avatar,
+              social_links: appData.socials,
+              admin_pin: appData.adminPin
+            })
+          });
+          const itemsToInsert = [];
+          let sortIdx = 0;
+          for (const sec of appData.sections) {
+            for (const it of (sec.items || [])) {
+              itemsToInsert.push({
+                store_id: currentStoreDbId,
+                section_title: sec.title,
+                title: it.title,
+                subtitle: it.subtitle || '',
+                thumbnail_url: it.img || '',
+                img_size: it.imgSize || 'large-square',
+                img_pos: it.imgPos || 'top',
+                target_url: it.url || '#',
+                discount_code: it.discountCode || '',
+                badge_label: it.badge || '',
+                sort_order: sortIdx++,
+                click_count: it.clicks || 0,
+                countdown_end: it.countdownEnd || ''
+              });
+            }
+          }
+          const delRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}`, {
+            method: "DELETE",
+            headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` }
+          });
+          if (delRes.ok && itemsToInsert.length > 0) {
+            await fetch(`${SUPABASE_URL}/rest/v1/bio_items`, {
+              method: "POST",
+              headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify(itemsToInsert)
+            });
+          }
+        } catch(err) {
+          console.warn("雲端同步異常:", err);
+        } finally {
+          isSavingLock = false;
+        }
+      }, 500);
+    }
+
+    window.saveAdminAndClose = async function() {
+      const btn = document.getElementById('btnSaveAdmin');
+      btn.disabled = true;
+      btn.innerText = '儲存發布中...';
+      await autoSaveToCloud();
+      btn.disabled = false;
+      btn.innerText = '儲存並同步發布';
+      closeAdminModal();
+      showToast('設定已成功儲存並同步發布！');
+    };
+
+    window.copyShareUrl = function() {
+      navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
+    };
+    window.changeTheme = function(k) { appData.theme = k; document.documentElement.setAttribute('data-theme', k); autoSaveToCloud(); showToast('色系已套用！'); };
+    window.syncLiveProfile = function() { appData.brandName = document.getElementById('inputBrandName').value; appData.bio = document.getElementById('inputBrandBio').value; renderView(); autoSaveToCloud(); };
+    window.cycleIllustrationAvatar = function() { avatarIndex = (avatarIndex + 1) % illustrationAvatars.length; appData.avatar = illustrationAvatars[avatarIndex]; document.getElementById('adminAvatarThumb').src = appData.avatar; renderView(); autoSaveToCloud(); };
+    
+    window.addSocialLink = function() { 
+      appData.socials.push({ icon: 'fa-solid fa-globe', label: 'Website', url: 'https://' }); 
+      populateAdmin(); 
+      renderView(); 
+      autoSaveToCloud(); 
+    };
+
+    window.reorderSection = function(sIdx, dir) {
+      const targetIdx = sIdx + dir;
+      if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
+      const temp = appData.sections[sIdx];
+      appData.sections[sIdx] = appData.sections[targetIdx];
+      appData.sections[targetIdx] = temp;
+      populateAdmin(); renderView(); autoSaveToCloud();
+    };
+    window.reorderItem = function(sIdx, iIdx, dir) {
+      const items = appData.sections[sIdx].items;
+      const targetIdx = iIdx + dir;
+      if (targetIdx < 0 || targetIdx >= items.length) return;
+      const temp = items[iIdx];
+      items[iIdx] = items[targetIdx];
+      items[targetIdx] = temp;
+      populateAdmin(); renderView(); autoSaveToCloud();
+    };
+    window.deleteSection = async function(idx) {
+      const res = await Swal.fire({ title: '確定刪除分類？', text: '將連帶刪除該分類下所有卡片。', icon: 'warning', showCancelButton: true });
+      if (res.isConfirmed) { appData.sections.splice(idx, 1); populateAdmin(); renderView(); autoSaveToCloud(); }
+    };
+    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
+      appData.sections[sIdx].items.splice(iIdx, 1);
+      populateAdmin(); renderView(); autoSaveToCloud();
+      showToast('項目已移除');
+    };
+    window.openCreateSectionModal = async function() {
+      const { value: name } = await Swal.fire({ title: '新增專屬分類', input: 'text', showCancelButton: true, inputValidator: (v) => !v ? '分類名稱不可為空' : null });
+      if (name) { appData.sections.push({ id: 'sec-' + Date.now(), title: name.trim(), items: [] }); populateAdmin(); renderView(); autoSaveToCloud(); }
+    };
+    window.toggleMarqueeEnabled = function(en) {
+      appData.marquee.enabled = en;
+      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
+      renderView(); autoSaveToCloud();
+    };
+    window.updateMarqueeText = function(txt) {
+      appData.marquee.text = txt.trim();
+      renderView(); autoSaveToCloud();
+    };
+    window.toggleLineLeadEnabled = function(en) {
+      appData.lineLead.enabled = en;
+      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
+      autoSaveToCloud();
+    };
+    window.updateLineLeadConfig = function() {
+      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
+      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
+      autoSaveToCloud();
+    };
+
     window.findMySlugPrompt = async function() {
       const { value: email } = await Swal.fire({
         title: '找回您的專屬網址',
@@ -2194,7 +2165,6 @@
         cancelButtonText: '取消',
         inputValidator: (v) => (!v || !v.trim()) ? '請填寫電子信箱！' : null
       });
-
       if (email) {
         try {
           const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?owner_email=eq.${email.trim()}&select=slug,brand_name`, {
@@ -2218,15 +2188,31 @@
       }
     };
 
-    // 數位管家功能許願池直傳
     window.submitWishToSuper = async function() {
       const wishText = document.getElementById('inputFeedbackWish').value.trim();
       if (!wishText) {
         Swal.fire('請填寫願望內容', '告訴我們您希望擴充或優化的功能！', 'info');
         return;
       }
-
       showToast('正在傳送您的願望...');
+      const payload = {
+        action: "FEATURE_WISH",
+        payload: {
+          brandName: appData.brandName,
+          slug: currentSlug || 'demo',
+          wish: wishText,
+          theme: appData.theme,
+          submittedAt: new Date().toISOString()
+        }
+      };
+      try {
+        fetch(GAS_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {}
       try {
         await fetch(`${SUPABASE_URL}/rest/v1/system_feedbacks`, {
           method: "POST",
@@ -2243,7 +2229,6 @@
           })
         });
       } catch (err) {}
-
       document.getElementById('inputFeedbackWish').value = '';
       Swal.fire({
         title: '✨ 願望已成功送達！',
@@ -2253,17 +2238,14 @@
       });
     };
 
-    // 註冊開通新頁面
     window.handleOnboardSubmit = async function(e) {
       e.preventDefault();
       const brand = document.getElementById('quickBrand').value.trim();
       const slug = document.getElementById('quickSlug').value.trim().toLowerCase();
       const email = document.getElementById('quickEmail').value.trim();
       const btn = document.getElementById('btnSubmitOnboard');
-
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 正在建立頁面...';
-
       try {
         const postBody = JSON.stringify({
           action: "REGISTER_NEW_STORE",
@@ -2271,7 +2253,6 @@
         });
         fetch(GAS_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: postBody });
       } catch (err) {}
-
       try {
         const metaPayload = JSON.stringify({
           bio: `歡迎光臨 ${brand} 官方頁面\n點擊探索更多推薦`,
@@ -2280,7 +2261,6 @@
           schedule: { enabled: true, position: 'below_carousel', note: '', dates: {} },
           lineLead: { enabled: true, url: '', title: '' }
         });
-
         const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores`, {
           method: "POST",
           headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json", "Prefer": "return=representation" },
@@ -2288,12 +2268,12 @@
             slug: slug, brand_name: brand, owner_email: email, admin_pin: "8888",
             theme: "cashmere-latte", avatar_url: illustrationAvatars[0], bio_text: metaPayload,
             social_links: [
+              { icon: "fa-solid fa-globe", label: "官網連結", url: "https://heysibyl.com" },
               { icon: "fa-brands fa-instagram", label: "Instagram", url: "https://instagram.com" },
               { icon: "fa-regular fa-envelope", label: "Email", url: `mailto:${email}` }
             ]
           })
         });
-
         const storeData = await storeRes.json();
         if (storeData && storeData.length > 0) {
           const newId = storeData[0].id;
@@ -2307,7 +2287,6 @@
             }])
           });
         }
-
         closeOnboardModal();
         Swal.fire({
           title: '開通成功！',
@@ -2320,74 +2299,6 @@
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1"></i> 立即免費開通專屬品牌頁';
       }
-    };
-
-    // 常用工具
-    window.copyShareUrl = function() {
-      navigator.clipboard.writeText(window.location.href).then(() => { showToast('已複製頁面連結！'); closeShareModal(); });
-    };
-
-    window.changeTheme = function(k) { 
-      appData.theme = k; 
-      document.documentElement.setAttribute('data-theme', k); 
-      showToast('色系已套用！'); 
-    };
-    window.syncLiveProfile = function() { 
-      appData.brandName = document.getElementById('inputBrandName').value; 
-      appData.bio = document.getElementById('inputBrandBio').value; 
-      renderView(); 
-    };
-    window.cycleIllustrationAvatar = function() { avatarIndex = (avatarIndex + 1) % illustrationAvatars.length; appData.avatar = illustrationAvatars[avatarIndex]; document.getElementById('adminAvatarThumb').src = appData.avatar; renderView(); };
-    window.addSocialLink = function() { 
-      appData.socials.push({ icon: 'fa-solid fa-globe', label: 'Website', url: 'https://' }); 
-      populateAdmin(); 
-      renderView(); 
-    };
-
-    window.reorderSection = function(sIdx, dir) {
-      const targetIdx = sIdx + dir;
-      if (targetIdx < 0 || targetIdx >= appData.sections.length) return;
-      const temp = appData.sections[sIdx];
-      appData.sections[sIdx] = appData.sections[targetIdx];
-      appData.sections[targetIdx] = temp;
-      populateAdmin(); renderView();
-    };
-    window.reorderItem = function(sIdx, iIdx, dir) {
-      const items = appData.sections[sIdx].items;
-      const targetIdx = iIdx + dir;
-      if (targetIdx < 0 || targetIdx >= items.length) return;
-      const temp = items[iIdx];
-      items[iIdx] = items[targetIdx];
-      items[targetIdx] = temp;
-      populateAdmin(); renderView();
-    };
-    window.deleteSection = async function(idx) {
-      const res = await Swal.fire({ title: '確定刪除分類？', text: '將連帶刪除該分類下所有卡片。', icon: 'warning', showCancelButton: true });
-      if (res.isConfirmed) { appData.sections.splice(idx, 1); populateAdmin(); renderView(); }
-    };
-    window.deleteCardItemPrompt = async function(sIdx, iIdx) {
-      appData.sections[sIdx].items.splice(iIdx, 1);
-      populateAdmin(); renderView();
-      showToast('項目已移除');
-    };
-    window.openCreateSectionModal = async function() {
-      const { value: name } = await Swal.fire({ title: '新增專屬分類', input: 'text', showCancelButton: true, inputValidator: (v) => !v ? '分類名稱不可為空' : null });
-      if (name) { appData.sections.push({ id: 'sec-' + Date.now(), title: name.trim(), items: [] }); populateAdmin(); renderView(); }
-    };
-
-    window.toggleMarqueeEnabled = function(en) {
-      appData.marquee.enabled = en;
-      document.getElementById('marqueeConfigBox').style.display = en ? 'block' : 'none';
-      renderView();
-    };
-    window.updateMarqueeText = function(txt) { appData.marquee.text = txt.trim(); renderView(); };
-    window.toggleLineLeadEnabled = function(en) {
-      appData.lineLead.enabled = en;
-      document.getElementById('lineLeadConfigBox').style.display = en ? 'block' : 'none';
-    };
-    window.updateLineLeadConfig = function() {
-      appData.lineLead.url = document.getElementById('inputLineLeadUrl').value.trim();
-      appData.lineLead.title = document.getElementById('inputLineLeadTitle').value.trim();
     };
 
     window.copyCode = function(c, e) {
