@@ -932,13 +932,11 @@
 
     async function loadStoreFromSupabase(slug) {
       try {
-        // 關鍵：加入 _t 時間戳記與 Cache-Control 標頭，破除手機瀏覽器快取
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${slug}&select=*&_t=${Date.now()}`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/bio_stores?slug=eq.${encodeURIComponent(slug)}&select=*&_t=${Date.now()}`, {
           headers: {
             "apikey": SUPABASE_ANON_KEY,
             "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            "Pragma": "no-cache"
+            "Cache-Control": "no-cache, no-store, must-revalidate"
           }
         });
 
@@ -947,24 +945,31 @@
 
         if (rows && rows.length > 0) {
           const s = rows[0];
+          isRealUser = true;
           currentStoreDbId = s.id;
           appData.theme = s.theme || 'cashmere-latte';
           appData.brandName = s.brand_name || slug;
           appData.avatar = s.avatar_url || illustrationAvatars[0];
           appData.adminPin = s.admin_pin || '8888';
-          appData.socials = s.social_links || [];
+          appData.socials = Array.isArray(s.social_links) ? s.social_links : [];
 
+          // 容錯解析 bio_text
           try {
             const parsedMeta = JSON.parse(s.bio_text);
             appData.bio = parsedMeta.bio || '';
             appData.marquee = parsedMeta.marquee || { enabled: false, text: '' };
             appData.carousel = parsedMeta.carousel || { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
             appData.lineLead = parsedMeta.lineLead || { enabled: false, url: '', title: '' };
-            if (parsedMeta.schedule) appData.schedule = parsedMeta.schedule;
+            appData.schedule = parsedMeta.schedule || { enabled: false, position: 'below_carousel', note: '', dates: {} };
           } catch(e) {
             appData.bio = s.bio_text || '';
+            appData.marquee = { enabled: false, text: '' };
+            appData.carousel = { enabled: false, aspectRatio: 'square', position: 'below', images: [] };
+            appData.lineLead = { enabled: false, url: '', title: '' };
+            appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
           }
 
+          // 讀取卡片
           const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/bio_items?store_id=eq.${currentStoreDbId}&select=*&_t=${Date.now()}`, {
             headers: {
               "apikey": SUPABASE_ANON_KEY,
@@ -1008,12 +1013,11 @@
           document.title = `${appData.brandName} | 品牌名片`;
           renderView();
         } else {
-          Swal.fire('找不到此頁面', `網址代號「${slug}」尚未開通。`, 'info').then(() => {
-            window.location.href = window.location.pathname;
-          });
+          switchToDemoMode();
         }
       } catch (err) {
-        console.error("雲端讀取異常:", err);
+        console.error("載入異常:", err);
+        renderView();
       }
     }
 
@@ -1759,35 +1763,32 @@
       const mod = document.getElementById('scheduleModule');
       if (!mod) return;
 
-      // 1. 防禦機制：確保 appData.schedule 存在
       if (!appData.schedule) {
         appData.schedule = { enabled: false, position: 'below_carousel', note: '', dates: {} };
       }
       const s = appData.schedule;
 
-      // 2. 若為業主模式且未啟用排班，直接隱藏，避免露出空的框框
+      // 關鍵：真實使用者如果沒勾選開啟排班，直接隱藏整塊模組
       if (isRealUser && !s.enabled) {
         mod.style.display = 'none';
         return;
       }
 
-      // 示範模式或已啟用時顯示
       mod.style.display = 'block';
 
-      // 3. 嚴格控制教學文案：業主模式絕不顯示
+      // 示範提示標籤：業主正式頁面 100% 隱藏
       const tagEl = document.getElementById('demoScheduleTag');
       const guideEl = document.getElementById('demoScheduleGuideBox');
       if (tagEl) tagEl.style.display = isRealUser ? 'none' : 'inline-block';
       if (guideEl) guideEl.style.display = isRealUser ? 'none' : 'block';
 
-      // 4. 防禦機制：確保 currentCalDate 是合法的 Date 物件
+      // 日期物件安全檢查
       if (!(currentCalDate instanceof Date) || isNaN(currentCalDate.getTime())) {
         currentCalDate = new Date();
       }
 
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
-
       const titleEl = document.getElementById('calMonthTitle');
       if (titleEl) titleEl.innerText = `${year}年 ${month + 1}月`;
 
@@ -1808,7 +1809,7 @@
         grid.appendChild(empty);
       }
 
-      // 建立 1 ~ 31 號實體格子
+      // 生成 1 ~ 31 號實體格子
       for (let d = 1; d <= totalDays; d++) {
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const item = (s.dates && s.dates[dateKey]) ? s.dates[dateKey] : null;
@@ -1842,6 +1843,37 @@
         grid.appendChild(cell);
       }
     }
+
+    // ====================================================
+    // 3. 後台驗證修復：密碼正確直接開後台，不強迫跳轉修改
+    // ====================================================
+    window.handleAdminEntry = async function() {
+      if (!isRealUser) {
+        openAdminModal();
+        return;
+      }
+      const { value: pin } = await Swal.fire({
+        title: '請輸入管理 PIN 碼',
+        input: 'password',
+        inputPlaceholder: '請輸入 4-6 碼 PIN 碼',
+        showCancelButton: true,
+        confirmButtonText: '登入後台',
+        cancelButtonText: '取消',
+        confirmButtonColor: '#2C241E'
+      });
+
+      // 只要輸入值符合後台密碼（不管是 8888 還是自訂密碼），直接開啟後台
+      if (pin && pin.trim() === String(appData.adminPin).trim()) {
+        openAdminModal();
+      } else if (pin) {
+        Swal.fire({
+          title: '密碼錯誤',
+          text: '若忘記管理 PIN 碼，請聯繫官方 LINE 由總管中心為您查詢。',
+          icon: 'error',
+          confirmButtonColor: '#2C241E'
+        });
+      }
+    };
     
     function renderCarousel() {
       const c = appData.carousel;
