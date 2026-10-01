@@ -105,7 +105,7 @@
   </div>
 
   <!-- 頂部導航列 -->
-  <header class="w-full max-w-[480px] px-5 pt-4 pb-2 flex items-center justify-between relative z-30 bg-transparent">
+  <header class="w-full max-w-[480px] px-5 pt-8 pb-3 flex items-center justify-between relative z-30 bg-transparent" style="padding-top: calc(max(env(safe-area-inset-top, 0px), 16px) + 0.75rem);">
     <a href="https://link.heysibyl.com" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-white/60 shadow-xs transition active:scale-95 cursor-pointer">
       <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
       <span class="text-[11px] tracking-widest font-semibold uppercase opacity-80">link.heysibyl.com</span>
@@ -120,7 +120,7 @@
       </button>
     </div>
   </header>
-
+  
   <!-- 主體畫布 -->
   <main id="mainCanvas" class="w-full max-w-[460px] px-5 pt-1 pb-16 flex-grow flex flex-col items-center relative z-10 gap-y-6">
     <!-- 示範模式專屬：高轉換引導與痛點解析卡片 -->
@@ -178,7 +178,7 @@
     </div>
 
     <!-- 模組 1：品牌頭像與名片介紹 -->
-    <div id="profileModule" class="w-full flex flex-col items-center text-center transition-all">
+   <div id="profileModule" class="w-full flex flex-col items-center text-center transition-all pt-2">
       <div onclick="openAdminDirectly()" class="relative group cursor-pointer" title="點擊設定個人資訊">
         <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-white/90 via-white/40 to-white shadow-md">
           <img id="displayAvatar" src="" alt="" onerror="this.src='https://api.dicebear.com/7.x/lorelei/svg?seed=Chloe&backgroundColor=e8dfd3'" class="w-full h-full rounded-full object-cover bg-[#E8DFD3]">
