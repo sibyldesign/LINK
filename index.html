@@ -1914,51 +1914,70 @@ window.closeAdminModal = async function() {
     let touchStartX = 0;
     let touchEndX = 0;
 
+    // ⭐ 完美自適應輪播渲染：雙層毛玻璃鏡像背景 + 前景居中高光 + 磨砂膠囊指示點
     function renderCarousel() {
       const c = appData.carousel;
       const wrap = document.getElementById('carouselWrapper');
       const track = document.getElementById('carouselTrack');
       const dots = document.getElementById('carouselDots');
       if (carouselTimer) clearInterval(carouselTimer);
+      
       if (!c || !c.enabled || !c.images || c.images.length === 0) {
         wrap.style.display = 'none';
         return;
       }
       wrap.style.display = 'block';
+
+      // 畫幅比例映射
       const aspectClassMap = {
         'square': 'aspect-square max-w-[380px] w-full mx-auto',
         'landscape': 'aspect-video max-w-[420px] w-full mx-auto',
         'story': 'aspect-[9/16] max-w-[320px] w-full mx-auto'
       };
+
       const innerBox = wrap.querySelector('.relative.overflow-hidden');
       if (innerBox) {
         innerBox.className = `relative overflow-hidden rounded-2xl shadow-sm border border-white/80 bg-stone-900/10 backdrop-blur-md ${aspectClassMap[c.aspectRatio || 'square']}`;
       }
+
       track.innerHTML = '';
       c.images.forEach(imgUrl => {
         const slide = document.createElement('div');
-        slide.className = 'w-full h-full flex-shrink-0 relative overflow-hidden flex items-center justify-center bg-stone-900/5';
+        slide.className = 'w-full h-full flex-shrink-0 relative overflow-hidden flex items-center justify-center';
         slide.innerHTML = `
-          <div class="absolute inset-0 w-full h-full bg-cover bg-center scale-125 blur-xl opacity-40 brightness-95 pointer-events-none" style="background-image: url('${imgUrl}');"></div>
-          <img src="${imgUrl}" class="relative z-10 max-w-full max-h-full w-auto h-auto object-contain pointer-events-none drop-shadow-sm">
+          <!-- 底層：毛玻璃自適應滿版背景（徹底消除留白） -->
+          <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none">
+            <img src="${imgUrl}" class="w-full h-full object-cover scale-125 blur-2xl opacity-60 brightness-95 transform -translate-y-0.5">
+            <div class="absolute inset-0 bg-black/10"></div>
+          </div>
+          <!-- 前景：清晰主圖居中完整呈現（保留所有細節文字） -->
+          <img src="${imgUrl}" class="relative z-10 max-w-full max-h-full w-auto h-auto object-contain pointer-events-none drop-shadow-md select-none p-1">
         `;
         track.appendChild(slide);
       });
+
+      // 輪播指示點：膠囊磨砂容器，質感更佳
+      dots.className = 'absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/30 backdrop-blur-md z-20 pointer-events-auto';
       dots.innerHTML = '';
       c.images.forEach((_, idx) => {
         const dot = document.createElement('button');
-        dot.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/50'}`;
+        dot.className = `h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-5 bg-white shadow-xs' : 'w-1.5 bg-white/50 hover:bg-white/75'}`;
         dot.onclick = () => { currentSlide = idx; updateSlidePosition(); };
         dots.appendChild(dot);
       });
+
       if (currentSlide >= c.images.length) currentSlide = 0;
       updateSlidePosition();
+
+      // 超過 1 張才啟動定時輪播
       if (c.images.length > 1) {
         carouselTimer = setInterval(() => {
           currentSlide = (currentSlide + 1) % c.images.length;
           updateSlidePosition();
-        }, 3800);
+        }, 4000);
       }
+
+      // 手機滑動手勢
       wrap.ontouchstart = (e) => { touchStartX = e.changedTouches[0].screenX; };
       wrap.ontouchend = (e) => {
         touchEndX = e.changedTouches[0].screenX;
